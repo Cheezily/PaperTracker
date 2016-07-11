@@ -1,9 +1,64 @@
 body {
     margin: 0;
     padding: 0;
+    background: #FCFCFC;
+    font-family: sans-serif;
+    color: #444;
 }
 header {
     height: 40px;
     width: 100%;
+    font-size: 18px;
     border: 1px solid red;
+}
+
+/* Home Page Components */
+.mainWrapper {
+    width: 960px;
+    margin: 40px auto;
+}
+
+.loginForm {
+    display: none;
+    background: white;
+    box-sizing: border-box;
+    width: 500px;
+    height: 300px;
+    position: relative;
+    top: -100px;
+    margin: 0 auto;
+    padding: 30px;
+    border: 2px solid green;
+    font-size: 24px;
+}
+
+.loginForm label {
+    display: inline-block;
+    width: 120px;
+}
+
+.loginButtons {
+    margin: 8px 50px 0 0;
+    float: right;
+}
+
+.loginButtons:after {
+    clear: both;
+}
+
+.loginButton {
+    background: none;
+    border: none;
+    font-size: 18px;
+    outline: none;
+}
+
+.loginButton:hover {
+    color: #bbb;
+}
+
+.warning {
+    color: red;
+    font-size: 16px;
+    margin-top: 15px;
 }
