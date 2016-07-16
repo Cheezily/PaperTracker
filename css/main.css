@@ -27,14 +27,22 @@ header {
     position: relative;
     top: -100px;
     margin: 0 auto;
-    padding: 30px;
+    padding: 0 30px;
     border: 2px solid green;
     font-size: 24px;
 }
 
+.loginForm input {
+    margin: 5px 0;
+    height: 25px;
+    width: 220px;
+    border: 1px solid #bbb;
+}
+
 .loginForm label {
     display: inline-block;
-    width: 120px;
+    width: 180px;
+    font-size: 18px;
 }
 
 .loginButtons {
@@ -46,11 +54,30 @@ header {
     clear: both;
 }
 
-.loginButton {
+.loginButton, .forgotPWbutton {
     background: none;
     border: none;
     font-size: 18px;
     outline: none;
+}
+
+.newUserForm {
+    display: none;
+}
+
+.registrationButton {
+    background: green;
+    width: 440px;
+    height: 40px;
+    margin: 10px auto;
+    color: white;
+    font-size: 22px;
+    border: none;
+}
+
+.forgotPWbutton {
+    font-size: 12px;
+    text-decoration: underline;
 }
 
 .loginButton:hover {

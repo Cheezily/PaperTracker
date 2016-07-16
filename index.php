@@ -4,7 +4,7 @@
     
     $salt = 'super_secret_salt';
     
-    if ($_POST['from_login_form'] == 1) {
+    if ($_POST['from_login_form'] && !$_POST['forgot_PW']) {
         $username = filter_input(INPUT_POST, 'username');
         $password = filter_input(INPUT_POST, 'password');
     
@@ -17,9 +17,13 @@
         if (!$username && $password) {
             $loginError = "No username entered.";
         }
+    } elseif ($_POST['from_login_form'] && $_POST['forgot_PW']) {
+        header("Location: forgotPW.php?q=recovery");
     } else {
         $loginError = NULL;
+        
     }
+
 ?>
 
 <!DOCTYPE html>
@@ -53,8 +57,8 @@
                     <input type='text' id='login_username' name='username' placeholder='Username'><br>
                     <label for='login_password'>Password</label>
                     <input type='password' id='login_password' name='password'><br>
-                    <input type='submit' id='login_submit' name='submit' value='Log In'>
                     <input type='hidden' name='from_login_form' value='1'>
+                    <input type='submit' id='login_submit' name='submit' value='Log In'>
                 </form>
                 
                 <form method='post' action='index.php'>
@@ -62,10 +66,54 @@
                     <input type='submit' id='login_submit' name='submit' value='Cancel'>
                 </form>
                 
+                <form method='post' action='index.php'>
+                    <input type='hidden' name='from_login_form' value='1'>
+                    <input type='hidden' name='forgot_PW' value='1'>
+                    <input type='submit' class='forgotPWbutton' id='login_submit' name='submit' 
+                              value='Click here if you forgot your password'>
+                </form>
                 <span class='warning' id='loginWarning'>
                     <?php echo $loginError; ?>
                 </span>
             </div>
-        
+
+            <!--Registration forms.  Starts hidden. Displayed via JS-->
+            <div class="loginForm" id="registrationDialog">
+                <p id='roleTitle'>Please select your role:</p>
+                <div class='roleSelection'>
+                    <button class='registrationButton' id="newAuthorRegister">Author - You'll be submitting papers</button><br>
+                    <button class='registrationButton' id="newReviewerRegister">Reviewer - You'll be reviewing papers</button>
+                    <form method='post' action='index.php'>
+                        <input type='hidden' name='from_login_form' value='0'>
+                        <input type='submit' id='login_submit' name='submit' value='Cancel'>
+                    </form>
+                </div>
+
+                <div id='newUserForm' class='newUserForm'>
+                    <form class='newUserRegisterForm' method='post' action='registration.php'>
+                        <label for='authorUsername'>Username</label>
+                        <input type='text' id='authorUsername' name='authorUsername' placeholder="Username">
+                        <span class='warning'><?php echo $taken_username; ?></span><br>
+                        <label for='firstName'>First Name</label>
+                        <input type='text' id='firstName' name='firstName' placeholder="First Name"><br>
+                        <label for='lastName'>Last Name</label>
+                        <input type='text' id='lastName' name='lastName' placeholder="Last Name"><br>
+                        <label for='authorEmail'>Email</label>
+                        <input type='text' id='email' name='email' placeholder="Email"><br>
+                        <label for='password'>Password</label>
+                        <input type='password' id='password' name='password'><br>
+                        <label for='password2'>Confirm Password</label>
+                        <input type='password' id='password' name='password2'><br><br>
+                        <input type='hidden' name='role'>
+                        <input type='submit' value='submit'>
+                    </form>
+                    <form method='post' action='index.php'>
+                        <input type='hidden' name='from_login_form' value='0'>
+                        <input type='submit' id='login_submit' name='submit' value='Cancel'>
+                    </form>
+
+                </div>
+            </div>
+        <script type='text/javascript' src='js/loginWindow.js'></script>
     </body>
 </html>

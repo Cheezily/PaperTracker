@@ -8,6 +8,10 @@
     <?php 
         if (isset($_SESSION['firstname'])) {
             echo "Hello, ".$_SESSION['firstname'];
+        } elseif (isset($_GET['q']) && $_GET['q'] == 'recovery') {
+            echo "<div class=loginButtons>";
+            echo "Password Recovery";
+            echo "</div>";
         } else {
             echo "<div class=loginButtons>";
             echo "<button class='loginButton' id='newUser'>New User</button>";
