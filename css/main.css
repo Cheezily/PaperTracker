@@ -24,15 +24,17 @@ header {
     box-sizing: border-box;
     width: 500px;
     height: 300px;
-    position: relative;
-    top: -200px;
+    position: absolute;
+    top: 100px;
+    left: 0;
+    right: 0;
     margin: 0 auto;
     padding: 0 30px;
-    border: 2px solid green;
+    border: 4px solid #f66;
     font-size: 24px;
 }
 
-.loginForm input {
+.loginForm input:not([type='submit']) {
     margin: 0 auto;
     height: 25px;
     width: 430px;
@@ -40,11 +42,44 @@ header {
     border: 1px solid #bbb;
 }
 
+#createAccount, .registrationButton {
+    width: 435px;
+    height: 35px;
+    background: #f66;
+    color: white; 
+    font-size: 22px;
+    border: none;
+}
+
+#login_cancel, #loginCancalButton {
+    width: 435px;
+    height: 35px;
+    background: none;
+    color: #333;
+}
+
+.loginForm input[type='submit'] {
+    background: #f66;
+    height: 35px;
+    color: white;
+    font-size: 22px;
+    border: 2px solid #f66;
+    margin-bottom: 10px;
+}
+
+.secondaryButton {
+    display: block;
+    background: none;
+    height: 45px;
+    color: #333;
+    border: 2px solid #333;
+}
+
 .loginForm label {
     display: block;
     margin: 20px 0 0 0;
     width: 420px;
-    font-size: 16px;
+    font-size: 14px;
     color: #777;
 }
 
@@ -67,9 +102,9 @@ header {
 .newUserForm {
     display: none;
 }
-
+/*
 .registrationButton {
-    background: green;
+    background: #f66;
     width: 440px;
     height: 40px;
     margin: 10px auto;
@@ -77,7 +112,7 @@ header {
     font-size: 22px;
     border: none;
 }
-
+*/
 .forgotPWbutton {
     font-size: 12px;
     text-decoration: underline;
@@ -94,8 +129,15 @@ header {
 }
 
 .miniWarning {
+    display: inline-block;
+    float: right;
     color: red;
+    height: 8px;
     font-size: 14px;
     font-weight: bold;
-    margin-top: 3px;
+    margin-top: 0;
+}
+
+.miniWarning:after {
+    clear: both;
 }

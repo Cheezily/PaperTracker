@@ -21,5 +21,4 @@
         }
     ?>
 </header>
-<script type='text/javascript' src='js/loginWindow.js'></script>
 

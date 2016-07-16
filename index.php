@@ -4,6 +4,7 @@
     
     $salt = 'super_secret_salt';
     
+    //error handling from the login form on this page
     if ($_POST['from_login_form'] && !$_POST['forgot_PW']) {
         $username = filter_input(INPUT_POST, 'username');
         $password = filter_input(INPUT_POST, 'password');
@@ -25,21 +26,42 @@
     
     //Error handling from the registration script
     if (isset($_GET['err'])) {
+        //Get variables from the registration page if there is an error
+        $newUserError = TRUE;
+        $usernameBlank = filter_input(INPUT_GET, 'u');
+        $firstNameBlank = filter_input(INPUT_GET, 'f');
+        $lastNameBlank = filter_input(INPUT_GET, 'l');
+        $emailBlank = filter_input(INPUT_GET, 'e');
+        $emailInvalid = filter_input(INPUT_GET, 'ei');
+        $passwordBlank = filter_input(INPUT_GET, 'pw');
+        $password2Blank = filter_input(INPUT_GET, 'pw2');
+        $passwordTooShort = filter_input(INPUT_GET, 'pws');
+        $usernameFilled = filter_input(INPUT_GET, 'username');
+        $firstNameFilled = filter_input(INPUT_GET, 'firstname');
+        $lastNameFilled = filter_input(INPUT_GET, 'lastname');
+        $emailFilled = filter_input(INPUT_GET, 'email');
+            
+        //gets the role from the 'r' parameter
+        $errRole = filter_input(INPUT_GET, 'r');
+        if ($errRole == 'a') {
+            $errRole = 'Author';
+        }
+        if ($errRole == 'r') {
+            $errRole = 'Reviewer';
+        }
+        $newUserErrorRole = 'Registration: New '.$errRole;
+        
+
+
         if ($_GET['err'] == 'pwm') {
             $newUserError = 'Passwords do not match.';
             $passwordError = TRUE;
-            
-            $errRole = filter_input(INPUT_GET, 'r');
-            if ($errRole == 'a') {
-                $errRole = 'Author';
-            }
-            if ($errRole == 'r') {
-                $errRole = 'Reviewer';
-            }
-            $newUserErrorRole = 'Registration: New '.$errRole;
+        }
+        if ($_GET['err'] == 'u') {
+            $newUserError = 'Username is taken';
+            $usernameError = TRUE;
         }
     }
-
 ?>
 
 <!DOCTYPE html>
@@ -122,11 +144,11 @@
                         } 
                     ?>
                 >
-                    <button class='registrationButton' id="newAuthorRegister">Author - You'll be submitting papers</button><br>
-                    <button class='registrationButton' id="newReviewerRegister">Reviewer - You'll be reviewing papers</button>
+                    <button class='registrationButton' id="newAuthorRegister">Author - You'll be submitting papers</button><br><br>
+                    <button class='registrationButton' id="newReviewerRegister">Reviewer - You'll be reviewing papers</button><br><br>
                     <form method='post' action='index.php'>
                         <input type='hidden' name='from_login_form' value='0'>
-                        <input type='submit' id='login_submit' name='submit' value='Cancel'>
+                        <input type='submit' id='loginCancalButton' name='submit' value='Cancel'>
                     </form>
                 </div>
 
@@ -135,37 +157,117 @@
                         //keep this section displayed with no slide effect if
                         //there is an error
                         if ($newUserError) {
-                            echo "style='display: block;";
+                            echo "style='display: block;'";
                         } 
                     ?>
                 >
                     <form class='newUserRegisterForm' method='post' action='registration.php'>
-                        <label for='authorUsername'>Username</label>
-                        <input type='text' id='authorUsername' name='authorUsername' placeholder="Username">
+                        <label for='authorUsername'>Username
+                            <span class='miniWarning'>
+                                <?php if ($usernameError) {
+                                    echo " ".$newUserError;
+                                }
+                                if ($usernameBlank) {
+                                    echo "Username cannot be blank";
+                                }
+                                ?>
+                            </span>
+                        </label>
+                        <input type='text' id='username' name='username' 
+                            <?php 
+                                if ($usernameFilled && !$usernameError) {
+                                    echo " value='".$usernameFilled."' ";
+                                }
+                            ?>   
+                               placeholder="Username">
                         <span class='warning'><?php echo $taken_username; ?></span><br>
-                        <label for='firstName'>First Name</label>
-                        <input type='text' id='firstName' name='firstName' placeholder="First Name"><br>
-                        <label for='lastName'>Last Name</label>
-                        <input type='text' id='lastName' name='lastName' placeholder="Last Name"><br>
-                        <label for='authorEmail'>Email</label>
-                        <input type='text' id='email' name='email' placeholder="Email"><br>
-                        <label for='password'>Password</label>
+                        <label for='firstName'>First Name
+                            <span class='miniWarning'>
+                                <?php if ($firstNameBlank) {
+                                    echo "First name cannot be blank";
+                                }
+                                ?>
+                            </span>
+                        </label>
+                        <input type='text' id='firstName' name='firstName' 
+                            <?php 
+                                if ($firstNameFilled) {
+                                    echo " value='".$firstNameFilled."' ";
+                                }
+                            ?>                               
+                               placeholder="First Name"><br>
+                        <label for='lastName'>Last Name
+                            <span class='miniWarning'>
+                                <?php if ($lastNameBlank) {
+                                    echo "Last name cannot be blank";
+                                }
+                                ?>
+                            </span>                        
+                        </label>
+                        <input type='text' id='lastName' name='lastName' 
+                            <?php 
+                                if ($lastNameFilled) {
+                                    echo " value='".$lastNameFilled."' ";
+                                }
+                            ?>                               
+                               placeholder="Last Name"><br>
+                        <label for='authorEmail'>Email
+                            <span class='miniWarning'>
+                                <?php if ($emailBlank && !$emailInvalid) {
+                                    echo "Email field cannot be blank";
+                                }
+                                if (!$emailBlank && $emailInvalid) {
+                                    echo "Not a valid email format";
+                                }
+                                ?>
+                            </span>                         
+                        </label>
+                        <input type='text' id='email' name='email' 
+                                <?php 
+                                    if ($emailFilled) {
+                                        echo " value='".$emailFilled."' ";
+                                    }
+                                ?>                               
+                               placeholder="Email"><br>
+                        <label for='password'>Password (min 8 characters)
+                            <span class='miniWarning'>
+                                <?php if ($passwordError) {
+                                    echo " ".$newUserError;
+                                }
+                                if ($passwordBlank) {
+                                    echo "Please enter a password";
+                                }
+                                if ($passwordTooShort) {
+                                    echo "Password too short";
+                                }
+                                ?>
+                            </span>                        
+                        </label>
                         <input type='password' id='password' name='password'><br>
                         <label for='password2'>Confirm Password
                             <span class='miniWarning'>
                                 <?php if ($passwordError) {
                                     echo " ".$newUserError;
                                 }
+                                if ($password2Blank) {
+                                    echo "Please confirm password entered";
+                                }
                                 ?>
                             </span>
                         </label>
                         <input type='password' id='password' name='passwordConfirm'><br><br>
-                        <input type='hidden' name='role'>
-                        <input type='submit' value='submit'>
+                        <input type='hidden' name='role' 
+                        <?php 
+                            if ($errRole) {
+                                echo "value=".$errRole;
+                            }
+                        ?>       
+                        >
+                        <input id='createAccount' type='submit' value='Create Account'>
                     </form>
                     <form method='post' action='index.php'>
                         <input type='hidden' name='from_login_form' value='0'>
-                        <input type='submit' id='login_submit' name='submit' value='Cancel'>
+                        <input class='secondaryButton' type='submit' id='login_cancel' name='submit' value='Cancel'>
                     </form>
 
                 </div>
