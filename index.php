@@ -21,7 +21,23 @@
         header("Location: forgotPW.php?q=recovery");
     } else {
         $loginError = NULL;
-        
+    }
+    
+    //Error handling from the registration script
+    if (isset($_GET['err'])) {
+        if ($_GET['err'] == 'pwm') {
+            $newUserError = 'Passwords do not match.';
+            $passwordError = TRUE;
+            
+            $errRole = filter_input(INPUT_GET, 'r');
+            if ($errRole == 'a') {
+                $errRole = 'Author';
+            }
+            if ($errRole == 'r') {
+                $errRole = 'Reviewer';
+            }
+            $newUserErrorRole = 'Registration: New '.$errRole;
+        }
     }
 
 ?>
@@ -38,7 +54,7 @@
     <body>
         <?php include 'static/header.php';?>
         
-        <div class='mainWrapper' <?php if ($loginError) {echo "style='opacity: .3'";} ?>>
+        <div class='mainWrapper' <?php if ($loginError || $newUserError) {echo "style='opacity: .3'";} ?>>
             <h1>Hi there!</h1>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
                 eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
@@ -50,8 +66,13 @@
                 laborum.</p>
             </div>
             
-            <div class='loginForm' id='loginWindow' <?php if ($loginError) {
-                    echo "style='display: block'";} ?>>
+            <div class='loginForm' id='loginWindow' <?php //if ($loginError || $newUserError) {
+                    //echo "style='display: block'";} ?>>
+                <div <?php 
+                    if ($newUserError) {
+                        echo "style='display: none'";
+                    }
+                ?>>
                 <form method='post' action='index.php'>
                     <label for='login_username'>Username</label>
                     <input type='text' id='login_username' name='username' placeholder='Username'><br>
@@ -72,15 +93,35 @@
                     <input type='submit' class='forgotPWbutton' id='login_submit' name='submit' 
                               value='Click here if you forgot your password'>
                 </form>
+                </div>
                 <span class='warning' id='loginWarning'>
                     <?php echo $loginError; ?>
                 </span>
             </div>
 
-            <!--Registration forms.  Starts hidden. Displayed via JS-->
-            <div class="loginForm" id="registrationDialog">
-                <p id='roleTitle'>Please select your role:</p>
-                <div class='roleSelection'>
+            <!--Registration forms.  Starts hidden. Displayed via JS or 
+            error handling in PHP-->
+            <div class="loginForm" id="registrationDialog" 
+                <?php if ($newUserError) {
+                    echo "style='display: block; height: 600px;'";} 
+                ?>
+            >
+                <p id='roleTitle'>
+                    <?php if ($newUserError) {
+                        echo $newUserErrorRole;
+                    } else {
+                        echo 'Please select your role:';
+                    } 
+                    ?>
+                </p>
+                
+                <div class='roleSelection' 
+                    <?php 
+                        if ($newUserError) {
+                            echo "style='display: none'";
+                        } 
+                    ?>
+                >
                     <button class='registrationButton' id="newAuthorRegister">Author - You'll be submitting papers</button><br>
                     <button class='registrationButton' id="newReviewerRegister">Reviewer - You'll be reviewing papers</button>
                     <form method='post' action='index.php'>
@@ -89,7 +130,15 @@
                     </form>
                 </div>
 
-                <div id='newUserForm' class='newUserForm'>
+                <div id='newUserForm' class='newUserForm'
+                    <?php 
+                        //keep this section displayed with no slide effect if
+                        //there is an error
+                        if ($newUserError) {
+                            echo "style='display: block;";
+                        } 
+                    ?>
+                >
                     <form class='newUserRegisterForm' method='post' action='registration.php'>
                         <label for='authorUsername'>Username</label>
                         <input type='text' id='authorUsername' name='authorUsername' placeholder="Username">
@@ -102,8 +151,15 @@
                         <input type='text' id='email' name='email' placeholder="Email"><br>
                         <label for='password'>Password</label>
                         <input type='password' id='password' name='password'><br>
-                        <label for='password2'>Confirm Password</label>
-                        <input type='password' id='password' name='password2'><br><br>
+                        <label for='password2'>Confirm Password
+                            <span class='miniWarning'>
+                                <?php if ($passwordError) {
+                                    echo " ".$newUserError;
+                                }
+                                ?>
+                            </span>
+                        </label>
+                        <input type='password' id='password' name='passwordConfirm'><br><br>
                         <input type='hidden' name='role'>
                         <input type='submit' value='submit'>
                     </form>
