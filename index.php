@@ -1,9 +1,7 @@
 <?php
     error_reporting(E_ALL &  ~E_NOTICE);
     session_start();
-    
-    $salt = 'super_secret_salt';
-    
+
     //error handling from the login form on this page
     if ($_POST['from_login_form'] && !$_POST['forgot_PW']) {
         $username = filter_input(INPUT_POST, 'username');

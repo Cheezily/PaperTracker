@@ -1,6 +1,10 @@
 <?php
 require_once 'model/registrationDB.php';
 
+//this should be refactored at some point to not have to feed
+//index.php any get parameters. That will require a seperate
+//registrationSuccess.php or something else to forward to upon success
+
 $role = filter_input(INPUT_POST, 'role');
 $firstName = filter_input(INPUT_POST, 'firstName');
 $lastName = filter_input(INPUT_POST, 'lastName');
@@ -68,7 +72,7 @@ if ($password && strlen($password) < 8) {
 }
 
 //Check to see if the username is taken. Function in model/registrationDB.php
-if (check_username($username)) {
+if (checkUsername($username)) {
     header('Location: index.php?err=u'.$errorList.'&r='.$r);
     die();
 }
@@ -84,8 +88,34 @@ if ($password != $passwordConfirm) {
     die();
 }
 
-
-
-
+//If all of the above checks have passed, we add the user to the database
+//and display a success page
+$user = array(
+    'username' => $username,
+    'firstName' => $firstName,
+    'lastName' => $lastName,
+    'email' => $email,
+    'password' => $password,
+    'role' => $role
+);
+addUser($user);
 
 ?>
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Submission Tracker
+        </title>
+        <script type='text/javascript' src='bower_components/jquery/dist/jquery.min.js'></script>
+    </head>
+    
+    <body>
+        <?php include 'static/header.php';?>
+        
+        <div class='mainWrapper'>
+            <h1>Success!</h1>
+        </div>
+    </body>
+</html>
