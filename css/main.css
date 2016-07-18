@@ -51,7 +51,7 @@ header {
     border: none;
 }
 
-#login_cancel, #loginCancalButton {
+#login_cancel, #createAccountCancel, #loginCancelButton, #roleCancelButton {
     width: 435px;
     height: 35px;
     background: none;
@@ -61,6 +61,7 @@ header {
 .loginForm input[type='submit'] {
     background: #f66;
     height: 35px;
+    width: 430px;
     color: white;
     font-size: 22px;
     border: 2px solid #f66;
@@ -92,27 +93,60 @@ header {
     clear: both;
 }
 
-.loginButton, .forgotPWbutton {
+.loginButton {
     background: none;
     border: none;
     font-size: 18px;
     outline: none;
 }
 
+/*HOME PAGE - greeting in the upper right when the user is logged in*/
+.greeting {
+    display: inline-block;
+    float: right;
+    margin: 12px;
+}
+
+.logoutButton {
+    background: #f66;
+    color: white;
+    border: none;
+    font-size: 18px;
+    outline: none;
+}
+
+.logoutForm {
+    display: inline-block;
+    background: #f66;
+    height: 30px;
+    width: 80px;
+    margin: 5px 10px;
+    float: right;
+    text-align: center;
+}
+
+.logoutForm:after {
+    clear: both;
+}
+/*------------------------------------------*/
+
+#forgotPWbutton {
+    color: #333;
+    background: none;
+    border: none;
+    font-size: 12px;
+    outline: none;
+    text-decoration: underline;
+}
+
+#forgotPWbutton:hover {
+    color: #777;
+}
+
 .newUserForm {
     display: none;
 }
-/*
-.registrationButton {
-    background: #f66;
-    width: 440px;
-    height: 40px;
-    margin: 10px auto;
-    color: white;
-    font-size: 22px;
-    border: none;
-}
-*/
+
 .forgotPWbutton {
     font-size: 12px;
     text-decoration: underline;
@@ -120,6 +154,11 @@ header {
 
 .loginButton:hover {
     color: #bbb;
+}
+
+.logoutButton {
+    display: inline-block;
+    
 }
 
 .warning {

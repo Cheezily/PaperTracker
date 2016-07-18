@@ -27,7 +27,7 @@ function addUser($user) {
     $passwordHash = password_hash($user['password'], PASSWORD_BCRYPT, $passwordOptions);
     
     $statement = $db->prepare($query);
-    $statement->bindValue(":username", $user['username']);
+    $statement->bindValue(":username", strtolower($user['username']));
     $statement->bindValue(":account_created", $accountCreated);
     $statement->bindValue(":first_name", $user['firstName']);
     $statement->bindValue(":last_name", $user['lastName']);
@@ -36,5 +36,38 @@ function addUser($user) {
     $statement->bindValue(":role", $user['role']);
     $statement->execute();
     
+}
+
+function login($name, $password) {
+    //echo "---------------<br>";
+    //echo "username: ".$name."<br>";
+    global $db;
+    $query = "SELECT * FROM users WHERE username=:username";
+    $statement = $db->prepare($query);
+    $statement->bindValue(":username", strtolower($name));
+    $statement->execute();
+
+    $result = $statement->fetch();
+    //echo "password: ".$password."<br>";
+    $pwcheck = password_verify(substr($password, 0, 60), $result['passwordHash']);
+    //var_dump($pwcheck);
+    //echo "TEST: ".password_verify($password, $result['passwordHash'])."<br>";
+    //echo "password hash: ".$result['passwordHash'];
+    
+    if (password_verify($password, $result['passwordHash'])) {
+        updateTimestamp($name);
+        return $result;
+    } else {
+        return FALSE;
+    }
+}
+
+function updateTimestamp($name) {
+    global $db;
+    $query = "UPDATE users SET last_login=CURRENT_TIMESTAMP WHERE username=:username";
+    $statement = $db->prepare($query);
+    //$statement->bindValue(":timestamp", date("Y-m-d H:i:s"));
+    $statement->bindValue(":username", strtolower($name));
+    $statement->execute();
 }
 ?>

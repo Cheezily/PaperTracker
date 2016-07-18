@@ -1,21 +1,49 @@
 <?php
     error_reporting(E_ALL &  ~E_NOTICE);
-    session_start();
+    session_start();    
 
+    //handles logout requests
+    if ($_POST['logout'] == 'Logout') {
+        $_SESSION = array();
+        session_destroy();
+        header("Location: index.php");
+    }
+    
     //error handling from the login form on this page
     if ($_POST['from_login_form'] && !$_POST['forgot_PW']) {
-        $username = filter_input(INPUT_POST, 'username');
-        $password = filter_input(INPUT_POST, 'password');
-    
-        if (!$username && !$password) {
+        $name = filter_input(INPUT_POST, 'username');
+        $userPW = filter_input(INPUT_POST, 'password');
+        //echo "PASSED USERNAME: ".$name."<br>";
+        //echo "PASSED PASSWORD: ".$userPW."<br>";
+        
+        if (!$name && !$userPW) {
             $loginError = "Please enter a username and password.";
-        }
-        if ($username && !$password) {
+        } elseif ($name && !$userPW) {
             $loginError = "Please enter a password.";
-        }
-        if (!$username && $password) {
+        } elseif (!$name && $userPW) {
             $loginError = "No username entered.";
+        } else {
+            //checks to see if the username and password matches.
+            require_once 'model/registrationDB.php';
+            
+            $result = login($name, $userPW);
+            if (!empty($result)) {
+                //var_dump($result);
+                $_SESSION['username'] = $result['username'];
+                $_SESSION['firstname'] = $result['first_name'];
+                $_SESSION['lastname'] = $result['last_name'];
+                $_SESSION['email'] = $result['email'];
+                $_SESSION['role'] = $result['role'];
+                $_SESSION['userID'] = $result['userID'];
+                $_SESSION['username'] = $result['username'];
+                $_SESSION['lastLogin'] = $result['last_login'];
+                //echo "TIMESTAMP: ".$_SESSION['lastLogin'];
+                //var_dump($_SESSION);
+            } else {
+                $loginError = "Invalid username or password";
+            }
         }
+        
     } elseif ($_POST['from_login_form'] && $_POST['forgot_PW']) {
         header("Location: forgotPW.php?q=recovery");
     } else {
@@ -26,15 +54,15 @@
     if (isset($_GET['err'])) {
         //Get variables from the registration page if there is an error
         $newUserError = TRUE;
-        $usernameBlank = filter_input(INPUT_GET, 'u');
+        $nameBlank = filter_input(INPUT_GET, 'u');
         $firstNameBlank = filter_input(INPUT_GET, 'f');
         $lastNameBlank = filter_input(INPUT_GET, 'l');
         $emailBlank = filter_input(INPUT_GET, 'e');
         $emailInvalid = filter_input(INPUT_GET, 'ei');
-        $passwordBlank = filter_input(INPUT_GET, 'pw');
-        $password2Blank = filter_input(INPUT_GET, 'pw2');
-        $passwordTooShort = filter_input(INPUT_GET, 'pws');
-        $usernameFilled = filter_input(INPUT_GET, 'username');
+        $userPWBlank = filter_input(INPUT_GET, 'pw');
+        $userPW2Blank = filter_input(INPUT_GET, 'pw2');
+        $userPWTooShort = filter_input(INPUT_GET, 'pws');
+        $nameFilled = filter_input(INPUT_GET, 'username');
         $firstNameFilled = filter_input(INPUT_GET, 'firstname');
         $lastNameFilled = filter_input(INPUT_GET, 'lastname');
         $emailFilled = filter_input(INPUT_GET, 'email');
@@ -48,17 +76,26 @@
             $errRole = 'Reviewer';
         }
         $newUserErrorRole = 'Registration: New '.$errRole;
-        
-
 
         if ($_GET['err'] == 'pwm') {
             $newUserError = 'Passwords do not match.';
-            $passwordError = TRUE;
+            $userPWError = TRUE;
         }
         if ($_GET['err'] == 'u') {
             $newUserError = 'Username is taken';
-            $usernameError = TRUE;
+            $nameError = TRUE;
         }
+    }
+    
+    //Handle routing if the session is set
+    if ($_SESSION['role'] == 'author') {
+        header("Location: usersUser.php");
+    }
+    if ($_SESSION['role'] == 'reviewer') {
+        header("Location: usersUser.php");
+    }
+    if ($_SESSION['admin'] == 'reviewer') {
+        header("Location: usersAdmin.php");
     }
 ?>
 
@@ -86,37 +123,39 @@
                 laborum.</p>
             </div>
             
-            <div class='loginForm' id='loginWindow' <?php //if ($loginError || $newUserError) {
-                    //echo "style='display: block'";} ?>>
+            <div class='loginForm' id='loginWindow' <?php if ($loginError || $newUserError) {
+                    echo "style='display: block'";} ?>>
                 <div <?php 
                     if ($newUserError) {
                         echo "style='display: none'";
                     }
                 ?>>
                 <form method='post' action='index.php'>
-                    <label for='login_username'>Username</label>
+                    <label for='login_username'>Username
+                    <span class='warning' id='loginWarning'>
+                        <?php echo $loginError; ?>
+                    </span>
+                    </label>
                     <input type='text' id='login_username' name='username' placeholder='Username'><br>
                     <label for='login_password'>Password</label>
-                    <input type='password' id='login_password' name='password'><br>
+                    <input type='password' id='login_password' name='password'><br><br>
                     <input type='hidden' name='from_login_form' value='1'>
                     <input type='submit' id='login_submit' name='submit' value='Log In'>
                 </form>
                 
                 <form method='post' action='index.php'>
                     <input type='hidden' name='from_login_form' value='0'>
-                    <input type='submit' id='login_submit' name='submit' value='Cancel'>
+                    <input type='submit' id='loginCancelButton' name='submit' value='Cancel'>
                 </form>
                 
                 <form method='post' action='index.php'>
                     <input type='hidden' name='from_login_form' value='1'>
                     <input type='hidden' name='forgot_PW' value='1'>
-                    <input type='submit' class='forgotPWbutton' id='login_submit' name='submit' 
+                    <input type='submit' id='forgotPWbutton' id='login_submit' name='submit' 
                               value='Click here if you forgot your password'>
                 </form>
                 </div>
-                <span class='warning' id='loginWarning'>
-                    <?php echo $loginError; ?>
-                </span>
+
             </div>
 
             <!--Registration forms.  Starts hidden. Displayed via JS or 
@@ -146,7 +185,7 @@
                     <button class='registrationButton' id="newReviewerRegister">Reviewer - You'll be reviewing papers</button><br><br>
                     <form method='post' action='index.php'>
                         <input type='hidden' name='from_login_form' value='0'>
-                        <input type='submit' id='loginCancalButton' name='submit' value='Cancel'>
+                        <input type='submit' id='roleCancelButton' name='submit' value='Cancel'>
                     </form>
                 </div>
 
@@ -162,10 +201,10 @@
                     <form class='newUserRegisterForm' method='post' action='registration.php'>
                         <label for='authorUsername'>Username
                             <span class='miniWarning'>
-                                <?php if ($usernameError) {
+                                <?php if ($nameError) {
                                     echo " ".$newUserError;
                                 }
-                                if ($usernameBlank) {
+                                if ($nameBlank) {
                                     echo "Username cannot be blank";
                                 }
                                 ?>
@@ -173,8 +212,8 @@
                         </label>
                         <input type='text' id='username' name='username' 
                             <?php 
-                                if ($usernameFilled && !$usernameError) {
-                                    echo " value='".$usernameFilled."' ";
+                                if ($nameFilled && !$nameError) {
+                                    echo " value='".$nameFilled."' ";
                                 }
                             ?>   
                                placeholder="Username">
@@ -229,13 +268,13 @@
                                placeholder="Email"><br>
                         <label for='password'>Password (min 8 characters)
                             <span class='miniWarning'>
-                                <?php if ($passwordError) {
+                                <?php if ($userPWError) {
                                     echo " ".$newUserError;
                                 }
-                                if ($passwordBlank) {
+                                if ($userPWBlank) {
                                     echo "Please enter a password";
                                 }
-                                if ($passwordTooShort) {
+                                if ($userPWTooShort) {
                                     echo "Password too short";
                                 }
                                 ?>
@@ -244,10 +283,10 @@
                         <input type='password' id='password' name='password'><br>
                         <label for='password2'>Confirm Password
                             <span class='miniWarning'>
-                                <?php if ($passwordError) {
+                                <?php if ($userPWError) {
                                     echo " ".$newUserError;
                                 }
-                                if ($password2Blank) {
+                                if ($userPW2Blank) {
                                     echo "Please confirm password entered";
                                 }
                                 ?>
@@ -265,7 +304,7 @@
                     </form>
                     <form method='post' action='index.php'>
                         <input type='hidden' name='from_login_form' value='0'>
-                        <input class='secondaryButton' type='submit' id='login_cancel' name='submit' value='Cancel'>
+                        <input class='secondaryButton' type='submit' id='createAccountCancel' name='submit' value='Cancel'>
                     </form>
 
                 </div>
