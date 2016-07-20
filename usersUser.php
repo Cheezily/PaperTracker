@@ -81,6 +81,51 @@ if (isset($_POST['getStarted'])) {
         }
         ?>
             <h1>Hello, <?php echo $_SESSION['firstname']; ?>!  Welcome to the AUTHOR page!</h1>
+            
+        <?php
+            require_once 'model/papersDB.php';
+            $yourPapers = checkPapers($_SESSION['username']);
+            if (!empty($yourPapers)) {
+                //var_dump($yourPapers);
+                forEach ($yourPapers as $paper) { ?>
+                <div class='paperWrapper'>
+                        
+                    <div class='paperAttribute'>
+                        <?php echo "<span class='attributeLabel'>Title:</span> ".$paper['title']; ?>
+                    </div>
+
+                    <div class='paperAttribute'>
+                    <?php switch ($paper['status']) {
+                        case "awaiting_assignment":
+                            echo "<span class='attributeLabel'>Status:</span> Awaiting Assignment to Reviewer";
+                            break;
+                        case "awaiting_review":
+                            echo "<span class='attributeLabel'>Status:</span> Assigned to Reviewer. Under review";
+                            break;
+                        case "awaiting_revisions":
+                            echo "<span class='attributeLabel'>Status:</span> Review Complete. Awaiting your revisions";
+                            break;
+                        case "accepted":
+                            echo "<span class='attributeLabel'>Status:</span> Complete. Accepted!";
+                            break;
+                        case "rejected":
+                            echo "<span class='attributeLabel'>Status:</span> Rejected";
+                            break;
+                        default:
+                            echo "Status not available. Please contact the administrator";
+                    } ?>
+                    </div>
+                    
+                    <div class='paperAttribute'>
+                        <?php echo "<span class='attributeLabel'>Filename:</span> ".$paper['filename']; ?>
+                    </div>
+                </div>    
+            <?php 
+                } 
+            } else { ?>
+            <h2>You have no papers waiting for review. Click the button below
+                to submit a new document for review.</h2>
+            <?php } ?>
         </div>
     </body>
 </html>
