@@ -35,7 +35,7 @@ function addUser($user) {
     $statement->bindValue(":passwordHash", $passwordHash);
     $statement->bindValue(":role", $user['role']);
     $statement->execute();
-    
+
 }
 
 function login($name, $password) {

@@ -1,8 +1,14 @@
 <?php
     error_reporting(E_ALL &  ~E_NOTICE);
-    session_start();    
+    session_start();
+    
+    //CSS transitions are not supported in IE 8 or 9
+    if(preg_match('/(?i)msie [5-9]/',$_SERVER['HTTP_USER_AGENT'])) {
+        echo "<h1>Please upgrade to a modern browser like Chrome, Firefox, Edge, or Internet Explorer version 10+</h1>";
+        die();
+    }
 
-    //handles logout requests
+//handles logout requests
     if ($_POST['logout'] == 'Logout') {
         $_SESSION = array();
         session_destroy();
@@ -13,8 +19,6 @@
     if ($_POST['from_login_form'] && !$_POST['forgot_PW']) {
         $name = filter_input(INPUT_POST, 'username');
         $userPW = filter_input(INPUT_POST, 'password');
-        //echo "PASSED USERNAME: ".$name."<br>";
-        //echo "PASSED PASSWORD: ".$userPW."<br>";
         
         if (!$name && !$userPW) {
             $loginError = "Please enter a username and password.";
@@ -37,8 +41,8 @@
                 $_SESSION['userID'] = $result['userID'];
                 $_SESSION['username'] = $result['username'];
                 $_SESSION['lastLogin'] = $result['last_login'];
-                //echo "TIMESTAMP: ".$_SESSION['lastLogin'];
-                //var_dump($_SESSION);
+                $_SESSION['firstLogin'] = TRUE;
+
             } else {
                 $loginError = "Invalid username or password";
             }

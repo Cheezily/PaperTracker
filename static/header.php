@@ -16,7 +16,7 @@
             echo "Password Recovery";
             echo "</div>";
         } else {
-            echo "<div class=loginButtons>";
+            echo "<div class='loginButtons'>";
             echo "<button class='loginButton' id='newUser'>New User</button>";
             echo " or ";
             echo "<button class='loginButton' id='login'>Login</button>";

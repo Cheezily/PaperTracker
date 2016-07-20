@@ -17,7 +17,7 @@ $passwordConfirm = filter_input(INPUT_POST, 'passwordConfirm');
 if ($role == 'Author') {
     $r = 'a'; 
 } elseif ($role == 'Reviewer') {
-    $r = 'r'; 
+    $r = 'r';
 } else {
     $r='ERROR. Refresh page';
 }
@@ -99,9 +99,26 @@ $user = array(
     'role' => $role
 );
 addUser($user);
+$loginInfo = login($user['username'], $user['password']);
 
 ?>
 
+
+
+<?php 
+if (!empty($loginInfo)) {
+    session_start();
+    //var_dump($result);
+    $_SESSION['username'] = $loginInfo['username'];
+    $_SESSION['firstname'] = $loginInfo['first_name'];
+    $_SESSION['lastname'] = $loginInfo['last_name'];
+    $_SESSION['email'] = $loginInfo['email'];
+    $_SESSION['role'] = $loginInfo['role'];
+    $_SESSION['userID'] = $loginInfo['userID'];
+    $_SESSION['username'] = $loginInfo['username'];
+    $_SESSION['lastLogin'] = $loginInfo['last_login'];
+    $_SESSION['firstLogin'] = TRUE;
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -110,12 +127,45 @@ addUser($user);
         </title>
         <script type='text/javascript' src='bower_components/jquery/dist/jquery.min.js'></script>
     </head>
-    
     <body>
         <?php include 'static/header.php';?>
         
         <div class='mainWrapper'>
-            <h1>Success!</h1>
+            <h1>Thanks for registering!</h1>
+            <h3>Click on the button below to be taken to your dashboard.</h3>
+            <form method="post" action="index.php">
+                <form method='get' action='index.php'>
+                    <input class='registrationSuccess' type='submit' value='My Dashboard'>
+                </form>
+            </form>
         </div>
     </body>
 </html>
+<?php
+    } else {
+?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Submission Tracker
+        </title>
+        <script type='text/javascript' src='bower_components/jquery/dist/jquery.min.js'></script>
+    </head>
+    <body>
+        <?php include 'static/header.php';?>
+        
+        <div class='mainWrapper'>
+            <h1>Something went wrong with registering your username :(</h1>
+            <h3>The administrator has been notified. You can click on the button below to try again if you wish. </h3>
+            <form method="post" action="index.php">
+                <form method='get' action='index.php'>
+                    <input class='registrationSuccess' type='submit' value='Back to the Home Page'>
+                </form>
+            </form>
+        </div>
+    </body>
+</html>
+<?php
+}
+?>
