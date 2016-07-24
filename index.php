@@ -2,13 +2,34 @@
     error_reporting(E_ALL &  ~E_NOTICE);
     session_start();
     
+    //Login request flag
+    if ($_POST['loginRequest']) {
+        $newLoginRequest = TRUE;
+    }
+    
+    //new user request flag
+    if ($_POST['newUserRequest']) {
+        $newUserRequested = TRUE;
+    }
+    
+    //Handling the new user page after the user has selected a role
+    if ($_POST['newAuthorRegister']) {
+        $newAuthorRequested = TRUE;
+        $newUserRequested = FALSE;
+    }
+    
+    if ($_POST['newReviewerRegister']) {
+        $newReviewerRequested = TRUE;
+        $newUserRequested = FALSE;
+    }
+
     //CSS transitions are not supported in IE 8 or 9
     if(preg_match('/(?i)msie [5-9]/',$_SERVER['HTTP_USER_AGENT'])) {
         echo "<h1>Please upgrade to a modern browser like Chrome, Firefox, Edge, or Internet Explorer version 10+</h1>";
         die();
     }
 
-//handles logout requests
+    //handles logout requests
     if ($_POST['logout'] == 'Logout') {
         $_SESSION = array();
         session_destroy();
@@ -101,7 +122,10 @@
     if ($_SESSION['admin'] == 'reviewer') {
         header("Location: usersAdmin.php");
     }
+
 ?>
+
+
 
 <!DOCTYPE html>
 <html>
@@ -115,7 +139,10 @@
     <body>
         <?php include 'static/header.php';?>
         
-        <div class='mainWrapper' <?php if ($loginError || $newUserError) {echo "style='opacity: .3'";} ?>>
+        <?php if ($loginError || $newUserError || $newUserRequested || $newAuthorRequested || $newReviewerRequested) {
+            echo "<div class='mainWrapper' style='opacity: .3'>";
+            } elseif ($newLoginRequest) {echo "<div class='mainWrapper fadeOutMainWrapper'>";
+            } else {echo "<div class='mainWrapper'>";}?>
             <h1>Hi there!</h1>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
                 eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
@@ -127,82 +154,88 @@
                 laborum.</p>
             </div>
             
-            <div class='loginForm' id='loginWindow' <?php if ($loginError || $newUserError) {
-                    echo "style='display: block'";} ?>>
-                <div <?php 
-                    if ($newUserError) {
-                        echo "style='display: none'";
-                    }
-                ?>>
-                <form method='post' action='index.php'>
-                    <label for='login_username'>Username
-                    <span class='warning' id='loginWarning'>
-                        <?php echo $loginError; ?>
-                    </span>
-                    </label>
-                    <input type='text' id='login_username' name='username' placeholder='Username'><br>
-                    <label for='login_password'>Password</label>
-                    <input type='password' id='login_password' name='password'><br><br>
-                    <input type='hidden' name='from_login_form' value='1'>
-                    <input type='submit' id='login_submit' name='submit' value='Log In'>
-                </form>
-                
-                <form method='post' action='index.php'>
-                    <input type='hidden' name='from_login_form' value='0'>
-                    <input type='submit' id='loginCancelButton' name='submit' value='Cancel'>
-                </form>
-                
-                <form method='post' action='index.php'>
-                    <input type='hidden' name='from_login_form' value='1'>
-                    <input type='hidden' name='forgot_PW' value='1'>
-                    <input type='submit' id='forgotPWbutton' id='login_submit' name='submit' 
-                              value='Click here if you forgot your password'>
-                </form>
-                </div>
+            <!--The login form will be displayed if there are any /registration 
+                errors or if the form was requested by clicking the login 
+                button in the header-->
+            <?php if ($loginError || $newUserError || $newLoginRequest) { ?>
+            
+                <?php if ($newLoginRequest) {echo "<div class='loginForm loginFormAppear' id='loginWindow'>";} 
+                elseif (!$newLoginRequest && ($loginError || $newUserError)) {echo "<div class='loginForm' id='loginWindow'>";} ?>
 
-            </div>
-
-            <!--Registration forms.  Starts hidden. Displayed via JS or 
-            error handling in PHP-->
-            <div class="loginForm" id="registrationDialog" 
-                <?php if ($newUserError) {
-                    echo "style='display: block; height: 600px;'";} 
-                ?>
-            >
-                <p id='roleTitle'>
-                    <?php if ($newUserError) {
-                        echo $newUserErrorRole;
-                    } else {
-                        echo 'Please select your role:';
-                    } 
-                    ?>
-                </p>
-                
-                <div class='roleSelection' 
-                    <?php 
+                    <div <?php 
                         if ($newUserError) {
                             echo "style='display: none'";
-                        } 
-                    ?>
-                >
-                    <button class='registrationButton' id="newAuthorRegister">Author - You'll be submitting papers</button><br><br>
-                    <button class='registrationButton' id="newReviewerRegister">Reviewer - You'll be reviewing papers</button><br><br>
+                        }
+                    ?>>
+                    <form method='post' action='index.php'>
+                        <label for='login_username'>Username
+                        <span class='warning' id='loginWarning'>
+                            <?php echo $loginError; ?>
+                        </span>
+                        </label>
+                        <input type='text' id='login_username' name='username' placeholder='Username'><br>
+                        <label for='login_password'>Password</label>
+                        <input type='password' id='login_password' name='password'><br><br>
+                        <input type='hidden' name='from_login_form' value='1'>
+                        <input type='submit' id='login_submit' name='submit' value='Log In'>
+                    </form>
+
                     <form method='post' action='index.php'>
                         <input type='hidden' name='from_login_form' value='0'>
-                        <input type='submit' id='roleCancelButton' name='submit' value='Cancel'>
+                        <input type='submit' id='loginCancelButton' name='submit' value='Cancel'>
                     </form>
-                </div>
 
-                <div id='newUserForm' class='newUserForm'
-                    <?php 
-                        //keep this section displayed with no slide effect if
-                        //there is an error
-                        if ($newUserError) {
-                            echo "style='display: block;'";
-                        } 
-                    ?>
-                >
+                    <form method='post' action='index.php'>
+                        <input type='hidden' name='from_login_form' value='1'>
+                        <input type='hidden' name='forgot_PW' value='1'>
+                        <input type='submit' id='forgotPWbutton' id='login_submit' name='submit' 
+                                  value='Click here if you forgot your password'>
+                    </form>
+                    </div>
+
+                </div>
+        
+            <?php } ?>
+
+            <!--Registration forms.  Starts hidden-->
+            <?php if ($newUserRequested || $newAuthorRequested || $newReviewerRequested) { ?>
+                <?php if ($newAuthorRequested || $newReviewerRequested) { ?>
+                    <div class="loginForm loginFormDisappear" id="registrationDialog">
+                <?php } else { ?>
+                    <div class="loginForm loginFormAppear" id="registrationDialog">
+                <?php } ?>
+                        <p id='roleTitle'>
+                            <?php if ($newUserError) {
+                                echo $newUserErrorRole;
+                            } else {
+                                echo 'Please select your role:';
+                            } 
+                            ?>
+                        </p>
+
+                    <div class='roleSelection'>   
+                        <form method="post" action='index.php'>
+                        <input type="submit" class='registrationButton' name="newAuthorRegister" value="Author - You'll be submitting papers"><br>
+                        </form>
+                        <form method="post" action='index.php'>
+                        <input type="submit" class='registrationButton' name="newReviewerRegister" value="Reviewer - You'll be reviewing papers"><br>
+                        </form>
+                        <form method='post' action='index.php'>
+                            <input type='hidden' name='from_login_form' value='0'>
+                            <input type='submit' id='roleCancelButton' name='submit' value='Cancel'>
+                        </form>
+                    </div>
+                </div>
+            <?php } ?>
+                
+                <?php if ($newUserError || $newAuthorRequested || $newReviewerRequested) {
+                    if ($newUserError && !$newAuthorRequested && !$newReviewerRequested) { 
+                    echo "<div class='loginForm newUserForm'>";
+                    } else { 
+                    echo "<div class='loginForm newUserForm newUserFormAppear'>";} ?>
                     <form class='newUserRegisterForm' method='post' action='registration.php'>
+                        <?php if ($newAuthorRequested || ($errRole === 'Author')) {echo "<h4>New Author Registration:</h4>";}?>
+                        <?php if ($newReviewerRequested || ($errRole === 'Reviewer')) {echo "<h4>New Reviewer Registration:</h4>";}?>
                         <label for='authorUsername'>Username
                             <span class='miniWarning'>
                                 <?php if ($nameError) {
@@ -302,6 +335,12 @@
                             if ($errRole) {
                                 echo "value=".$errRole;
                             }
+                            if ($newAuthorRequested) {
+                                echo "value='Author'";
+                            }
+                            if ($newReviewerRequested) {
+                                echo "value='Reviewer'";
+                            }
                         ?>       
                         >
                         <input id='createAccount' type='submit' value='Create Account'>
@@ -312,7 +351,10 @@
                     </form>
 
                 </div>
-            </div>
-        <script type='text/javascript' src='js/loginWindow.js'></script>
+                <?php   
+
+                } ?>
+
+        
     </body>
 </html>

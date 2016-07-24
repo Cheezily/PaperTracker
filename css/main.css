@@ -5,6 +5,8 @@ body {
     font-family: sans-serif;
     color: #444;
 }
+
+/*Header stuff*/
 header {
     height: 40px;
     width: 100%;
@@ -14,6 +16,10 @@ header {
     border-bottom: 1px solid red;
 }
 
+.headerFrom {
+    display: inline-block;
+}
+/*------------------------*/
 
 /* Home Page Components */
 .mainWrapper {
@@ -26,21 +32,47 @@ header {
     height: 800px;
 }
 
-
-.loginForm {
-    display: none;
+/*LOGIN FORM ON THE MAIN PAGE*/
+.loginForm, .loginFormAppear, .newUserForm {
     background: white;
     box-sizing: border-box;
     width: 500px;
-    height: 300px;
+    height: 350px;
     position: absolute;
     top: 100px;
     left: 0;
     right: 0;
     margin: 0 auto;
-    padding: 0 30px;
+    padding: 10px 30px;
     border: 4px solid #f66;
     font-size: 24px;
+}
+
+.loginFormAppear {
+    animation: formAppear 1s forwards;
+}
+
+@keyframes formAppear {
+    0% {top: -600px; }
+    100% {top: 100px; opacity: 1;}
+}
+
+.loginFormDisappear {
+    animation: formDisappear .2s forwards;
+}
+
+@keyframes formDisappear {
+    0% {opacity: 1;}
+    100% {opacity: 0;}
+}
+
+.fadeOutMainWrapper {
+    animation: fadeOutMain 1s forwards;
+}
+
+@keyframes fadeOutMain {
+    0% {opacity: 1;}
+    100% {opacity: .3;}
 }
 
 .loginForm input:not([type='submit']) {
@@ -74,7 +106,7 @@ header {
     color: white;
     font-size: 22px;
     border: 2px solid #f66;
-    margin-bottom: 10px;
+    margin: 5px 0;
 }
 
 .secondaryButton {
@@ -109,36 +141,7 @@ header {
     outline: none;
 }
 
-/*HOME PAGE - greeting in the upper right when the user is logged in*/
-.greeting {
-    display: inline-block;
-    float: right;
-    margin: 12px;
-}
-
-.logoutButton {
-    background: #f66;
-    color: white;
-    border: none;
-    font-size: 18px;
-    outline: none;
-}
-
-.logoutForm {
-    display: inline-block;
-    background: #f66;
-    height: 30px;
-    width: 80px;
-    margin: 5px 40px 10px 15px;
-    float: right;
-    text-align: center;
-}
-
-.logoutForm::after {
-    clear: both;
-}
-/*------------------------------------------*/
-
+/*REGISTRATION FORM ITEMS FOR THE HOME PAGE*/
 #forgotPWbutton {
     color: #333;
     background: none;
@@ -153,7 +156,16 @@ header {
 }
 
 .newUserForm {
-    display: none;
+    height: 630px;
+}
+
+.newUserFormAppear {
+    animation: newUserFormAppear .5s forwards;
+}
+
+@keyframes newUserFormAppear {
+    0% {opacity: 0;}
+    100% {opacity 1;}
 }
 
 .forgotPWbutton {
@@ -189,6 +201,41 @@ header {
 .miniWarning:after {
     clear: both;
 }
+/*------------------------------------------*/
+
+/*HOME PAGE - greeting in the upper right when the user is logged in*/
+.greeting {
+    display: inline-block;
+    float: right;
+    margin: 12px;
+}
+
+.logoutButton {
+    background: #f66;
+    color: white;
+    border: none;
+    font-size: 18px;
+    outline: none;
+}
+
+.logoutForm {
+    display: inline-block;
+    background: #f66;
+    height: 30px;
+    width: 80px;
+    margin: 5px 40px 10px 15px;
+    float: right;
+    text-align: center;
+}
+
+.logoutForm::after {
+    clear: both;
+}
+/*------------------------------------------*/
+
+
+
+
 
 /*REGISTRATION SUCCESS PAGE*/
 .registrationSuccess {

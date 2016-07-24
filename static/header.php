@@ -17,9 +17,13 @@
             echo "</div>";
         } else {
             echo "<div class='loginButtons'>";
-            echo "<button class='loginButton' id='newUser'>New User</button>";
+            echo "<form method='post' action='index.php' class='headerFrom'>";
+            echo "<input type='submit' class='loginButton' id='newUser' name='newUserRequest' value='New User'>";
+            echo "</form>";
             echo " or ";
-            echo "<button class='loginButton' id='login'>Login</button>";
+            echo "<form method='post' action='index.php' class='headerFrom'>";
+            echo "<input type='submit' class='loginButton' id='login' name='loginRequest' value='Login'>";
+            echo "</form>";
             echo "</div>";
         }
     ?>
