@@ -26,7 +26,7 @@ header {
     box-sizing: border-box;
     background: #eee;
     width: 960px;
-    padding: 10px 50px;
+    padding: 5px 50px 25px;
     margin: 0 auto;
     border: 5px solid #777;
     /*
@@ -255,6 +255,36 @@ header {
 
 /*--------------------------*/
 
+
+/*COMMON TO ALL DASHBOARDS*/
+
+.alert {
+    display: inline-block;
+    margin-left: 30px;
+    color: green;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.submitButton {
+    border: none;
+    height: 35px;
+    width: 200px;
+    margin: 10px 10px 5px 5px;
+    background: #4b4;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 18px;
+}
+
+.tip {
+    margin-top: 30px;
+    color: #666;
+    font-size: 14px;
+}
+
+/*--------------------------*/
+
 /*USER DASHBOARD PAGE*/
 .newAuthorAlert, .hideAuthorAlert {
     box-sizing: border-box;
@@ -331,10 +361,15 @@ header {
 }
 
 .paperList {
-    height: 400px;
+
     margin: -10px auto 5px;
     padding: 0;
-    border: 1px solid red;
+    border-top: 1px solid #777;
+    border-left: 1px solid #777;
+    border-right: 1px solid #777;
+    border-radius: 4px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .paperWrapper {
@@ -363,6 +398,11 @@ header {
     color: #777;
 }
 
+.paperTitleLabel {
+    color: darkred;
+    font-weight: bold;
+}
+
 .selectPaperTitle {
     height: 30px;
     width: 80%;
@@ -372,10 +412,22 @@ header {
 
 .messageText {
     width: 80%;
-    height: 130px;
+    height: 90px;
     font-size: 14px;
     margin: 5px 0 5px 0;
 }
+
+.messageList {
+    box-sizing: border-box;
+    padding: 5px 20px;
+    max-height: 300px;
+    overflow-y: auto;
+    border-top: 1px solid #777;
+    border-left: 1px solid #777;
+    border-right: 1px solid #777;
+    border-radius: 4px;
+}
+
 /*------------------------------*/
 
 

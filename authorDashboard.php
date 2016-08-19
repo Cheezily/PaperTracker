@@ -9,6 +9,8 @@ if (!isset($_SESSION['username'])) {
 require_once 'model/papersDB.php';
 require_once 'model/messagesDB.php';
 
+$userMessages = getMessages($_SESSION['username']);
+
 $hideAlert = FALSE;
 if (isset($_POST['getStarted'])) {
     $hideAlert = TRUE;
@@ -84,7 +86,7 @@ if (isset($_POST['getStarted'])) {
         <?php } else { ?>
             <div class='mainWrapper'>
         <?php } ?>
-            <h1>Submission List:</h1>
+            <h2>Submission List:</h2>
             <div class='paperList'>
         <?php
             //from papersDB.php
@@ -132,29 +134,45 @@ if (isset($_POST['getStarted'])) {
             <?php } ?>
             </div>
             <form method='post' action='index.php'>
-                <button type='submit' name="newPaper">Submit New Paper</button>
+                <button class='submitButton' type='submit' name="newPaper">Submit New Paper</button>
             </form>
-            <hr>
+
+            <br>
+            <br>
+            
+            <h2>Messages:</h2>
+            <div class='messageList'>
+                <?php if (count($userMessages) == 0) {
+                    echo "<p>You have no messages at this time!</p>";
+                } else {
+                    forEach ($userMessages as $message) {
+                        echo "<p>Sent on - ".$message['whenSent']." by Administrator:<p>";
+                        echo "<p>".$message['message']."<p><hr>";
+                    }
+                }
+                ?>
+            </div>
             <div class='messageAdmin'>
-                <p>Please use the following form to contact the administrator.  They
+                <p class='tip'>Please use the following form to contact the administrator.  They
                 are responsible for assigning your papers to reviewers as well as 
                 handling any requests to delete submitted papers from the system.</p>
                 <form method='post' action='index.php'>
-                    <label for='selectPaperTitle'>Which paper is this about?</label><br>
-                    <select class='selectPaperTitle' id='selectPaperTitle' name='selectPaperTitle' required>
+                    <label class='paperTitleLabel' for='selectPaperTitle'>Which paper is this about?</label><br>
+                    <select class='selectPaperTitle' id='selectPaperTitle' name='messageTitle' required>
                         <?php forEach ($yourPapers as $paper) {
                             echo "<option value='".$paper['title']."'>".$paper['title']."</option>";
                         } ?>
                         <option value='General Question' selected>General Question - No specific paper</option>
                     </select>
                     <br>
-                    <textarea class='messageText' name='message' placeholder="Type your message here..."></textarea>
+                    <textarea class='messageText' name='message' placeholder="Type your message here..." required></textarea>
                     <br>
-                    <input type='hidden' name='username' value='<?php echo $_SESSION['username']; ?>'>
-                    <input type='submit' name='messageAdmin' value='Send Message'>
-                    <br>
-                    <?php if(isset($messageStatus)) {
-                        echo "<h3>".$messageStatus."</h3>";
+                    <input type='hidden' name='fromUsername' value='<?php echo $_SESSION['username']; ?>'>
+                    <input class='submitButton' type='submit' name='sendMessage' value='Send Message'>
+                    <?php //echo "STATUS: ".$_SESSION['messageSent']; ?>
+                    <?php if(isset($_SESSION['messageSent'])) {
+                        //echo "STUFF";
+                        echo "<span class='alert'>".$messageStatus."</span>";
                     } ?>
                 </form>
             </div>

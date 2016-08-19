@@ -13,7 +13,7 @@ function getMessages($username) {
     return $results;
 }
 
-function sendAuthorMessage($fromUsername, $toUsername, $message, $title) {
+function sendMessage($fromUsername, $toUsername, $message, $messageTitle) {
     $whenSent = date("Y-m-d H:i:s");
     
     global $db;
@@ -23,18 +23,22 @@ function sendAuthorMessage($fromUsername, $toUsername, $message, $title) {
     $statement->bindValue(":toUsername", $toUsername);
     $statement->bindValue(":whenSent", $whenSent);
     $statement->bindValue(":message", $message);
-    $statement->bindValue(":title", $title);
+    $statement->bindValue(":title", $messageTitle);
     $statement->execute();
     
     //make sure the message went through
-    $query = "SELECT FROM messages WHERE fromUsername=:fromUsername AND whenSent=:whenSent AND title=:title";
+    $query = "SELECT * FROM messages WHERE fromUsername=:fromUsername AND whenSent=:whenSent AND title=:title";
     $statement = $db->prepare($query);
     $statement->bindValue(":fromUsername", $fromUsername);
     $statement->bindValue(":whenSent", $whenSent);
-    $statement->bindValue(":title", $title);
+    $statement->bindValue(":title", $messageTitle);
     $statement->execute();
     $results = $statement->fetch();
     
-    return !empty($results);
+    if ($results) {
+        return "Message sent";
+    } else {
+        return;
+    }
 }
 ?>
