@@ -364,7 +364,6 @@ header {
 
     margin: -10px auto 5px;
     padding: 0;
-    border-top: 1px solid #777;
     border-left: 1px solid #777;
     border-right: 1px solid #777;
     border-radius: 4px;
@@ -422,7 +421,6 @@ header {
     padding: 5px 20px;
     max-height: 300px;
     overflow-y: auto;
-    border-top: 1px solid #777;
     border-left: 1px solid #777;
     border-right: 1px solid #777;
     border-radius: 4px;

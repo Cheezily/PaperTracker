@@ -2,6 +2,8 @@
     error_reporting(E_ALL &  ~E_NOTICE);
     session_start();
     
+    date_default_timezone_set ("America/Chicago");
+    
     //CSS transitions are not supported in IE 8 or 9
     if(preg_match('/(?i)msie [5-9]/',$_SERVER['HTTP_USER_AGENT'])) {
         echo "<h1>Please upgrade to a modern browser like Chrome, Firefox, Edge, or Internet Explorer version 10+</h1>";

@@ -2,11 +2,11 @@
 
 require_once 'database.php';
 
-function getMessages($username) {
+function getMessages($toUsername) {
     global $db;
-    $query = "SELECT * FROM messages WHERE username=:username ORDER BY whenSent DESC";
+    $query = "SELECT * FROM messages WHERE toUsername=:toUsername ORDER BY whenSent DESC";
     $statement = $db->prepare($query);
-    $statement->bindValue(":username", $username);
+    $statement->bindValue(":toUsername", $toUsername);
     $statement->execute();
     
     $results = $statement->fetchAll();

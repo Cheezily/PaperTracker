@@ -146,7 +146,7 @@ if (isset($_POST['getStarted'])) {
                     echo "<p>You have no messages at this time!</p>";
                 } else {
                     forEach ($userMessages as $message) {
-                        echo "<p>Sent on - ".$message['whenSent']." by Administrator:<p>";
+                        echo "<p>Sent on ".date("F j, Y, g:i a", strtotime($message['whenSent']))." by Administrator:<p>";
                         echo "<p>".$message['message']."<p><hr>";
                     }
                 }
