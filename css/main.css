@@ -1,7 +1,7 @@
 body {
     margin: 0;
     padding: 0;
-    background: #FCFCFC;
+    background: #bcb;
     font-family: sans-serif;
     color: #444;
 }
@@ -13,7 +13,7 @@ header {
     margin-top: 15px;
     margin-bottom: 0;
     font-size: 18px;
-    border-bottom: 1px solid red;
+    border-bottom: 0px solid #777;
 }
 
 .headerFrom {
@@ -24,12 +24,17 @@ header {
 /* Home Page Components */
 .mainWrapper {
     box-sizing: border-box;
+    background: #eee;
     width: 960px;
-    padding: 30px 20px;
+    padding: 10px 50px;
     margin: 0 auto;
-    border-left: 1px solid #f66;
-    border-right: 1px solid #f66;
-    height: 800px;
+    border: 5px solid #777;
+    /*
+    border-left: 3px solid #777;
+    border-right: 3px solid #777;
+    */
+    height: 100%;
+    border-radius: 12px;
 }
 
 /*LOGIN FORM ON THE MAIN PAGE*/
@@ -44,7 +49,7 @@ header {
     right: 0;
     margin: 0 auto;
     padding: 10px 30px;
-    border: 4px solid #f66;
+    border: 4px solid #777;
     font-size: 24px;
 }
 
@@ -86,8 +91,8 @@ header {
 #createAccount, .registrationButton {
     width: 435px;
     height: 35px;
-    background: #f66;
-    color: white; 
+    background: #777;
+    color: white;
     font-size: 22px;
     border: none;
 }
@@ -100,12 +105,12 @@ header {
 }
 
 .loginForm input[type='submit'], .getStartedButton {
-    background: #f66;
+    background: #777;
     height: 35px;
     width: 430px;
     color: white;
     font-size: 22px;
-    border: 2px solid #f66;
+    border: 2px solid #777;
     margin: 5px 0;
 }
 
@@ -179,7 +184,7 @@ header {
 
 .logoutButton {
     display: inline-block;
-    
+
 }
 
 .warning {
@@ -211,7 +216,7 @@ header {
 }
 
 .logoutButton {
-    background: #f66;
+    background: #777;
     color: white;
     border: none;
     font-size: 18px;
@@ -220,7 +225,7 @@ header {
 
 .logoutForm {
     display: inline-block;
-    background: #f66;
+    background: #777;
     height: 30px;
     width: 80px;
     margin: 5px 40px 10px 15px;
@@ -240,12 +245,12 @@ header {
 /*REGISTRATION SUCCESS PAGE*/
 .registrationSuccess {
     margin: 20px 40px;
-    background: #f66;
+    background: #777;
     height: 35px;
     width: 430px;
     color: white;
     font-size: 22px;
-    border: 2px solid #f66;
+    border: 2px solid #777;
 }
 
 /*--------------------------*/
@@ -262,18 +267,18 @@ header {
     padding: 15px 25px;
     height: 530px;
     width: 500px;
-    border: 3px solid #f66;
+    border: 3px solid #777;
     z-index: 2;
 }
 
 .newAuthorAlert {
     animation: alertSlideIn 1s forwards;
-    animation-iteration-count: 1;    
+    animation-iteration-count: 1;
 }
 
 .hideAuthorAlert {
     animation: alertSlideOut 1s forwards;
-    animation-iteration-count: 1;    
+    animation-iteration-count: 1;
 }
 
 .fadeOut {
@@ -286,6 +291,10 @@ header {
     animation: fadeIn 1s;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
+}
+
+.dimmed {
+    opacity: .3;
 }
 
 @keyframes alertSlideIn {
@@ -321,11 +330,18 @@ header {
     width: 430px;
 }
 
+.paperList {
+    height: 400px;
+    margin: -10px auto 5px;
+    padding: 0;
+    border: 1px solid red;
+}
+
 .paperWrapper {
     box-sizing: border-box;
     width: 90%;
     margin: 20px auto;
-    border: 3px solid #f66;
+    border: 3px solid #777;
 }
 
 .paperAttribute {
@@ -334,7 +350,7 @@ header {
     height: 25px;
     margin: 0 auto;
     padding: 5px;
-    
+
 }
 
 .paperAttribute:not(:first-of-type) {
@@ -344,6 +360,81 @@ header {
 .attributeLabel {
     font-weight: bold;
     font-style: italic;
-    color: #f66;
+    color: #777;
 }
+
+.selectPaperTitle {
+    height: 30px;
+    width: 80%;
+    font-size: 14px;
+    border: 1px solid #333;
+}
+
+.messageText {
+    width: 80%;
+    height: 130px;
+    font-size: 14px;
+    margin: 5px 0 5px 0;
+}
+/*------------------------------*/
+
+
+/*Author submitting a new paper from the dashboard*/
+.newPaper, .paperSubmitted {
+    box-sizing: border-box;
+    background: white;
+    position: absolute;
+    top: 100px;
+    left: 0;
+    right: 0;
+    width: 700px;
+    height: 400px;
+    margin: 0 auto;
+    padding: 30px;
+    border: 1px solid #333;
+    z-index: 2;
+}
+
+.newPaperAppear {
+    animation: newPaperAppear 1s forwards;
+}
+
+.paperSubmitted {
+    z-index: -1;
+    animation: newPaperDisappear 1s forwards;
+}
+
+@keyframes newPaperAppear {
+    0% {top: -1000px;}
+    100% {top: 100px;}
+}
+
+@keyframes newPaperDisappear {
+    0% {top: 100px;
+        z-index: 2;}
+    100% {top: -1000px;}
+}
+
+.upload button {
+    height: 45px;
+    width: 80%;
+    margin: 0 auto;
+    border: none;
+    background: #ddd;
+}
+
+.newPaper input {
+    height: 45px;
+    margin: 5px 0 20px 0;
+    width: 100%;
+    font-size: 18px;
+}
+
+.newPaper input[type="submit"] {
+    height: 45px;
+    margin-bottom: 20px;
+    width: 100%;
+    background: #ccc;
+}
+
 /*------------------------------*/
