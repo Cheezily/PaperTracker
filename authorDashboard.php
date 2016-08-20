@@ -10,6 +10,7 @@ require_once 'model/papersDB.php';
 require_once 'model/messagesDB.php';
 
 $userMessages = getMessages($_SESSION['username']);
+$yourPapers = checkPapers($_SESSION['username']);
 
 $hideAlert = FALSE;
 if (isset($_POST['getStarted'])) {
@@ -58,7 +59,7 @@ if (isset($_POST['getStarted'])) {
             </ul>
             <br>
             <p>Press the button below to get started and submit a paper for review.</p>
-            <form method='post' action='authorDashboard.php'>
+            <form method='post' action='index.php'>
                 <input type='submit' name='getStarted' class='getStartedButton' value='Get Started'> 
             </form>
             
@@ -90,7 +91,7 @@ if (isset($_POST['getStarted'])) {
             <div class='paperList'>
         <?php
             //from papersDB.php
-            $yourPapers = checkPapers($_SESSION['username']);
+            
             if (!empty($yourPapers)) {
                 //var_dump($yourPapers);
                 forEach ($yourPapers as $paper) { ?>
@@ -124,7 +125,7 @@ if (isset($_POST['getStarted'])) {
                     
                     <div class='paperAttribute'>
                         <?php echo "<span class='attributeLabel'>Filename:</span> ".
-                                "<a target='_blank' href='uploads/".$_SESSION['userID']."-".$paper['filename'].
+                                "<a target='_blank' href='uploads/".$paper['filename'].
                                 "'>".htmlspecialchars($paper['filename'])."</a>"; ?>
                     </div>
                 </div>    
@@ -148,8 +149,9 @@ if (isset($_POST['getStarted'])) {
                     echo "<p>You have no messages at this time!</p>";
                 } else {
                     forEach ($userMessages as $message) {
-                        echo "<p class='messageLine'>Sent on ".date("F j, Y, g:i a", strtotime($message['whenSent']))." by Administrator:<p>";
-                        echo "<p class='messageLine'>Re: ".$message['title']."</p>";
+                        echo "<p class='messageLineHeader'>Sent on ".date("F j, Y, g:i a", 
+                                strtotime($message['whenSent']))." by Administrator:</p>";
+                        echo "<p class='messageLineHeader'>Re: ".$message['title']."</p>";
                         echo "<p class='messageLine'>".$message['message']."<p><hr>";
                     }
                 }

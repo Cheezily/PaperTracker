@@ -26,7 +26,7 @@ header {
     box-sizing: border-box;
     background: #eee;
     width: 960px;
-    padding: 5px 50px 25px;
+    padding: 15px 50px 25px;
     margin: 0 auto;
     border: 5px solid #777;
     /*
@@ -289,7 +289,7 @@ header {
 .newAuthorAlert, .hideAuthorAlert {
     box-sizing: border-box;
     position: absolute;
-    top: 200px;
+    top: 100px;
     background: white;
     left: 0;
     right: 0;
@@ -329,12 +329,12 @@ header {
 
 @keyframes alertSlideIn {
     from {top: -700px;}
-    to {top: 160px;}
+    to {top: 100px;}
 }
 
 @keyframes alertSlideOut {
-    0% from {top: 160px;}
-    20% {top: 320px;}
+    0% from {top: 100px;}
+    20% {top: 220px;}
     100% {top: -660px;
           opacity: 0;
           z-index: -2;
@@ -426,9 +426,13 @@ header {
     border-radius: 4px;
 }
 
-.messageLine {
-    margin-top: 0;
+.messageLine, .messageLineHeader {
+    margin: 0;
     padding: 0;
+}
+
+.messageLineHeader {
+    color: #a6a6a6;
 }
 
 /*------------------------------*/

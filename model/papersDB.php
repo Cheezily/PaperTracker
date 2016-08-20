@@ -15,9 +15,23 @@ function checkPapers($username) {
     }
 }
 
-function uploadPaper($username, $filename, $title) {
+function checkPapersForReviewer($reviewername) {
     global $db;
-    $query = 'INSERT INTO papers (username, filename, when_submitted, title) VALUES (:username, :filename, :when_submitted, :title)';
+    $query = 'SELECT * FROM papers WHERE reviewername=:reviewername ORDER BY when_submitted DESC';
+    $statement = $db->prepare($query);
+    $statement->bindValue(":reviewername", $reviewername);
+    $statement->execute();
+    $results = $statement->fetchAll();
+    if ($results) {
+        return $results;
+    } else {
+        return FALSE;
+    }
+}
+
+function uploadDraft($username, $filename, $title) {
+    global $db;
+    $query = 'INSERT INTO papers (username, draftFilename, when_submitted, title) VALUES (:username, :filename, :when_submitted, :title)';
     $statement = $db->prepare($query);
     $statement->bindValue(":username", $username);
     $statement->bindValue(":when_submitted", date("Y-m-d H:i:s"));
@@ -25,4 +39,6 @@ function uploadPaper($username, $filename, $title) {
     $statement->bindValue(":title", $title);
     $statement->execute();
 }
+
+
 ?>
