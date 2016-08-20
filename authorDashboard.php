@@ -123,7 +123,9 @@ if (isset($_POST['getStarted'])) {
                     </div>
                     
                     <div class='paperAttribute'>
-                        <?php echo "<span class='attributeLabel'>Filename:</span> ".htmlspecialchars($paper['filename']); ?>
+                        <?php echo "<span class='attributeLabel'>Filename:</span> ".
+                                "<a target='_blank' href='uploads/".$_SESSION['userID']."-".$paper['filename'].
+                                "'>".htmlspecialchars($paper['filename'])."</a>"; ?>
                     </div>
                 </div>    
             <?php 
@@ -146,8 +148,9 @@ if (isset($_POST['getStarted'])) {
                     echo "<p>You have no messages at this time!</p>";
                 } else {
                     forEach ($userMessages as $message) {
-                        echo "<p>Sent on ".date("F j, Y, g:i a", strtotime($message['whenSent']))." by Administrator:<p>";
-                        echo "<p>".$message['message']."<p><hr>";
+                        echo "<p class='messageLine'>Sent on ".date("F j, Y, g:i a", strtotime($message['whenSent']))." by Administrator:<p>";
+                        echo "<p class='messageLine'>Re: ".$message['title']."</p>";
+                        echo "<p class='messageLine'>".$message['message']."<p><hr>";
                     }
                 }
                 ?>
