@@ -12,6 +12,7 @@ require_once 'model/messagesDB.php';
 $userMessages = getMessages($_SESSION['username']);
 $yourPapers = checkPapers($_SESSION['username']);
 
+
 $hideAlert = FALSE;
 if (isset($_POST['getStarted'])) {
     $hideAlert = TRUE;
@@ -124,10 +125,40 @@ if (isset($_POST['getStarted'])) {
                     </div>
                     
                     <div class='paperAttribute'>
-                        <?php echo "<span class='attributeLabel'>Filename:</span> ".
-                                "<a target='_blank' href='uploads/".$paper['filename'].
-                                "'>".htmlspecialchars($paper['filename'])."</a>"; ?>
+                        <?php echo "<span class='attributeLabel'>Draft Filename:</span> ".
+                                "<a target='_blank' href='uploads/drafts/".$paper['draftFilename'].
+                                "'>".htmlspecialchars($paper['draftFilename'])."</a>"; ?>
                     </div>
+                    
+                    <div class='paperAttribute'>
+                        <?php if ($paper['firstReplyFilename'] && !$paper['finalReplyFilename']) {
+                                $firstReplyFilename = htmlspecialchars($paper['firstReplyFilename']);
+                                echo "<span class='attributeLabel'>Feedback:</span> ".
+                                "<a target='_blank' href='uploads/firstResponses/".$firstReplyFilename.
+                                "'>".$firstReplyFilename."</a>";
+                            } elseif ($paper['finalReplyFilename']) {
+                                $finalReplyFilename = htmlspecialchars($paper['finalReplyFilename']);
+                                echo "<span class='attributeLabel'>Final Feedback:</span> ".
+                                "<a target='_blank' href='uploads/finalResponses/".$finalReplyFilename.
+                                "'>".$finalReplyFilename."</a>";    
+                            } else {
+                                echo "<span class='attributeLabel'>Feedback:</span> N/A";
+                            }
+                        ?>
+                    </div>
+                    
+                    <?php if ($paper['firstReplyFilename'] && 
+                            !$paper['finalReplyFilename']) { ?>
+                        <div class='paperAttribute'>
+                        <span class='attributeLabel'>Your Revised Paper:</span>
+                        <form method='post' action='index.php'>
+                            <input class='revisionSubmit' type='submit' name='revisionSubmit' value='Submit'>
+                            <input class='revisionUpload' type='file' name='revision'>
+                            <input type='hidden' name='paperID' value='<?php 
+                                echo $paper['paperID']; ?>'>
+                        </form>
+                        </div>
+                    <?php } ?>
                 </div>    
             <?php 
                 } 
@@ -137,7 +168,7 @@ if (isset($_POST['getStarted'])) {
             <?php } ?>
             </div>
             <form method='post' action='index.php'>
-                <button class='submitButton' type='submit' name="newPaper">Submit New Paper</button>
+                <button class='submitButton' type='submit' name="newPaper">Submit New Draft</button>
             </form>
 
             <br>

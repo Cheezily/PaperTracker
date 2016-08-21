@@ -384,7 +384,6 @@ header {
     height: 25px;
     margin: 0 auto;
     padding: 5px;
-
 }
 
 .paperAttribute:not(:first-of-type) {
@@ -435,6 +434,34 @@ header {
     color: #a6a6a6;
 }
 
+.paperAttribute form {
+    display: inline;
+    padding: 0;
+}
+
+.revisionSubmit {
+    float: right;
+    border: none;
+    width: 140px;
+    height: 24px;
+    margin: -5px -5px 0 0;
+    color: white;
+    font-size: 16px;
+    background: #4b4;
+}
+
+.revisionUpload {
+    display: inline-block;
+    margin-top: -15px;
+    padding: 3px;
+    position: relative;
+    top: 10px;
+    float: right;
+    color: black;
+    background: #ccc;
+    height: 18px;
+    width: 400px;
+}
 /*------------------------------*/
 
 

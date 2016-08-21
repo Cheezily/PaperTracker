@@ -22,7 +22,7 @@
             $newPaper = TRUE;
             $randomPad = rand(1000, 9999);
             //var_dump($_FILES);
-            $doc_dir = getcwd().'/uploads/';
+            $doc_dir = getcwd().'/uploads/drafts/';
             $doc_file  = $doc_dir.$randomPad."-".basename($_FILES["paperFile"]["name"]);
             $filetype = pathinfo($doc_file, PATHINFO_EXTENSION);
             //echo $filetype;
@@ -38,7 +38,7 @@
             if (!isset($newPaperError)) {
                 if (move_uploaded_file($_FILES["paperFile"]["tmp_name"], $doc_file)) {
                     require_once 'model/papersDB.php';
-                    uploadPaper($_SESSION['username'],
+                    uploadDraft($_SESSION['username'],
                             $randomPad."-".basename($_FILES["paperFile"]["name"]), 
                             $title);
                     $newPaperSubmitted = TRUE;
