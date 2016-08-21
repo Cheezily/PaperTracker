@@ -462,6 +462,30 @@ header {
     height: 18px;
     width: 400px;
 }
+
+.awaitingAssignment {
+    border-color: #666;
+}
+
+.awaitingReview {
+    border-color: blue;
+}
+
+.awaitingRevisions {
+    border-color: #4bb;
+}
+
+.awaitingFinal {
+    border-color: orange;
+}
+
+.accepted {
+    border-color: #4b4;
+}
+
+.rejected {
+    border-color: darkred;
+}
 /*------------------------------*/
 
 

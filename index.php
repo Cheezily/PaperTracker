@@ -14,7 +14,7 @@
     require_once 'controller/messages.php';
     require_once 'controller/login.php';
     require_once 'controller/newUser.php';
-    require_once 'controller/newPaper.php';
+    require_once 'controller/userUploads.php';
     
     //Handle routing if the session is set
     if ($_SESSION['role'] == 'author') {

@@ -49,4 +49,32 @@
             $_SESSION['titleSubmitted'] = $title;
         }
     }
+    
+    //Handle author revision upload
+    if (isset($_POST['revisionSubmit'])) {
+        $paperID = filter_input(INPUT_POST, 'paperID', FILTER_VALIDATE_INT);
+        require_once 'model/papersDB.php';
+        if ($paperID && !checkForRevision($paperID)) {
+            $randomPad = rand(1000, 9999);
+            $doc_dir = getcwd().'/uploads/revisions/';
+            $doc_file  = $doc_dir.$randomPad."-".basename($_FILES["revisionFile"]["name"]);
+            $filetype = pathinfo($doc_file, PATHINFO_EXTENSION);
+            if ($_FILES["revisionFile"]["size"] > 10000000) {
+                $revisionError = "Filesize must be less than 10MB";
+            }
+            if ($filetype != "doc" && $filetype != "docx") {
+                $revisionError = "File must be a MS Word file";
+            }
+            if (file_exists($doc_file)) {
+                $revisionError = "File already exists";
+            }
+            if (!isset($revisionError)) {
+                if (move_uploaded_file($_FILES["revisionFile"]["tmp_name"], $doc_file)) {
+                    uploadRevision($paperID, $randomPad."-".basename($_FILES["revisionFile"]["name"]));
+                } else {
+                    $revisionError = "Something went wrong. Please try again.";
+                }
+            }
+        }
+    }
 ?>

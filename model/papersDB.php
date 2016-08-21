@@ -40,5 +40,26 @@ function uploadDraft($username, $filename, $title) {
     $statement->execute();
 }
 
+function checkForRevision($paperID) {
+    global $db;
+    $query = 'SELECT * FROM papers WHERE paperID=:paperID';
+    $statement = $db->prepare($query);
+    $statement->bindValue(":paperID", $paperID);
+    $statement->execute();
+    
+    $results = $statement->fetch();
+    return $results['revisedFilename'];
+}
+
+function uploadRevision($paperID, $filename) {
+    global $db;
+    $query = 'UPDATE papers SET revisedFilename=:filename, whenRevised=:whenRevised, status=:status WHERE paperID=:paperID';
+    $statement = $db->prepare($query);
+    $statement->bindValue(":filename", $filename);
+    $statement->bindValue(":status", "revisions_submitted");
+    $statement->bindValue(":whenRevised", date("Y-m-d H:i:s"));
+    $statement->bindValue(":paperID", $paperID);
+    $statement->execute();
+}
 
 ?>

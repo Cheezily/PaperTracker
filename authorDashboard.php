@@ -90,14 +90,31 @@ if (isset($_POST['getStarted'])) {
         <?php } ?>
             <h2>Submission List:</h2>
             <div class='paperList'>
-        <?php
-            //from papersDB.php
-            
-            if (!empty($yourPapers)) {
-                //var_dump($yourPapers);
+        <?php if (!empty($yourPapers)) {
                 forEach ($yourPapers as $paper) { ?>
-                <div class='paperWrapper'>
-                        
+                    <?php switch ($paper['status']) {
+                        case "awaiting_assignment":
+                            echo "<div class='paperWrapper awaitingAssignment'>";
+                            break;
+                        case "awaiting_review":
+                            echo "<div class='paperWrapper awaitingReview'>";
+                            break;
+                        case "awaiting_revisions":
+                            echo "<div class='paperWrapper awaitingRevisions'>";
+                            break;
+                        case "revisions_submitted":
+                            echo "<div class='paperWrapper awaitingFinal'>";
+                            break;
+                        case "accepted":
+                            echo "<div class='paperWrapper accepted'>";
+                            break;
+                        case "rejected":
+                            echo "<div class='paperWrapper rejected'>";
+                            break;
+                        default:
+                            echo "<div class='paperWrapper'>";
+                    } ?>
+  
                     <div class='paperAttribute'>
                         <?php echo "<span class='attributeLabel'>Title:</span> ".htmlspecialchars($paper['title']); ?>
                     </div>
@@ -111,7 +128,10 @@ if (isset($_POST['getStarted'])) {
                             echo "<span class='attributeLabel'>Status:</span> Assigned to Reviewer. Under review";
                             break;
                         case "awaiting_revisions":
-                            echo "<span class='attributeLabel'>Status:</span> Review Complete. Awaiting your revisions";
+                            echo "<span class='attributeLabel'>Status:</span> Initial Review Complete. Awaiting your revisions";
+                            break;
+                        case "revisions_submitted":
+                            echo "<span class='attributeLabel'>Status:</span> Revision submitted. Awaiting final review";
                             break;
                         case "accepted":
                             echo "<span class='attributeLabel'>Status:</span> Complete. Accepted!";
@@ -130,33 +150,49 @@ if (isset($_POST['getStarted'])) {
                                 "'>".htmlspecialchars($paper['draftFilename'])."</a>"; ?>
                     </div>
                     
+                    <!--display the link to the revised paper if there is one-->
+                    <?php if ($paper['revisedFilename']) { ?>
+                        <div class='paperAttribute'>
+                            <span class='attributeLabel'>Your Revised Paper:</span>
+                            <?php echo "<a href='".$paper['revisedFilename'].
+                                "'>".$paper['revisedFilename']."</a>"; ?>
+                        </div>
+                    <?php } ?>
+                
+                    <!--display the links to the feedback docs if they're there-->
                     <div class='paperAttribute'>
                         <?php if ($paper['firstReplyFilename'] && !$paper['finalReplyFilename']) {
                                 $firstReplyFilename = htmlspecialchars($paper['firstReplyFilename']);
-                                echo "<span class='attributeLabel'>Feedback:</span> ".
+                                echo "<span class='attributeLabel'>Review:</span> ".
                                 "<a target='_blank' href='uploads/firstResponses/".$firstReplyFilename.
                                 "'>".$firstReplyFilename."</a>";
                             } elseif ($paper['finalReplyFilename']) {
                                 $finalReplyFilename = htmlspecialchars($paper['finalReplyFilename']);
-                                echo "<span class='attributeLabel'>Final Feedback:</span> ".
+                                echo "<span class='attributeLabel'>Final Review:</span> ".
                                 "<a target='_blank' href='uploads/finalResponses/".$finalReplyFilename.
                                 "'>".$finalReplyFilename."</a>";    
                             } else {
-                                echo "<span class='attributeLabel'>Feedback:</span> N/A";
+                                echo "<span class='attributeLabel'>Review:</span> N/A";
                             }
                         ?>
                     </div>
-                    
+
+                    <!--display option to submit a revised paper if only the 
+                        first feedback file is shown-->
                     <?php if ($paper['firstReplyFilename'] && 
-                            !$paper['finalReplyFilename']) { ?>
+                            !$paper['finalReplyFilename'] && 
+                            !$paper['revisedFilename']) { ?>
                         <div class='paperAttribute'>
                         <span class='attributeLabel'>Your Revised Paper:</span>
-                        <form method='post' action='index.php'>
+                        <form method='post' action='index.php' enctype="multipart/form-data">
                             <input class='revisionSubmit' type='submit' name='revisionSubmit' value='Submit'>
-                            <input class='revisionUpload' type='file' name='revision'>
+                            <input type='file' class='revisionUpload' name='revisionFile' required>
                             <input type='hidden' name='paperID' value='<?php 
                                 echo $paper['paperID']; ?>'>
                         </form>
+                        <?php if ($revisionError) {
+                            echo "<br><div><span class='miniWarning'>".$revisionError."</span></div>";
+                        } ?>
                         </div>
                     <?php } ?>
                 </div>    
