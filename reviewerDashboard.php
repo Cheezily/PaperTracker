@@ -100,15 +100,22 @@ if (isset($_POST['getStarted'])) {
                     </div>
 
                     <div class='paperAttribute'>
+                        <span class='attributeLabel'>Recommendation:</span>
                         <form method='post' action='index.php'>
-                            <select
+                            <select>
+                                <option value='' selected></option>
+                                <option value='accept' >Accept As Is</option>
+                                <option value='minor' >Minor Revisions Needed</option>
+                                <option value='major' >Major Revisions Needed</option>
+                                <option value='reject' >Reject This Paper</option>
+                            </select>
                         </form>
                     </div>
                     
                     <div class='paperAttribute'>
-                        <?php echo "<span class='attributeLabel'>Filename:</span> ".
-                                "<a target='_blank' href='uploads/".$paper['filename'].
-                                "'>".htmlspecialchars($paper['filename'])."</a>"; ?>
+                        <?php echo "<span class='attributeLabel'>Draft File:</span> ".
+                                "<a target='_blank' href='uploads/drafts/".$paper['draftFilename'].
+                                "'>".htmlspecialchars($paper['draftFilename'])."</a>"; ?>
                     </div>
                 </div>    
             <?php 

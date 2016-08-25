@@ -16,12 +16,14 @@ function checkPapers($username) {
 }
 
 function checkPapersForReviewer($reviewername) {
+    //echo $reviewername;
     global $db;
-    $query = 'SELECT * FROM papers WHERE reviewername=:reviewername ORDER BY when_submitted DESC';
+    $query = 'SELECT * FROM papers WHERE reviewername=:reviewername ORDER BY whenSubmitted DESC';
     $statement = $db->prepare($query);
     $statement->bindValue(":reviewername", $reviewername);
     $statement->execute();
     $results = $statement->fetchAll();
+    //var_dump($results);
     if ($results) {
         return $results;
     } else {
