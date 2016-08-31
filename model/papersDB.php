@@ -33,12 +33,14 @@ function checkPapersForReviewer($reviewername) {
 
 function uploadDraft($username, $filename, $title) {
     global $db;
-    $query = 'INSERT INTO papers (username, draftFilename, whenSubmitted, title) VALUES (:username, :filename, :whenSubmitted, :title)';
+    $query = 'INSERT INTO papers (username, draftFilename, whenSubmitted, title, recentlyUpdated) '
+            . 'VALUES (:username, :filename, :whenSubmitted, :title, :recentlyUpdated)';
     $statement = $db->prepare($query);
     $statement->bindValue(":username", $username);
     $statement->bindValue(":whenSubmitted", date("Y-m-d H:i:s"));
     $statement->bindValue(":filename", $filename);
     $statement->bindValue(":title", $title);
+    $statement->bindValue(":recentlyUpdated", 1);
     $statement->execute();
 }
 

@@ -217,7 +217,7 @@ if (isset($_POST['getStarted'])) {
                 } else {
                     forEach ($userMessages as $message) {
                         echo "<p class='messageLineHeader'>Sent on ".date("F j, Y, g:i a", 
-                                strtotime($message['whenSent']))." by Administrator:</p>";
+                                strtotime($message['whenSent']))." by the Editor:</p>";
                         echo "<p class='messageLineHeader'>Re: ".$message['title']."</p>";
                         echo "<p class='messageLine'>".$message['message']."<p><hr>";
                     }

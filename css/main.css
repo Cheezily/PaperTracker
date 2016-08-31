@@ -282,7 +282,10 @@ header {
     color: #666;
     font-size: 14px;
 }
-
+.instructions {
+    width: 90%;
+    margin: 0 auto;
+}
 /*--------------------------*/
 
 /*USER DASHBOARD PAGE*/
@@ -439,10 +442,10 @@ header {
     padding: 0;
 }
 
-.revisionSubmit {
+.revisionSubmit, .reviewSubmit {
     float: right;
     border: none;
-    width: 140px;
+    width: 130px;
     height: 24px;
     margin: -5px -5px 0 0;
     color: white;
@@ -546,5 +549,11 @@ header {
     width: 100%;
     background: #ccc;
 }
+
+/*------------------------------*/
+
+/*REVIEWER DASHBOARD PAGE*/
+
+
 
 /*------------------------------*/

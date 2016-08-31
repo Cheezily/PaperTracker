@@ -98,25 +98,33 @@ if (isset($_POST['getStarted'])) {
                     <div class='paperAttribute'>
                         <?php echo "<span class='attributeLabel'>Title:</span> ".htmlspecialchars($paper['title']); ?>
                     </div>
-
-                    <div class='paperAttribute'>
-                        <span class='attributeLabel'>Recommendation:</span>
-                        <form method='post' action='index.php'>
-                            <select>
-                                <option value='' selected></option>
-                                <option value='accept' >Accept As Is</option>
-                                <option value='minor' >Minor Revisions Needed</option>
-                                <option value='major' >Major Revisions Needed</option>
-                                <option value='reject' >Reject This Paper</option>
-                            </select>
-                        </form>
-                    </div>
                     
                     <div class='paperAttribute'>
                         <?php echo "<span class='attributeLabel'>Draft File:</span> ".
                                 "<a target='_blank' href='uploads/drafts/".$paper['draftFilename'].
                                 "'>".htmlspecialchars($paper['draftFilename'])."</a>"; ?>
                     </div>
+                    
+                    
+                    <?php if (!$paper['recommendation']) { ?>
+                        <p class='instructions'>Please review the draft file. Select your 
+                            recommendation and submit a MS Word file with your comments whenever you're ready</p>
+                        <div class='paperAttribute'>
+                            <span class='attributeLabel'>Recommendation:</span>
+                            <form method='post' action='index.php'>
+                                <select required>
+                                    <option value='' selected></option>
+                                    <option value='accept' >Accept As Is</option>
+                                    <option value='minor' >Minor Revisions Needed</option>
+                                    <option value='major' >Major Revisions Needed</option>
+                                    <option value='reject' >Reject This Paper</option>
+                                </select>
+                                <input type='file' name='reviewFile' required>
+                                <input type='submit' class='reviewSubmit' name='reviewSubmit' value='Submit'>
+                            </form>
+                        </div>
+                    <?php } ?>
+                    
                 </div>    
             <?php 
                 } 
@@ -136,7 +144,7 @@ if (isset($_POST['getStarted'])) {
                 } else {
                     forEach ($userMessages as $message) {
                         echo "<p class='messageLineHeader'>Sent on ".date("F j, Y, g:i a", 
-                                strtotime($message['whenSent']))." by Administrator:</p>";
+                                strtotime($message['whenSent']))." by the Editor:</p>";
                         echo "<p class='messageLineHeader'>Re: ".$message['title']."</p>";
                         echo "<p class='messageLine'>".$message['message']."<p><hr>";
                     }
