@@ -40,7 +40,7 @@ function uploadDraft($username, $filename, $title) {
     $statement->bindValue(":whenSubmitted", date("Y-m-d H:i:s"));
     $statement->bindValue(":filename", $filename);
     $statement->bindValue(":title", $title);
-    $statement->bindValue(":recentlyUpdated", 1);
+    $statement->bindValue(":recentlyUpdated", "1");
     $statement->execute();
 }
 
