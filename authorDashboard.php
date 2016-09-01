@@ -161,26 +161,26 @@ if (isset($_POST['getStarted'])) {
                 
                     <!--display the links to the feedback docs if they're there-->
                     <div class='paperAttribute'>
-                        <?php if ($paper['firstReplyFilename'] && !$paper['finalReplyFilename']) {
-                                $firstReplyFilename = htmlspecialchars($paper['firstReplyFilename']);
-                                echo "<span class='attributeLabel'>Review:</span> ".
-                                "<a target='_blank' href='uploads/firstResponses/".$firstReplyFilename.
-                                "'>".$firstReplyFilename."</a>";
-                            } elseif ($paper['finalReplyFilename']) {
-                                $finalReplyFilename = htmlspecialchars($paper['finalReplyFilename']);
+                        <?php if ($paper['firstReviewFilename'] && !$paper['finalReviewFilename']) {
+                                $firstReviewFilename = htmlspecialchars($paper['firstReviewFilename']);
+                                echo "<span class='attributeLabel'>Feedback:</span> ".
+                                "<a target='_blank' href='uploads/firstReview/".$firstReviewFilename.
+                                "'>".$firstReviewFilename."</a>";
+                            } elseif ($paper['finalReviewFilename']) {
+                                $finalReviewFilename = htmlspecialchars($paper['finalReviewFilename']);
                                 echo "<span class='attributeLabel'>Final Review:</span> ".
-                                "<a target='_blank' href='uploads/finalResponses/".$finalReplyFilename.
-                                "'>".$finalReplyFilename."</a>";    
+                                "<a target='_blank' href='uploads/finalReview/".$finalReviewFilename.
+                                "'>".$finalReviewFilename."</a>";    
                             } else {
-                                echo "<span class='attributeLabel'>Review:</span> N/A";
+                                echo "<span class='attributeLabel'>Feedback:</span> N/A";
                             }
                         ?>
                     </div>
 
                     <!--display option to submit a revised paper if only the 
                         first feedback file is shown-->
-                    <?php if ($paper['firstReplyFilename'] && 
-                            !$paper['finalReplyFilename'] && 
+                    <?php if ($paper['firstReviewFilename'] && 
+                            !$paper['finalReviewFilename'] && 
                             !$paper['revisedFilename']) { ?>
                         <div class='paperAttribute'>
                         <span class='attributeLabel'>Your Revised Paper:</span>
