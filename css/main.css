@@ -284,7 +284,9 @@ header {
 }
 .instructions {
     width: 90%;
-    margin: 0 auto;
+    margin: 9px auto 5px;
+    font-weight: bold;
+    color: teal;
 }
 /*--------------------------*/
 
@@ -384,7 +386,7 @@ header {
 .paperAttribute {
     box-sizing: border-box;
     width: 100%;
-    height: 25px;
+    height: 28px;
     margin: 0 auto;
     padding: 5px;
 }
@@ -446,10 +448,10 @@ header {
     float: right;
     border: none;
     width: 130px;
-    height: 24px;
+    height: 27px;
     margin: -5px -5px 0 0;
     color: white;
-    font-size: 16px;
+    font-size: 18px;
     background: #4b4;
 }
 

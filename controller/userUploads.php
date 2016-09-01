@@ -18,7 +18,6 @@
         }
         //prevents duplicate submissions when the user refreshes
         if ($_SESSION['titleSubmitted'] != $title) {
-            
             $newPaper = TRUE;
             $randomPad = rand(1000, 9999);
             //var_dump($_FILES);
@@ -57,7 +56,7 @@
         if ($paperID && !checkForRevision($paperID)) {
             $randomPad = rand(1000, 9999);
             $doc_dir = getcwd().'/uploads/revisions/';
-            $doc_file  = $doc_dir.$randomPad."-".basename($_FILES["revisionFile"]["name"]);
+            $doc_file = $doc_dir.$randomPad."-".basename($_FILES["revisionFile"]["name"]);
             $filetype = pathinfo($doc_file, PATHINFO_EXTENSION);
             if ($_FILES["revisionFile"]["size"] > 10000000) {
                 $revisionError = "Filesize must be less than 10MB";
@@ -73,6 +72,72 @@
                     uploadRevision($paperID, $randomPad."-".basename($_FILES["revisionFile"]["name"]));
                 } else {
                     $revisionError = "Something went wrong. Please try again.";
+                }
+            }
+        }
+    }
+    
+    //handle reviewer first review recommendation and submission
+    if (isset($_POST['firstReviewSubmit'])) {
+        $paperID = filter_input(INPUT_POST, 'paperID', FILTER_VALIDATE_INT);
+        $recommendation = filter_input(INPUT_POST, 'recommendation');
+        
+        require_once 'model/papersDB.php';
+        
+        if ($paperID && $recommendation && checkForFirstReview($paperID) == NULL) {
+
+            $randomPad = rand(1000, 9999);
+            $doc_dir = getcwd().'/uploads/firstReview/';
+            $doc_file = $doc_dir.$randomPad."-".basename($_FILES["reviewFile"]["name"]);
+            $filetype = pathinfo($doc_file, PATHINFO_EXTENSION);
+            if ($_FILES["reviewFile"]["size"] > 10000000) {
+                $reviewError = "Filesize must be less than 10MB";
+            }
+            if ($filetype != "doc" && $filetype != "docx") {
+                $reviewError = "File must be a MS Word file";
+            }
+            if (file_exists($doc_file)) {
+                $reviewError = "File already exists";
+            }
+            if (!isset($reviewError)) {
+                if (move_uploaded_file($_FILES["reviewFile"]["tmp_name"], $doc_file)) {
+                    uploadFirstReview($paperID, $randomPad."-".basename($_FILES["reviewFile"]["name"]),
+                        $recommendation);
+                } else {
+                    $reviewError = "Something went wrong. Please try again.";
+                }
+            }
+        }
+    }
+    
+    //handle reviewer final review recommendation and submission
+    if (isset($_POST['finalReviewSubmit'])) {
+        $paperID = filter_input(INPUT_POST, 'paperID', FILTER_VALIDATE_INT);
+        $recommendation = filter_input(INPUT_POST, 'recommendation');
+        
+        require_once 'model/papersDB.php';
+        
+        if ($paperID && $recommendation && checkForFinalReview($paperID) == NULL) {
+
+            $randomPad = rand(1000, 9999);
+            $doc_dir = getcwd().'/uploads/finalReview/';
+            $doc_file = $doc_dir.$randomPad."-".basename($_FILES["reviewFile"]["name"]);
+            $filetype = pathinfo($doc_file, PATHINFO_EXTENSION);
+            if ($_FILES["reviewFile"]["size"] > 10000000) {
+                $reviewError = "Filesize must be less than 10MB";
+            }
+            if ($filetype != "doc" && $filetype != "docx") {
+                $reviewError = "File must be a MS Word file";
+            }
+            if (file_exists($doc_file)) {
+                $reviewError = "File already exists";
+            }
+            if (!isset($reviewError)) {
+                if (move_uploaded_file($_FILES["reviewFile"]["tmp_name"], $doc_file)) {
+                    uploadFinalReview($paperID, $randomPad."-".basename($_FILES["reviewFile"]["name"]),
+                        $recommendation);
+                } else {
+                    $reviewError = "Something went wrong. Please try again.";
                 }
             }
         }
