@@ -161,12 +161,15 @@ if (isset($_POST['getStarted'])) {
                 
                     <!--display the links to the feedback docs if they're there-->
                     <div class='paperAttribute'>
-                        <?php if ($paper['firstReviewFilename'] && !$paper['finalReviewFilename']) {
+                        <?php if ($paper['firstReviewFilename'] && !$paper['finalReviewFilename'] &&
+                                $paper['status'] == "awaiting_revisions") {
                                 $firstReviewFilename = htmlspecialchars($paper['firstReviewFilename']);
                                 echo "<span class='attributeLabel'>Feedback:</span> ".
                                 "<a target='_blank' href='uploads/firstReview/".$firstReviewFilename.
                                 "'>".$firstReviewFilename."</a>";
-                            } elseif ($paper['finalReviewFilename']) {
+                            } elseif ($paper['finalReviewFilename'] &&
+                                    ($paper[status] == "accepted" || 
+                                     $paper['status'] == "rejected")) {
                                 $finalReviewFilename = htmlspecialchars($paper['finalReviewFilename']);
                                 echo "<span class='attributeLabel'>Final Review:</span> ".
                                 "<a target='_blank' href='uploads/finalReview/".$finalReviewFilename.
@@ -178,10 +181,12 @@ if (isset($_POST['getStarted'])) {
                     </div>
 
                     <!--display option to submit a revised paper if only the 
-                        first feedback file is shown-->
+                        first feedback file exists and the status has been updated
+                        by the editor-->
                     <?php if ($paper['firstReviewFilename'] && 
                             !$paper['finalReviewFilename'] && 
-                            !$paper['revisedFilename']) { ?>
+                            !$paper['revisedFilename'] &&
+                            $paper['status'] == "awaiting_revisions") { ?>
                         <div class='paperAttribute'>
                         <span class='attributeLabel'>Your Revised Paper:</span>
                         <form method='post' action='index.php' enctype="multipart/form-data">
@@ -193,6 +198,15 @@ if (isset($_POST['getStarted'])) {
                         <?php if ($revisionError) {
                             echo "<br><div><span class='miniWarning'>".$revisionError."</span></div>";
                         } ?>
+                        </div>
+                    <?php } ?>
+                    
+                    <!--displays the submitted revised doc if it exists-->
+                    <?php if ($paper['revisedFilename']) { ?>
+                        <div class='paperAttribute'>
+                            <?php echo "<span class='attributeLabel'>Revised File:</span> ".
+                                    "<a target='_blank' href='uploads/drafts/".$paper['revisedFilename'].
+                                    "'>".htmlspecialchars($paper['revisedFilename'])."</a>"; ?>
                         </div>
                     <?php } ?>
                 </div>    

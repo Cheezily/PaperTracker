@@ -143,7 +143,8 @@ if (isset($_POST['getStarted'])) {
                                     "'>".htmlspecialchars($paper['firstReviewFilename'])."</a>"; ?>
                         </div>
                         <?php if ($paper['recentlyUpdated'] == "1" &&
-                                !$paper['finalReviewFilename']) {
+                                !$paper['finalReviewFilename'] &&
+                                !$paper['revisedFilename']) {
                             echo "<p class='instructions'>Thanks! Based on your 
                             feedback, if a decision for a revise & resubmit is made by the Editor, 
                             this box will allow you to submit a final review to the Editor 
