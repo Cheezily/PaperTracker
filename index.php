@@ -46,7 +46,7 @@
     }
     
     if ($_SESSION['role'] == 'admin') {
-        include "adminDashboard.php";
+        include "admin/adminDashboard.php";
     }
     
 ?>

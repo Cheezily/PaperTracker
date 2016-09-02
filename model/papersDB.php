@@ -43,13 +43,12 @@ function checkForRevision($paperID) {
 
 
 function uploadRevision($paperID, $filename) {
-    echo "YO---".$paperID." ".$filename;
     global $db;
     $query = 'UPDATE papers SET revisedFilename=:filename, whenRevised=:whenRevised, '
-            . 'recentlyUpdated="1", status=:status WHERE paperID=:paperID';
+            . 'recentlyUpdated="1", WHERE paperID=:paperID';
     $statement = $db->prepare($query);
     $statement->bindValue(":filename", $filename);
-    $statement->bindValue(":status", "revisions_submitted");
+    //$statement->bindValue(":status", "revisions_submitted");
     $statement->bindValue(":whenRevised", date("Y-m-d H:i:s"));
     $statement->bindValue(":paperID", $paperID);
     $statement->execute();

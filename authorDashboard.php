@@ -159,6 +159,16 @@ if (isset($_POST['getStarted'])) {
                         </div>
                     <?php } ?>
                 
+                    
+                    <!--display the link to the revised paper if there is one-->
+                    <?php if ($paper['firstReviewFilename']) { ?>
+                        <div class='paperAttribute'>
+                            <span class='attributeLabel'>Initial Review:</span>
+                            <?php echo "<a href='".$paper['firstReviewFilename'].
+                                "'>".$paper['firstReviewFilename']."</a>"; ?>
+                        </div>
+                    <?php } ?>
+                    
                     <!--display the links to the feedback docs if they're there-->
                     <div class='paperAttribute'>
                         <?php if ($paper['firstReviewFilename'] && !$paper['finalReviewFilename'] &&
@@ -200,15 +210,7 @@ if (isset($_POST['getStarted'])) {
                         } ?>
                         </div>
                     <?php } ?>
-                    
-                    <!--displays the submitted revised doc if it exists-->
-                    <?php if ($paper['revisedFilename']) { ?>
-                        <div class='paperAttribute'>
-                            <?php echo "<span class='attributeLabel'>Revised File:</span> ".
-                                    "<a target='_blank' href='uploads/drafts/".$paper['revisedFilename'].
-                                    "'>".htmlspecialchars($paper['revisedFilename'])."</a>"; ?>
-                        </div>
-                    <?php } ?>
+
                 </div>    
             <?php 
                 } 
