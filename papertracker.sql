@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.5.2
+-- version 4.5.1
 -- http://www.phpmyadmin.net
 --
--- Host: localhost
--- Generation Time: Aug 31, 2016 at 09:39 PM
--- Server version: 10.1.10-MariaDB
--- PHP Version: 5.6.19
+-- Host: 127.0.0.1
+-- Generation Time: Sep 03, 2016 at 05:34 PM
+-- Server version: 10.1.13-MariaDB
+-- PHP Version: 7.0.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `PaperTracker`
+-- Database: `papertracker`
 --
 
 -- --------------------------------------------------------
@@ -32,15 +32,16 @@ CREATE TABLE `messages` (
   `toUsername` varchar(30) NOT NULL,
   `whenSent` datetime NOT NULL,
   `message` text NOT NULL,
-  `title` varchar(255) NOT NULL
+  `title` varchar(255) NOT NULL,
+  `newMessage` tinyint(4) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `messages`
 --
 
-INSERT INTO `messages` (`messageID`, `fromUsername`, `toUsername`, `whenSent`, `message`, `title`) VALUES
-(105, 'admin', 'user', '2016-08-25 10:14:06', 'message', 'General Question');
+INSERT INTO `messages` (`messageID`, `fromUsername`, `toUsername`, `whenSent`, `message`, `title`, `newMessage`) VALUES
+(105, 'admin', 'user', '2016-08-25 10:14:06', 'message', 'General Question', 1);
 
 -- --------------------------------------------------------
 
@@ -54,9 +55,9 @@ CREATE TABLE `papers` (
   `reviewername` varchar(30) DEFAULT NULL,
   `recommendation` enum('accept','minor','major','reject') DEFAULT NULL,
   `draftFilename` varchar(50) NOT NULL,
-  `firstReplyFilename` varchar(50) DEFAULT NULL,
+  `firstReviewFilename` varchar(50) DEFAULT NULL,
   `revisedFilename` varchar(50) DEFAULT NULL,
-  `finalReplyFilename` varchar(50) DEFAULT NULL,
+  `finalReviewFilename` varchar(50) DEFAULT NULL,
   `status` enum('awaiting_assignment','awaiting_review','awaiting_revisions','revisions_submitted','accepted','rejected') NOT NULL DEFAULT 'awaiting_assignment',
   `whenSubmitted` datetime NOT NULL,
   `whenFirstReply` datetime DEFAULT NULL,
@@ -90,9 +91,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`userID`, `username`, `account_created`, `last_login`, `first_name`, `last_name`, `email`, `passwordHash`, `role`) VALUES
-(1, 'admin', '2016-08-19 00:00:00', '2016-08-19 13:48:30', 'Firstname', 'Lastname', 'admin@email.com', '$2y$10$pEPtxGEQCUWvu6CBfavyIeHxrZnZo.cDaCCkHzqzU7p.uKbESm4tS', 'admin'),
-(3, 'reviewer', '2016-08-20 04:31:38', '2016-08-30 18:22:16', 'firstname', 'lastname', 'rev@wmil.com', '$2y$11$cIqYazL6Z3tEc9AR0ZwQyuDpDSFIlOtBqky1FlbzAryUuJDMW6Hmq', 'reviewer'),
-(5, 'user', '2016-08-21 04:34:55', '2016-08-30 18:22:38', 'first', 'last', 'email@email.com', '$2y$11$fSL8mjGwt/SSWhJKfFMIwuPOAiIqx4Wo6Hi8mTqyfFoZ2MA3vtD/y', 'author'),
+(1, 'admin', '2016-08-19 00:00:00', '2016-09-03 10:07:59', 'Firstname', 'Lastname', 'admin@email.com', '$2y$10$pEPtxGEQCUWvu6CBfavyIeHxrZnZo.cDaCCkHzqzU7p.uKbESm4tS', 'admin'),
+(3, 'reviewer', '2016-08-20 04:31:38', '2016-09-02 09:10:57', 'firstname', 'lastname', 'rev@wmil.com', '$2y$11$cIqYazL6Z3tEc9AR0ZwQyuDpDSFIlOtBqky1FlbzAryUuJDMW6Hmq', 'reviewer'),
+(5, 'user', '2016-08-21 04:34:55', '2016-09-03 10:05:15', 'first', 'last', 'email@email.com', '$2y$11$fSL8mjGwt/SSWhJKfFMIwuPOAiIqx4Wo6Hi8mTqyfFoZ2MA3vtD/y', 'author'),
 (6, 'newuser', '2016-08-31 01:11:11', '2016-08-30 19:32:22', 'first', 'last', 'email@email.com', '$2y$11$tIcWiltjNU5Xi.SUVcN06.DaFytYq7e/LRMhgU3GoMxnfsNKJd9mO', 'author');
 
 --
@@ -132,7 +133,7 @@ ALTER TABLE `messages`
 -- AUTO_INCREMENT for table `papers`
 --
 ALTER TABLE `papers`
-  MODIFY `paperID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `paperID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 --
 -- AUTO_INCREMENT for table `users`
 --
