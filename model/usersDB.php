@@ -41,26 +41,24 @@ function addUser($user) {
 function login($name, $password) {
     //echo "---------------<br>";
     //echo "username: ".$name."<br>";
-    $lastLogin = getLastLogin($name);
-    global $db;
-    $query = "SELECT * FROM users WHERE username=:username";
-    $statement = $db->prepare($query);
-    $statement->bindValue(":username", strtolower($name));
-    $statement->execute();
+    if (!isset($_SESSION['username'])) {
+        $lastLogin = getLastLogin($name);
+        global $db;
+        $query = "SELECT * FROM users WHERE username=:username";
+        $statement = $db->prepare($query);
+        $statement->bindValue(":username", strtolower($name));
+        $statement->execute();
 
-    $result = $statement->fetch();
-    //echo "password: ".$password."<br>";
-    $pwcheck = password_verify(substr($password, 0, 60), $result['passwordHash']);
-    //var_dump($pwcheck);
-    //echo "TEST: ".password_verify($password, $result['passwordHash'])."<br>";
-    //echo "password hash: ".$result['passwordHash'];
-    
-    if (password_verify($password, $result['passwordHash'])) {
-        updateTimestamp($name);
-        //$_SESSION['lastLogin'] = $lastLogin;
-        return array($result, $lastLogin);
-    } else {
-        return FALSE;
+        $result = $statement->fetch();
+        $pwcheck = password_verify(substr($password, 0, 60), $result['passwordHash']);
+
+        if (password_verify($password, $result['passwordHash'])) {
+            updateTimestamp($name);
+            //$_SESSION['lastLogin'] = $lastLogin;
+            return array($result, $lastLogin);
+        } else {
+            return FALSE;
+        }
     }
 }
 

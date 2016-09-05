@@ -1,6 +1,6 @@
 <?php
     //Login request flag
-    if ($_POST['loginRequest']) {
+    if ($_POST['loginRequest'] && !isset($_SESSION['username'])) {
         $newLoginRequest = TRUE;
     }
     
