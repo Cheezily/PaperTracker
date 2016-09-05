@@ -24,21 +24,22 @@
             $loginError = "No username entered.";
         } else {
             //checks to see if the username and password matches.
-            require_once 'model/registrationDB.php';
+            require_once 'model/usersDB.php';
             
             $result = login($name, $userPW);
             if (!empty($result)) {
                 //var_dump($result);
-                $_SESSION['username'] = $result['username'];
-                $_SESSION['firstname'] = $result['first_name'];
-                $_SESSION['lastname'] = $result['last_name'];
-                $_SESSION['email'] = $result['email'];
-                $_SESSION['role'] = $result['role'];
-                $_SESSION['userID'] = $result['userID'];
-                $_SESSION['username'] = $result['username'];
-                $_SESSION['lastLogin'] = $result['last_login'];
+                $_SESSION['username'] = $result[0]['username'];
+                $_SESSION['firstname'] = $result[0]['first_name'];
+                $_SESSION['lastname'] = $result[0]['last_name'];
+                $_SESSION['email'] = $result[0]['email'];
+                $_SESSION['role'] = $result[0]['role'];
+                $_SESSION['userID'] = $result[0]['userID'];
+                $_SESSION['username'] = $result[0]['username'];
+                $_SESSION['lastLogin'] = $result[0]['last_login'];
+                $_SESSION['previousLogin'] = $result[1][0];
                 $_SESSION['firstLogin'] = TRUE;
-
+                
             } else {
                 $loginError = "Invalid username or password";
             }

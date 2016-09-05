@@ -41,6 +41,7 @@ function addUser($user) {
 function login($name, $password) {
     //echo "---------------<br>";
     //echo "username: ".$name."<br>";
+    $lastLogin = getLastLogin($name);
     global $db;
     $query = "SELECT * FROM users WHERE username=:username";
     $statement = $db->prepare($query);
@@ -56,7 +57,8 @@ function login($name, $password) {
     
     if (password_verify($password, $result['passwordHash'])) {
         updateTimestamp($name);
-        return $result;
+        //$_SESSION['lastLogin'] = $lastLogin;
+        return array($result, $lastLogin);
     } else {
         return FALSE;
     }
@@ -69,5 +71,15 @@ function updateTimestamp($name) {
     //$statement->bindValue(":timestamp", date("Y-m-d H:i:s"));
     $statement->bindValue(":username", strtolower($name));
     $statement->execute();
+}
+
+function getLastLogin($name) {
+    global $db;
+    $query = "SELECT last_login FROM users WHERE username=:username";
+    $statement = $db->prepare($query);
+    $statement->bindValue(":username", strtolower($name));
+    $statement->execute();
+    
+    return $statement->fetch();
 }
 ?>
