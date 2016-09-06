@@ -1,21 +1,24 @@
 <?php
 
-switch ($_POST['adminPage']) {
-    case "users":
-        $adminPage = "adminUsers.php";
-        break;
-    case "settings":
-        $adminPage = "adminSettings.php";
-        break;
-    case "papers":
-        $adminPage = "adminPapers.php";
-        break;
-    case "messages":
-        $adminPage = "adminMessages.php";
-        break;
-    default:
-        $adminPage = "adminSummary.php";
+if (!isset($adminPage)) {
+    switch ($_POST['adminPage']) {
+        case "users":
+            $adminPage = "adminUsers.php";
+            break;
+        case "settings":
+            $adminPage = "adminSettings.php";
+            break;
+        case "papers":
+            $adminPage = "adminPapers.php";
+            break;
+        case "messages":
+            $adminPage = "adminMessages.php";
+            break;
+        default:
+            $adminPage = "adminSummary.php";
+    }  
 }
+
 
 ?>
 

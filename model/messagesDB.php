@@ -24,9 +24,10 @@ function sendMessage($fromUsername, $toUsername, $message, $messageTitle) {
     $statement->bindValue(":whenSent", $whenSent);
     $statement->bindValue(":message", $message);
     $statement->bindValue(":title", $messageTitle);
-    $statement->execute();
+    $results = $statement->execute();
     
     //make sure the message went through
+    /*
     $query = "SELECT * FROM messages WHERE fromUsername=:fromUsername AND whenSent=:whenSent AND title=:title";
     $statement = $db->prepare($query);
     $statement->bindValue(":fromUsername", $fromUsername);
@@ -34,11 +35,28 @@ function sendMessage($fromUsername, $toUsername, $message, $messageTitle) {
     $statement->bindValue(":title", $messageTitle);
     $statement->execute();
     $results = $statement->fetch();
-    
+    */
     if ($results) {
         return "Message sent";
     } else {
         return;
     }
 }
+
+
+function replyToMessage($messageID, $reply) {
+    
+    //echo "id ".$messageID." reply: ".$reply;
+    $whenReplied = date("Y-m-d H:i:s");
+    global $db;
+    $query = "UPDATE messages SET whenReplied=:whenReplied, reply=:reply WHERE messageID=:messageID";
+    $statement = $db->prepare($query);
+    $statement->bindValue("whenReplied", $whenReplied);
+    $statement->bindValue("reply", $reply);
+    $statement->bindValue("messageID", $messageID);
+    $result = $statement->execute();
+    
+    return $result;
+}
+    
 ?>

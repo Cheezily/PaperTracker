@@ -440,7 +440,7 @@ header {
 }
 
 .messageLineHeader {
-    color: #a6a6a6;
+    color: #7c7c7c;
 }
 
 .paperAttribute form {
@@ -607,6 +607,55 @@ header {
 @keyframes activeNav {
     0% {border-bottom: 0px solid #aaa;}
     100% {border-bottom: 10px solid #aaa;}
+}
+
+/*------------------------------*/
+
+/*ADMIN MESSAGING PAGE*/
+
+.adminMessageList {
+    max-height: 500px;
+    overflow-y: scroll;
+
+    padding: 10px;
+    margin-top: -10px;
+}
+
+.adminMessage, .adminMessageOld {
+    border: 1px solid #333;
+    margin: 0 auto;
+    margin-bottom: 15px;
+    width: 650px;
+    min-height: 170px;
+    padding: 8px;
+    box-shadow: 0px 2px 3px #000;
+}
+
+.adminMessageOld {
+    min-height: 80px;
+}
+
+.replyHeading {
+    margin: 0;
+}
+
+.replyText {
+    float: left;
+    width: 542px;
+    height: 80px;
+}
+
+.replySubmit {
+    float: right;
+    height: 80px;
+    width: 80px;
+    background: #4b4;
+    margin-left: 8px;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
 }
 
 /*------------------------------*/
