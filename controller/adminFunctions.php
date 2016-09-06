@@ -9,7 +9,7 @@ if ($_POST['deletePaperConfirm']) {
 
 function getMessageCounts() {
 
-    $allMessages = getAllMessagesToAdmin();
+    $allMessages = getAllMessages();
     $newMessages = 0;
     $oldMessages = 0;
     $previousLogin = date($_SESSION['previousLogin']);
@@ -29,7 +29,7 @@ function getMessageLists() {
     
     $needsReply = array();
     $alreadyReplied = array();
-    $allMessages = getAllMessagesToAdmin();
+    $allMessages = getAllMessages();
     
     forEach($allMessages as $message) {
         if (empty($message['whenReplied'])) {

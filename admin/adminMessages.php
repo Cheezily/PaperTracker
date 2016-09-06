@@ -13,7 +13,7 @@
                     <div class="adminMessage">
                         <p class="messageLineHeader">
                             <?php echo "From: ".$message['fromUsername']." on ".
-                                    $message['whenSent'];
+                                    date("F j, Y, g:i a", strtotime($message['whenSent']))
                             ?>
                         </p>
                         <p class="messageLineHeader">

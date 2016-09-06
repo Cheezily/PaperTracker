@@ -424,13 +424,19 @@ header {
     margin: 5px 0 5px 0;
 }
 
+.messageWraper {
+    border: 1px solid #777;
+    padding: 8px;
+    width: 650px;
+    margin: 0 auto 10px;
+    box-shadow: 0 2px 3px #000;
+}
+
 .messageList {
     box-sizing: border-box;
     padding: 5px 20px;
-    max-height: 300px;
-    overflow-y: auto;
-    border-left: 1px solid #777;
-    border-right: 1px solid #777;
+    max-height: 500px;
+    overflow-y: scroll;
     border-radius: 4px;
 }
 

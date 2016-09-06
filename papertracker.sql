@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.5.1
+-- version 4.5.2
 -- http://www.phpmyadmin.net
 --
--- Host: 127.0.0.1
--- Generation Time: Sep 06, 2016 at 01:10 AM
--- Server version: 10.1.13-MariaDB
--- PHP Version: 7.0.8
+-- Host: localhost
+-- Generation Time: Sep 06, 2016 at 07:09 PM
+-- Server version: 10.1.10-MariaDB
+-- PHP Version: 5.6.19
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -29,7 +29,6 @@ SET time_zone = "+00:00";
 CREATE TABLE `messages` (
   `messageID` int(12) NOT NULL,
   `fromUsername` varchar(30) NOT NULL,
-  `toUsername` varchar(30) NOT NULL,
   `whenSent` datetime NOT NULL,
   `whenReplied` datetime DEFAULT NULL,
   `message` text NOT NULL,
@@ -42,12 +41,16 @@ CREATE TABLE `messages` (
 -- Dumping data for table `messages`
 --
 
-INSERT INTO `messages` (`messageID`, `fromUsername`, `toUsername`, `whenSent`, `whenReplied`, `message`, `reply`, `title`, `newMessage`) VALUES
-(105, 'admin', 'user', '2016-08-25 10:14:06', NULL, 'message', NULL, 'General Question', 1),
-(106, 'user', 'admin', '2016-09-05 11:22:19', NULL, 'This is a test!!!', NULL, 'General Question', 1),
-(107, 'user', 'admin', '2016-09-04 11:30:50', NULL, 'What?? Another message????', NULL, 'General Question', 1),
-(108, 'user', 'admin', '2016-09-05 12:31:02', NULL, 'New message time!', NULL, 'General Question', 1),
-(109, 'user', 'admin', '2016-09-05 12:31:35', NULL, 'Test message', NULL, 'General Question', 1);
+INSERT INTO `messages` (`messageID`, `fromUsername`, `whenSent`, `whenReplied`, `message`, `reply`, `title`, `newMessage`) VALUES
+(106, 'user', '2016-09-05 11:22:19', NULL, 'This is a test!!!', NULL, 'General Question', 1),
+(107, 'user', '2016-09-04 11:30:50', NULL, 'What?? Another message????', NULL, 'General Question', 1),
+(108, 'user', '2016-09-05 12:31:02', NULL, 'New message time!', NULL, 'General Question', 1),
+(109, 'user', '2016-09-05 12:31:35', NULL, 'Test message', NULL, 'General Question', 1),
+(110, 'user', '2016-09-05 20:05:00', NULL, 'Stuff message', NULL, 'This is a Test!', 1),
+(111, 'user', '2016-09-05 20:06:01', NULL, 'Test message', NULL, 'This is a Test!', 1),
+(112, 'user', '2016-09-05 20:06:39', '2016-09-06 11:13:03', 'More tests', 'This is the reply', 'General Question', 1),
+(113, 'reviewer', '2016-09-05 21:16:45', '2016-09-06 11:05:18', 'hi there', 'this is the reply', 'General Question', 1),
+(114, 'user', '2016-09-06 11:31:38', NULL, 'NEW MESSAGE', NULL, 'General Question', 1);
 
 -- --------------------------------------------------------
 
@@ -104,9 +107,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`userID`, `username`, `account_created`, `last_login`, `first_name`, `last_name`, `email`, `passwordHash`, `role`) VALUES
-(1, 'admin', '2016-08-19 00:00:00', '2016-09-05 12:31:40', 'Firstname', 'Lastname', 'admin@email.com', '$2y$10$pEPtxGEQCUWvu6CBfavyIeHxrZnZo.cDaCCkHzqzU7p.uKbESm4tS', 'admin'),
-(3, 'reviewer', '2016-08-20 04:31:38', '2016-09-05 10:52:52', 'firstname', 'lastname', 'rev@wmil.com', '$2y$11$cIqYazL6Z3tEc9AR0ZwQyuDpDSFIlOtBqky1FlbzAryUuJDMW6Hmq', 'reviewer'),
-(5, 'user', '2016-08-21 04:34:55', '2016-09-05 11:22:05', 'first', 'last', 'email@email.com', '$2y$11$fSL8mjGwt/SSWhJKfFMIwuPOAiIqx4Wo6Hi8mTqyfFoZ2MA3vtD/y', 'author'),
+(1, 'admin', '2016-08-19 00:00:00', '2016-09-06 10:52:28', 'Firstname', 'Lastname', 'admin@email.com', '$2y$10$pEPtxGEQCUWvu6CBfavyIeHxrZnZo.cDaCCkHzqzU7p.uKbESm4tS', 'admin'),
+(3, 'reviewer', '2016-08-20 04:31:38', '2016-09-06 12:05:50', 'firstname', 'lastname', 'rev@wmil.com', '$2y$11$cIqYazL6Z3tEc9AR0ZwQyuDpDSFIlOtBqky1FlbzAryUuJDMW6Hmq', 'reviewer'),
+(5, 'user', '2016-08-21 04:34:55', '2016-09-06 11:15:44', 'first', 'last', 'email@email.com', '$2y$11$fSL8mjGwt/SSWhJKfFMIwuPOAiIqx4Wo6Hi8mTqyfFoZ2MA3vtD/y', 'author'),
 (6, 'newuser', '2016-08-31 01:11:11', '2016-08-30 19:32:22', 'first', 'last', 'email@email.com', '$2y$11$tIcWiltjNU5Xi.SUVcN06.DaFytYq7e/LRMhgU3GoMxnfsNKJd9mO', 'author');
 
 --
@@ -141,7 +144,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `messageID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=110;
+  MODIFY `messageID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=115;
 --
 -- AUTO_INCREMENT for table `papers`
 --

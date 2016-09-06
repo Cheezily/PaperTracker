@@ -2,40 +2,31 @@
 
 require_once 'database.php';
 
-function getMessages($toUsername) {
+
+function getMessages($fromUsername) {
     global $db;
-    $query = "SELECT * FROM messages WHERE toUsername=:toUsername ORDER BY whenSent DESC";
+    $query = "SELECT * FROM messages WHERE fromUsername=:fromUsername ORDER BY whenSent DESC";
     $statement = $db->prepare($query);
-    $statement->bindValue(":toUsername", $toUsername);
+    $statement->bindValue(":fromUsername", $fromUsername);
     $statement->execute();
     
     $results = $statement->fetchAll();
     return $results;
 }
 
-function sendMessage($fromUsername, $toUsername, $message, $messageTitle) {
+
+function sendMessage($fromUsername, $message, $messageTitle) {
     $whenSent = date("Y-m-d H:i:s");
     
     global $db;
-    $query = "INSERT INTO messages(fromUsername, toUsername, whenSent, message, title) VALUES (:fromUsername, :toUsername, :whenSent, :message, :title)";
+    $query = "INSERT INTO messages(fromUsername, whenSent, message, title) VALUES (:fromUsername, :whenSent, :message, :title)";
     $statement = $db->prepare($query);
     $statement->bindValue(":fromUsername", $fromUsername);
-    $statement->bindValue(":toUsername", $toUsername);
     $statement->bindValue(":whenSent", $whenSent);
     $statement->bindValue(":message", $message);
     $statement->bindValue(":title", $messageTitle);
     $results = $statement->execute();
-    
-    //make sure the message went through
-    /*
-    $query = "SELECT * FROM messages WHERE fromUsername=:fromUsername AND whenSent=:whenSent AND title=:title";
-    $statement = $db->prepare($query);
-    $statement->bindValue(":fromUsername", $fromUsername);
-    $statement->bindValue(":whenSent", $whenSent);
-    $statement->bindValue(":title", $messageTitle);
-    $statement->execute();
-    $results = $statement->fetch();
-    */
+
     if ($results) {
         return "Message sent";
     } else {

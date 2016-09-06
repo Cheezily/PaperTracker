@@ -1,8 +1,8 @@
 <?php
 
-function getAllMessagesToAdmin() {
+function getAllMessages() {
     global $db;
-    $query = "SELECT * FROM messages WHERE toUsername='admin' ORDER BY whenSent DESC";
+    $query = "SELECT * FROM messages ORDER BY whenSent DESC";
     $statement = $db->prepare($query);
     $statement->execute();
     $results = $statement->fetchAll();

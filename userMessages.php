@@ -1,25 +1,51 @@
 <?php
-require_once 'model/messagesDB.php';
-$userMessages = getMessages($_SESSION['username']);
-
+require_once 'controller/messages.php';
+$userMessages = getMessageList($_SESSION['username']);
+$repliedMessages = $userMessages[0];
+$needsReply = $userMessages[1];
+//var_dump($repliedMessages);
 ?>
 
-<h2>Messages:</h2>
+<h2>Replies to your Messages:</h2>
 <div class='messageList'>
-    <?php if (count($userMessages) == 0) {
-        echo "<p>You have no messages at this time!</p>";
+    <?php if (count($repliedMessages) == 0) {
+        echo "<p>You have no messages with replies at this time!</p>";
     } else {
-        forEach ($userMessages as $message) {
-            echo "<p class='messageLineHeader'>Sent on ".date("F j, Y, g:i a", 
-                    strtotime($message['whenSent']))." by the Editor:</p>";
-            echo "<p class='messageLineHeader'>Re: ".$message['title']."</p>";
-            echo "<p class='messageLine'>".$message['message']."<p><hr>";
-        }
-    }
-    ?>
+        forEach ($repliedMessages as $message) { ?>
+            <div class='messageWraper'>
+                <p class='messageLineHeader'>Your Message Sent On <?php 
+                    echo date("F j, Y, g:i a", strtotime($message['whenSent'])); ?>
+                </p>
+                <p class='messageLineHeader'>Re: <?php echo $message['title']; ?></p>
+                <p class='messageLine'>Message: <?php echo $message['message']; ?><p>
+                <p class='messageLineHeader'>Editor Replied On <?php 
+                    echo date("F j, Y, g:i a", strtotime($message['whenReplied'])); ?>
+                </p>
+                <p class='messageLine'>Reply: <?php echo $message['reply']; ?><p>
+            </div>
+        <?php }
+    } ?>
 </div>
+
+<h2>Your Messages Awaiting a Reply:</h2>
+<div class='messageList'>
+    <?php if (count($needsReply) == 0) {
+        echo "<p>You have no messages that need a reply!</p>";
+    } else {
+        forEach ($needsReply as $message) { ?>
+            <div class='messageWraper'>
+                <p class='messageLineHeader'>Your Message Sent On <?php 
+                    echo date("F j, Y, g:i a", strtotime($message['whenSent'])); ?>
+                </p>
+                <p class='messageLineHeader'>Re: <?php echo $message['title']; ?></p>
+                <p class='messageLine'>Message: <?php echo $message['message']; ?><p>
+            </div>
+        <?php }
+    } ?>
+</div>
+<hr>
 <div class='messageAdmin'>
-    <p class='tip'>Please use the following form to contact the administrator.  They
+    <p class='tip'>Please use the following form to contact the Editor.  They
     are responsible for assigning your papers to reviewers as well as 
     handling any requests to delete submitted papers from the system.</p>
     <form method='post' action='index.php'>
