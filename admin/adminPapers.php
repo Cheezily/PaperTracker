@@ -2,7 +2,7 @@
 
 ?>
 
-<div class="mainWrapper">
+<div class="mainWrapperWithNav">
     papers
 </div>
 

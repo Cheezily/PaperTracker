@@ -26,19 +26,19 @@ header {
 /*------------------------*/
 
 /* Home Page Components */
-.mainWrapper {
+.mainWrapper, .mainWrapperWithNav {
     box-sizing: border-box;
     background: #eee;
     width: 960px;
     padding: 15px 50px 25px;
-    margin: 0 auto;
-    border: 5px solid #777;
-    /*
-    border-left: 3px solid #777;
-    border-right: 3px solid #777;
-    */
+    margin: 0 auto 100px;
     height: 100%;
+    border-radius: 5px;
+}
 
+.mainWrapperWithNav {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
 }
 
 /*LOGIN FORM ON THE MAIN PAGE*/
@@ -559,13 +559,13 @@ header {
 
 /*ADMIN DASHBOARD PAGE*/
 .adminNav {
+    background: #eee;
     box-sizing: border-box;
-    height: 50px;
+    height: 45px;
     width: 960px;
     margin: 0 auto;
     padding: 6px;
-    border: 5px solid #777;
-    border-bottom: none;
+    border-bottom: 1px solid #777;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 }

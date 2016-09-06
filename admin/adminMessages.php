@@ -4,7 +4,7 @@
     $alreadyReplied = $messages[1];
 ?>
 
-<div class="mainWrapper">
+<div class="mainWrapperWithNav">
     <h2>Messages Awaiting Reply:</h2>
     <div class='adminMessageList'>
         <?php

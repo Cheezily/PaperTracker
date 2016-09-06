@@ -2,6 +2,6 @@
 
 ?>
 
-<div class="mainWrapper">
+<div class="mainWrapperWithNav">
     Users
 </div>

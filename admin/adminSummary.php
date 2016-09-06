@@ -13,7 +13,7 @@ $newUsers = $usersCount[0];
 $oldUsers = $usersCount[1];
 ?>
 
-<div class="mainWrapper">
+<div class="mainWrapperWithNav">
     <h2>Messages:</h2>
     <h3>New Messages to You Since Last Login: <?php echo $newMessages; ?></h3>
     <p>(Total messages to the Editor: <?php echo $newMessages + $oldMessages; ?>)</p>

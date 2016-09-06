@@ -2,6 +2,6 @@
 
 ?>
 
-<div class="mainWrapper">
+<div class="mainWrapperWithNav">
     settings
 </div>
