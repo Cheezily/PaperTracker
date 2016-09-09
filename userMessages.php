@@ -26,7 +26,8 @@ $needsReply = $userMessages[1];
         <?php }
     } ?>
 </div>
-
+<hr>
+<br>
 <h2>Your Messages Awaiting a Reply:</h2>
 <div class='messageList'>
     <?php if (count($needsReply) == 0) {
@@ -44,6 +45,7 @@ $needsReply = $userMessages[1];
     } ?>
 </div>
 <hr>
+<br>
 <div class='messageAdmin'>
     <p class='tip'>Please use the following form to contact the Editor.  They
     are responsible for assigning your papers to reviewers as well as 
