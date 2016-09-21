@@ -127,5 +127,23 @@ function getPapersByStatus($papers) {
     return $output;
 }
 
+
+function reviewerOptionList() {
+    $reviewers = getAllReviewers();
+    
+    var_dump($reviewers);
+    $list = "<option></option>";
+
+    forEach($reviewers as $reviewer) {
+        $list = $list."<option class='reviewer' value=".$reviewers[0]['username'].'>'.
+                $reviewers[0]['first_name'].' '.$reviewers[0]['last_name'].' from '.
+                $reviewers[0]['affiliation'].'</option>';
+    }
+    
+    echo $list;
+    
+    return $list;
+}
+
 ?>
 

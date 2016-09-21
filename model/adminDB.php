@@ -30,5 +30,28 @@ function getAllUsers() {
     return $results;
 }
 
+function getAuthor($username) {
+    global $db;
+    $query = "SELECT first_name, last_name FROM users WHERE username=:username";
+    
+    $statement=$db->prepare($query);
+    $statement->bindValue('username', $username);
+    $statement->execute();
+    $results = $statement->fetch();
+    
+    return $results;
+}
 
+function getAllReviewers() {
+    global $db;
+    $query = "SELECT * FROM users WHERE role='reviewer'";
+    
+    $statement=$db->prepare($query);
+    $statement->execute();
+    $results = $statement->fetchAll();
+    
+    //var_dump($results);
+    
+    return $results;   
+}
 ?>
