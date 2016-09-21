@@ -4,7 +4,6 @@
         <title>
             Submission Tracker
         </title>
-        <script type='text/javascript' src='bower_components/jquery/dist/jquery.min.js'></script>
     </head>
     
     <body>
@@ -113,7 +112,7 @@
                                     echo " ".$newUserError;
                                 }
                                 if ($nameBlank) {
-                                    echo "Username cannot be blank";
+                                    echo "Required";
                                 }
                                 ?>
                             </span>
@@ -129,7 +128,7 @@
                         <label for='firstName'>First Name
                             <span class='miniWarning'>
                                 <?php if ($firstNameBlank) {
-                                    echo "First name cannot be blank";
+                                    echo "Required";
                                 }
                                 ?>
                             </span>
@@ -144,7 +143,7 @@
                         <label for='lastName'>Last Name
                             <span class='miniWarning'>
                                 <?php if ($lastNameBlank) {
-                                    echo "Last name cannot be blank";
+                                    echo "Required";
                                 }
                                 ?>
                             </span>                        
@@ -159,7 +158,7 @@
                         <label for='affiliation'>Affiliation (university, publication, etc...)
                             <span class='miniWarning'>
                                 <?php if ($affiliationBlank) {
-                                    echo "Affiliation cannot be blank";
+                                    echo "Required";
                                 }
                                 ?>
                             </span>                        
@@ -174,7 +173,7 @@
                         <label for='authorEmail'>Email
                             <span class='miniWarning'>
                                 <?php if ($emailBlank && !$emailInvalid) {
-                                    echo "Email field cannot be blank";
+                                    echo "Required";
                                 }
                                 if (!$emailBlank && $emailInvalid) {
                                     echo "Not a valid email format";
@@ -195,7 +194,7 @@
                                     echo " ".$newUserError;
                                 }
                                 if ($userPWBlank) {
-                                    echo "Please enter a password";
+                                    echo "Required";
                                 }
                                 if ($userPWTooShort) {
                                     echo "Password too short";

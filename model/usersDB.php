@@ -16,10 +16,11 @@ function checkUsername($username) {
 }
 
 function addUser($user) {
+    //var_dump($user);
     global $db;
     $query = "INSERT INTO users (username, account_created, first_name,".
-            "last_name, email, passwordHash, role) VALUES (:username, ".
-            ":account_created, :first_name, :last_name, :email, :passwordHash, ".
+            "last_name, affiliation, email, passwordHash, role) VALUES (:username, ".
+            ":account_created, :first_name, :last_name, :affiliation, :email, :passwordHash, ".
             ":role)";
     $accountCreated = date("Y-m-d H:i:s");
     
@@ -31,6 +32,7 @@ function addUser($user) {
     $statement->bindValue(":account_created", $accountCreated);
     $statement->bindValue(":first_name", $user['firstName']);
     $statement->bindValue(":last_name", $user['lastName']);
+    $statement->bindValue(":affiliation", $user['affiliation']);
     $statement->bindValue(":email", $user['email']);
     $statement->bindValue(":passwordHash", $passwordHash);
     $statement->bindValue(":role", $user['role']);

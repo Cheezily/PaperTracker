@@ -5,14 +5,14 @@ require_once 'model/usersDB.php';
 //index.php any get parameters. That will require a seperate
 //registrationSuccess.php or something else to forward to upon success
 
-$role = filter_input(INPUT_POST, 'role', FILTER_SANITIZE_STRIPPED);
-$firstName = filter_input(INPUT_POST, 'firstName', FILTER_SANITIZE_STRIPPED);
-$lastName = filter_input(INPUT_POST, 'lastName', FILTER_SANITIZE_STRIPPED);
-$affiliation = filter_input(INPUT_POST, 'affiliation', FILTER_SANITIZE_STRIPPED);
-$email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-$username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRIPPED);
-$password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRIPPED);
-$passwordConfirm = filter_input(INPUT_POST, 'passwordConfirm');
+$role = trim(filter_input(INPUT_POST, 'role', FILTER_SANITIZE_STRIPPED));
+$firstName = trim(filter_input(INPUT_POST, 'firstName', FILTER_SANITIZE_STRIPPED));
+$lastName = trim(filter_input(INPUT_POST, 'lastName', FILTER_SANITIZE_STRIPPED));
+$affiliation = trim(filter_input(INPUT_POST, 'affiliation', FILTER_SANITIZE_STRIPPED));
+$email = trim(filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL));
+$username = trim(filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRIPPED));
+$password = trim(filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRIPPED));
+$passwordConfirm = trim(filter_input(INPUT_POST, 'passwordConfirm', FILTER_SANITIZE_STRIPPED));
 
 //Get the role and store it as $r for GET params back to index.php if needed
 if ($role == 'Author') {
@@ -30,14 +30,14 @@ if (!$firstName) {
     $errorList .= "&f=true";
     $errorTrigger = TRUE;
 } else {
-    $errorList .= "&firstname=".$firstName;
+    $errorList .= "&firstname=".ucfirst($firstName);
 }
 
 if (!$lastName) {
     $errorList .= "&l=true";
     $errorTrigger = TRUE;
 } else {
-    $errorList .= "&lastname=".$lastName;
+    $errorList .= "&lastname=".ucfirst($lastName);
 }
 
 if (!$affiliation) {
@@ -100,78 +100,30 @@ if ($password != $passwordConfirm) {
 //and display a success page
 $user = array(
     'username' => $username,
-    'firstName' => $firstName,
-    'lastName' => $lastName,
+    'firstName' => ucfirst($firstName),
+    'lastName' => ucfirst($lastName),
+    'affiliation' => $affiliation,
     'email' => $email,
     'password' => $password,
     'role' => $role
 );
 addUser($user);
+
 $loginInfo = login($user['username'], $user['password']);
 
-?>
-
-
-
-<?php 
 if (!empty($loginInfo)) {
     session_start();
-    //var_dump($result);
-    $_SESSION['username'] = $loginInfo['username'];
-    $_SESSION['firstname'] = $loginInfo['first_name'];
-    $_SESSION['lastname'] = $loginInfo['last_name'];
-    $_SESSION['email'] = $loginInfo['email'];
-    $_SESSION['role'] = $loginInfo['role'];
-    $_SESSION['userID'] = $loginInfo['userID'];
-    $_SESSION['username'] = $loginInfo['username'];
-    $_SESSION['lastLogin'] = $loginInfo['last_login'];
+    var_dump($loginInfo);
+    $_SESSION['username'] = $loginInfo[0]['username'];
+    $_SESSION['firstname'] = $loginInfo[0]['first_name'];
+    $_SESSION['lastname'] = $loginInfo[0]['last_name'];
+    $_SESSION['email'] = $loginInfo[0]['email'];
+    $_SESSION['role'] = $loginInfo[0]['role'];
+    $_SESSION['userID'] = $loginInfo[0]['userID'];
+    $_SESSION['username'] = $loginInfo[0]['username'];
+    $_SESSION['lastLogin'] = $loginInfo[1];
     $_SESSION['firstLogin'] = TRUE;
-?>
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>
-            Submission Tracker
-        </title>
-    </head>
-    <body>
-        <?php include 'static/header.php';?>
-        
-        <div class='mainWrapper'>
-            <h1>Thanks for registering!</h1>
-            <h3>Click on the button below to be taken to your dashboard.</h3>
-            <form method="post" action="index.php">
-                <form method='get' action='index.php'>
-                    <input class='registrationSuccess' type='submit' value='My Dashboard'>
-                </form>
-            </form>
-        </div>
-    </body>
-</html>
-<?php
-    } else {
-?>
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>
-            Submission Tracker
-        </title>
-    </head>
-    <body>
-        <?php include 'static/header.php';?>
-        
-        <div class='mainWrapper'>
-            <h1>Something went wrong with registering your username :(</h1>
-            <h3>The administrator has been notified. You can click on the button below to try again if you wish. </h3>
-            <form method="post" action="index.php">
-                <form method='get' action='index.php'>
-                    <input class='registrationSuccess' type='submit' value='Back to the Home Page'>
-                </form>
-            </form>
-        </div>
-    </body>
-</html>
-<?php
+
+    header("Location: index.php");
 }
 ?>
