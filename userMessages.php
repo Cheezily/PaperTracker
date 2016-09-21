@@ -14,12 +14,12 @@ $needsReply = $userMessages[1];
         forEach ($repliedMessages as $message) { ?>
             <div class='messageWraper'>
                 <p class='messageLineHeader'>Your Message Sent On <?php 
-                    echo date("F j, Y, g:i a", strtotime($message['whenSent'])); ?>
+                    echo date("M j, Y, g:i a", strtotime($message['whenSent'])); ?>
                 </p>
                 <p class='messageLineHeader'>Re: <?php echo $message['title']; ?></p>
                 <p class='messageLine'>Message: <?php echo $message['message']; ?><p>
                 <p class='messageLineHeader'>Editor Replied On <?php 
-                    echo date("F j, Y, g:i a", strtotime($message['whenReplied'])); ?>
+                    echo date("M j, Y, g:i a", strtotime($message['whenReplied'])); ?>
                 </p>
                 <p class='messageLine'>Reply: <?php echo $message['reply']; ?><p>
             </div>
@@ -36,7 +36,7 @@ $needsReply = $userMessages[1];
         forEach ($needsReply as $message) { ?>
             <div class='messageWraper'>
                 <p class='messageLineHeader'>Your Message Sent On <?php 
-                    echo date("F j, Y, g:i a", strtotime($message['whenSent'])); ?>
+                    echo date("M j, Y, g:i a", strtotime($message['whenSent'])); ?>
                 </p>
                 <p class='messageLineHeader'>Re: <?php echo $message['title']; ?></p>
                 <p class='messageLine'>Message: <?php echo $message['message']; ?><p>
