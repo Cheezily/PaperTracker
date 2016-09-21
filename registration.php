@@ -113,7 +113,6 @@ $loginInfo = login($user['username'], $user['password']);
 
 if (!empty($loginInfo)) {
     session_start();
-    var_dump($loginInfo);
     $_SESSION['username'] = $loginInfo[0]['username'];
     $_SESSION['firstname'] = $loginInfo[0]['first_name'];
     $_SESSION['lastname'] = $loginInfo[0]['last_name'];
