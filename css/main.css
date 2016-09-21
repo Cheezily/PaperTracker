@@ -2,7 +2,7 @@ body {
     margin: 0;
     padding: 0;
     background: #bcb;
-    font-family: sans-serif;
+    font-family: Arial;
     color: #444;
 }
 
@@ -46,15 +46,19 @@ header {
     background: white;
     box-sizing: border-box;
     width: 500px;
-    height: 350px;
+    height: 310px;
     position: absolute;
-    top: 100px;
+    top: 25px;
     left: 0;
     right: 0;
     margin: 0 auto;
-    padding: 10px 30px;
+    padding: 0px 30px;
     border: 4px solid #777;
     font-size: 24px;
+}
+
+.newUserForm h4 {
+    margin: 15px 0 0 0;
 }
 
 .loginFormAppear {
@@ -63,7 +67,7 @@ header {
 
 @keyframes formAppear {
     0% {top: -600px; }
-    100% {top: 100px; opacity: 1;}
+    100% {top: 25px; opacity: 1;}
 }
 
 .loginFormDisappear {
@@ -165,7 +169,7 @@ header {
 }
 
 .newUserForm {
-    height: 630px;
+    height: 660px;
 }
 
 .newUserFormAppear {
@@ -673,6 +677,20 @@ header {
     width: 700px;
     border: 1px solid #777;
     margin: 0 auto 8px;
+}
+
+.adminPaper {
+    width: 860px;
+    border: 2px solid #333;
+}
+
+.paperAttributeAlt {
+    background: #355;
+    color: #fff;
+}
+
+.attributeLabelAlt {
+    color: #ddd;
 }
 
 /*------------------------------*/

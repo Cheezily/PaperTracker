@@ -1,16 +1,17 @@
 <?php
-require_once 'model/registrationDB.php';
+require_once 'model/usersDB.php';
 
 //this should be refactored at some point to not have to feed
 //index.php any get parameters. That will require a seperate
 //registrationSuccess.php or something else to forward to upon success
 
-$role = filter_input(INPUT_POST, 'role');
-$firstName = filter_input(INPUT_POST, 'firstName');
-$lastName = filter_input(INPUT_POST, 'lastName');
+$role = filter_input(INPUT_POST, 'role', FILTER_SANITIZE_STRIPPED);
+$firstName = filter_input(INPUT_POST, 'firstName', FILTER_SANITIZE_STRIPPED);
+$lastName = filter_input(INPUT_POST, 'lastName', FILTER_SANITIZE_STRIPPED);
+$affiliation = filter_input(INPUT_POST, 'affiliation', FILTER_SANITIZE_STRIPPED);
 $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-$username = filter_input(INPUT_POST, 'username');
-$password = filter_input(INPUT_POST, 'password');
+$username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRIPPED);
+$password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRIPPED);
 $passwordConfirm = filter_input(INPUT_POST, 'passwordConfirm');
 
 //Get the role and store it as $r for GET params back to index.php if needed
@@ -37,6 +38,13 @@ if (!$lastName) {
     $errorTrigger = TRUE;
 } else {
     $errorList .= "&lastname=".$lastName;
+}
+
+if (!$affiliation) {
+    $errorList .= "&a=true";
+    $errorTrigger = TRUE;
+} else {
+    $errorList .= "&affiliation=".$affiliation;
 }
 
 if (strlen($_POST['email']) == 0) {
@@ -125,7 +133,6 @@ if (!empty($loginInfo)) {
         <title>
             Submission Tracker
         </title>
-        <script type='text/javascript' src='bower_components/jquery/dist/jquery.min.js'></script>
     </head>
     <body>
         <?php include 'static/header.php';?>
@@ -150,7 +157,6 @@ if (!empty($loginInfo)) {
         <title>
             Submission Tracker
         </title>
-        <script type='text/javascript' src='bower_components/jquery/dist/jquery.min.js'></script>
     </head>
     <body>
         <?php include 'static/header.php';?>

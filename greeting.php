@@ -104,7 +104,7 @@
                     echo "<div class='loginForm newUserForm'>";
                     } else { 
                     echo "<div class='loginForm newUserForm newUserFormAppear'>";} ?>
-                    <form class='newUserRegisterForm' method='post' action='registration.php'>
+                        <form class='newUserRegisterForm' method='post' action='registration.php'>
                         <?php if ($newAuthorRequested || ($errRole === 'Author')) {echo "<h4>New Author Registration:</h4>";}?>
                         <?php if ($newReviewerRequested || ($errRole === 'Reviewer')) {echo "<h4>New Reviewer Registration:</h4>";}?>
                         <label for='authorUsername'>Username
@@ -125,7 +125,7 @@
                                 }
                             ?>   
                                placeholder="Username">
-                        <span class='warning'><?php echo $taken_username; ?></span><br>
+                        <span class='warning'><?php //echo $taken_username; ?></span>
                         <label for='firstName'>First Name
                             <span class='miniWarning'>
                                 <?php if ($firstNameBlank) {
@@ -156,6 +156,21 @@
                                 }
                             ?>                               
                                placeholder="Last Name"><br>
+                        <label for='affiliation'>Affiliation (university, publication, etc...)
+                            <span class='miniWarning'>
+                                <?php if ($affiliationBlank) {
+                                    echo "Affiliation cannot be blank";
+                                }
+                                ?>
+                            </span>                        
+                        </label>
+                        <input type='text' id='affiliation' name='affiliation' 
+                            <?php 
+                                if ($affiliationFilled) {
+                                    echo " value='".$affiliationFilled."' ";
+                                }
+                            ?>                               
+                               placeholder="Affiliation"><br>
                         <label for='authorEmail'>Email
                             <span class='miniWarning'>
                                 <?php if ($emailBlank && !$emailInvalid) {
