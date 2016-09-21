@@ -81,33 +81,48 @@ function getUserCounts() {
 
 //'awaiting_assignment','awaiting_review','awaiting_revisions','revisions_submitted','accepted','rejected'
 function getPapersByStatus($papers) {
-
-    $awaitingReview = array();
-    $awaitingAuthorUpdate = array();
+    
+    $needsAssignment = array();
+    $awaitingInitialReview = array();
+    $needsPostReviewStatus = array();
+    $awaitingRevisions = array();
+    $awaitingFinalReview = array();
+    $finalReviewDone = array();
     $accepted = array();
     $rejected = array();
-    $needsAssignment = array();
     $recentlyUpdated = array();
     
     forEach($papers as $paper) {
-        switch ($paper['status']) {
-            case 'awaiting_review':
-                array_push($awaitingReview, $paper);
-                break;
-            case 'awaiting_revisions':
-                array_push($awaitingUpdate, $paper);
-                break;
-            case 'revisions_submitted':
-                array_push($needsAssignment, $paper);
-                break;
-            case 'accepted':
-                array_push($accepted, $paper);
-                break;
-            case 'rejected':
-                array_push($rejected, $paper);
-                break;
-            default:
-                array_push($needsAssignment, $paper);
+        if ($paper['status'] === 'awaiting_assignment') {
+            array_push($needsAssignment, $paper);
+        }
+        
+        if ($paper['status'] === 'awaiting_review' && empty($paper['firstReviewFilename'])) {
+            array_push($awaitingInitialReview, $paper);
+        }
+        
+        if ($paper['status'] === 'awaiting_review' && !empty($paper['firstReviewFilename'])) {
+            array_push($needsPostReviewStatus, $paper);
+        }
+
+        if ($paper['status'] === 'awaiting_revisions') {
+            array_push($awaitingRevisions, $paper);
+        }
+        
+        if ($paper['status'] === 'revisions_submitted' && empty($paper['finalReviewFilename'])) {
+            array_push($awaitingFinalReview, $paper);
+        }
+        
+        if ($paper['status'] === 'revisions_submitted' && !empty($paper['finalReviewFilename'])) {
+            array_push($finalReviewDone, $paper);
+        }
+        
+        if ($paper['status'] === 'accepted') {
+            array_push($accepted, $paper);
+        }
+        
+        if ($paper['status'] === 'accepted') {
+            array_push($rejected, $paper);
         }
     }
     
@@ -118,31 +133,46 @@ function getPapersByStatus($papers) {
     }
     
     $output = array("needsAssignment" => $needsAssignment, 
-        "awaitingReview" => $awaitingReview, 
-        "awaitingAuthorUpdate" => $awaitingAuthorUpdate, 
-        "accepted" => $accepted, 
+        "awaitingInitialReview" => $awaitingInitialReview, 
+        "needsPostReviewStatus" => $needsPostReviewStatus, 
+        "awaitingRevisions" => $awaitingRevisions,
+        "awaitingFinalReview" => $awaitingFinalReview,
+        "finalReviewDone" => $finalReviewDone,
+        "accepted" => $accepted,        
         "rejected" => $rejected,
         "recentlyUpdated" => $recentlyUpdated);
     
     return $output;
 }
 
-
+//options for assigning a reviewer to a paper
 function reviewerOptionList() {
     $reviewers = getAllReviewers();
     
-    var_dump($reviewers);
+    //var_dump($reviewers);
     $list = "<option></option>";
 
     forEach($reviewers as $reviewer) {
-        $list = $list."<option class='reviewer' value=".$reviewers[0]['username'].'>'.
-                $reviewers[0]['first_name'].' '.$reviewers[0]['last_name'].' from '.
-                $reviewers[0]['affiliation'].'</option>';
+        $list = $list."<option class='reviewer' value=".$reviewer['username'].'>'.
+                $reviewer['first_name'].' '.$reviewer['last_name'].' - '.
+                $reviewer['affiliation'].'</option>';
     }
     
-    echo $list;
-    
     return $list;
+}
+
+
+if (isset($_POST['changeReviewer']) &&
+        isset($_POST['reviewer']) &&
+        isset($_POST['paperID'])) {
+    
+    $reviewer = filter_input(INPUT_POST, "reviewer", FILTER_SANITIZE_STRIPPED);
+    $paperID = filter_input(INPUT_POST, "paperID", FILTER_SANITIZE_NUMBER_INT);
+
+    
+    if($reviewer && $paperID) {
+        assignReviewer($paperID, $reviewer);
+    }
 }
 
 ?>

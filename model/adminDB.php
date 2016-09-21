@@ -30,9 +30,9 @@ function getAllUsers() {
     return $results;
 }
 
-function getAuthor($username) {
+function getRealName($username) {
     global $db;
-    $query = "SELECT first_name, last_name FROM users WHERE username=:username";
+    $query = "SELECT first_name, last_name, affiliation FROM users WHERE username=:username";
     
     $statement=$db->prepare($query);
     $statement->bindValue('username', $username);
@@ -53,5 +53,16 @@ function getAllReviewers() {
     //var_dump($results);
     
     return $results;   
+}
+
+function assignReviewer($paperID, $reviewer) {
+    global $db;
+    $query = "UPDATE papers SET reviewername=:reviewer, status='awaiting_review', whenAssigned=:assigned WHERE paperID=:paperID";
+    
+    $statement=$db->prepare($query);
+    $statement->bindValue('reviewer', $reviewer);
+    $statement->bindValue('paperID', $paperID);
+    $statement->bindValue('assigned', date("Y-m-d H:i:s"));
+    return $statement->execute();
 }
 ?>
