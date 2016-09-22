@@ -162,6 +162,49 @@ function reviewerOptionList() {
 }
 
 
+function paperNote($paper) {
+    
+    $note = '';
+    if ($paper['editorNotes']) {
+        
+        $noteDate = date('M j, Y, g:i a (e)', strtotime($paper['whenEditorNotes']));
+        $buttonTitle = "Edit/View Note to the Author Updated on ".$noteDate;
+        
+        $note = "<div class='noteAlert'>".
+                    "<div class='noteButton' class='viewNote' noteNumber=".$paper['paperID'].">".
+                        "Editor Note Submitted on ".$noteDate.
+                    "</div>".
+                "</div>".
+                "<div class='adminReadNote' id=".$paper['paperID'].">".
+                    "<div class='adminReadNoteHeader>".
+                        "<h4>Note Submitted on ".$noteDate."</h4>".
+                    "</div>".
+                    "<button class='closeNote' noteNumber=".$paper['paperID'].">".
+                "</div>";
+    } else {
+        $buttonTitle = "Add Note to the Author";
+    }
+    
+    $output = $note."<button class='adminNoteButton' paperID=".$paper['paperID'].">".$buttonTitle.
+            "</button>".
+            "<div class='adminPaperNote' id='makeNoteFor".$paper['paperID']."'>".
+                "<div class='adminNoteHeading'>Note for <b>".$paper['title']."</b></div><hr>".
+            "<form method='post' action=''>".
+                "<input type='hidden' name='paperID' value='".$paper['paperID']."'>".
+                "<textarea class='paperNote' name='noteText' id='textAreaFor".$paper['paperID']."'>".
+                "</textarea><hr>".
+                "<input type='submit' name='adminNote' value='Submit Note'>".
+            "</form>".
+            "<button class='adminNoteCancel' paperID=".$paper['paperID'].">Cancel</button>".
+            "<div id='textFor".$paper['paperID']."' style='display: none;'>".
+            ($paper['editorNotes']).
+            "</div>".
+            "</div>";
+    
+    return $output;
+}
+
+
 if (isset($_POST['changeReviewer']) &&
         isset($_POST['reviewer']) &&
         isset($_POST['paperID'])) {
@@ -172,6 +215,17 @@ if (isset($_POST['changeReviewer']) &&
     
     if($reviewer && $paperID) {
         assignReviewer($paperID, $reviewer);
+    }
+}
+
+if (isset($_POST['adminNote'])) {
+
+    $adminPage = "adminPapers.php";
+    $noteText = filter_input(INPUT_POST, "noteText", FILTER_SANITIZE_STRING);
+    $paperID = filter_input(INPUT_POST, "paperID", FILTER_SANITIZE_NUMBER_INT);
+    
+    if (!empty($noteText) && !empty($paperID)) {
+        addEditorNotes($paperID, $noteText);
     }
 }
 

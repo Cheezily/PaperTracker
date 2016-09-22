@@ -3,7 +3,7 @@
 ?>
 
 <link rel="stylesheet" href="css/main.css">
-
+<script type='text/javascript' src='bower_components/jquery/dist/jquery.min.js'></script>
 <header>
     <?php 
         if (isset($_SESSION['firstname'])) {

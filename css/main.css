@@ -693,4 +693,24 @@ header {
     color: #ddd;
 }
 
+.adminPaperNote {
+    display: none;
+    background: white;
+    position: absolute;
+    top: 20px;
+    left: 2%;
+    width: 95%;
+    height: 600px;
+    padding: 20px;
+    overflow-y: scroll;
+    box-shadow: 0 8px 15px #000;
+    z-index: 2;
+}
+
+.adminPaperNote textarea {
+    width: 95%;
+    height: 450px;
+    margin: 0 auto;
+}
+
 /*------------------------------*/

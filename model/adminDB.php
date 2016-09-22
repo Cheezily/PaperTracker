@@ -65,4 +65,17 @@ function assignReviewer($paperID, $reviewer) {
     $statement->bindValue('assigned', date("Y-m-d H:i:s"));
     return $statement->execute();
 }
+
+function addEditorNotes($paperID, $noteText) {
+    global $db;
+    $query = "UPDATE papers SET editorNotes=:editorNotes, whenEditorNotes=:whenEditorNotes WHERE paperID=:paperID";
+    
+    $statement=$db->prepare($query);
+    $statement->bindValue('editorNotes', $noteText);
+    $statement->bindValue('whenEditorNotes', date("Y-m-d H:i:s"));
+    $statement->bindValue('paperID', $paperID);
+    return $statement->execute();
+}
+    
+
 ?>
