@@ -101,7 +101,7 @@ function checkForFinalReview($paperID) {
 function uploadFirstReview($paperID, $filename, $recommendation) {
     global $db;
     $query = 'UPDATE papers SET firstReviewFilename=:filename, whenFirstReply=:whenFirstReply,'
-            . ' recommendation=:recommendation, recentlyUpdated="1" WHERE paperID=:paperID';
+            . ' firstRecommendation=:recommendation, recentlyUpdated="1" WHERE paperID=:paperID';
     $statement = $db->prepare($query);
     $statement->bindValue(":filename", $filename);
     $statement->bindValue(":recommendation", $recommendation);

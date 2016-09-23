@@ -3,6 +3,10 @@ body {
     padding: 0;
     background: #bcb;
     font-family: Arial;
+    font-weight: normal;
+    font-smooth:always;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     color: #444;
 }
 
@@ -691,6 +695,15 @@ header {
 
 .attributeLabelAlt {
     color: #ddd;
+}
+
+.paperAttributeAlt1 {
+    background: #3aa;
+    color: #fff;
+}
+
+.attributeLabelAlt1 {
+    color: #222;
 }
 
 /*styling for the button to delete the whole paper from the system*/

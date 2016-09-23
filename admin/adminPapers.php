@@ -90,7 +90,7 @@ $reviewerOptions = reviewerOptionList();
                 <span class='attributeLabel attributeLabelAlt'>Reviewer: </span>
                 <?php 
                     $reviewer = getRealName($paper['reviewername']);
-                    echo '<b>'.$reviewer[0].' '.$reviewer[1].'</b> from <b>'.$reviewer[2].'</b> on '. 
+                    echo '<b>'.$reviewer[0].' '.$reviewer[1].'</b> from <b>'.$reviewer[2].'</b> assigned on '. 
                          date("M j, Y, g:i a", strtotime($paper['whenAssigned']));
                 ?>
                 <br>
@@ -118,7 +118,7 @@ $reviewerOptions = reviewerOptionList();
 
         <hr>
         <br>
-        <h3>Papers with Initial Review Completed Awaiting Your Input:</h3>
+        <h3>Papers with Initial Review Completed and Awaiting Your Input:</h3>
         <?php if(empty($needsPostReviewStatus)) { ?>
         <p>There are no papers awaiting a status update at this time.</p>
         <?php } else { ?>
@@ -152,23 +152,31 @@ $reviewerOptions = reviewerOptionList();
             <div class='paperAttribute paperAttributeAlt'>
                 <span class='attributeLabel attributeLabelAlt'>Reviewer Initial Recommendation: </span>
                 <?php 
-                    switch ($paper['recommendation']) {
+                    switch ($paper['firstRecommendation']) {
                         case "accept":
-                            return "Accept As-Is";
+                            echo "Accept As-Is -- Recommendation made ".
+                                date("M j, Y, g:i a", strtotime($paper['whenFirstReply']));
+                            break;
                         case "reject":
-                            return "Reject Draft";
+                            echo "Reject Draft -- Recommendation made ".
+                                date("M j, Y, g:i a", strtotime($paper['whenFirstReply']));
+                            break;
                         case "minor":
-                            return "Minor Revisions Needed";
+                            echo "Minor Revisions Needed -- Recommendation made ".
+                                date("M j, Y, g:i a", strtotime($paper['whenFirstReply']));
+                            break;
                         case "major":
-                            return "Major Revisions Needed";
+                            echo "Major Revisions Needed -- Recommendation made ".
+                                date("M j, Y, g:i a", strtotime($paper['whenFirstReply']));
+                            break;
                         default:
-                            return "No Recommendation Made";
+                            echo "Error: No Recommendation Made. Please contact the reviewer.";
                     }
                 ?>
                 <br>
             </div>
-            <div class='paperAttribute paperAttributeAlt'>
-                <span class='attributeLabel attributeLabelAlt'>Change Reviewer: </span>
+            <div class='paperAttribute paperAttributeAlt1'>
+                <span class='attributeLabel attributeLabelAlt1'>Your Recommendation: </span>
                 <form method="post" action="index.php">
                     <select name="editorReview">
                         <option value='none'></option>
@@ -178,7 +186,7 @@ $reviewerOptions = reviewerOptionList();
                     </select>
                     <input type='hidden' name='paperID' value='<?php echo $paper['paperID'];?>'>
                     <input type='hidden' name='adminPage' value='papers'>
-                    <input type='submit' name='editorReview' value='Assign Reviewer'>
+                    <input type='submit' name='editorReview' value='Submit Recommendation'>
                 </form>
                 <br>
             </div>

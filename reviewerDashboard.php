@@ -108,7 +108,7 @@ if (isset($_POST['getStarted'])) {
                     
                     <!--Display the box for the reviewer to submit the initial review
                         or display the comment file the reviewer already submitted-->
-                    <?php if (!$paper['recommendation']) { ?>
+                    <?php if (!$paper['firstRecommendation']) { ?>
                         <p class='instructions'>Please review the draft file. Select your 
                             recommendation and submit a MS Word file with your comments whenever you're ready</p>
                         <?php if ($reviewError) {
@@ -139,11 +139,37 @@ if (isset($_POST['getStarted'])) {
                         <div class='paperAttribute'>
                             <?php echo "<span class='attributeLabel'>Initial Feedback File:</span> ".
                                     "<a target='_blank' href='uploads/firstReview/".$paper['firstReviewFilename'].
-                                    "'>".htmlspecialchars($paper['firstReviewFilename'])."</a>"; ?>
-                        </div>
+                                    "'>".htmlspecialchars($paper['firstReviewFilename'])."</a></div>";
+                                
+                                $iRecommendation = '';
+                                switch ($paper['firstRecommendation']) {
+                                    case "accept":
+                                        $initialRecommendation = "Accept As-Is -- made ".
+                                            date("M j, Y, g:i a", strtotime($paper['whenFirstReply']));
+                                        break;
+                                    case "reject":
+                                        $initialRecommendation = "Reject Draft -- made ".
+                                            date("M j, Y, g:i a", strtotime($paper['whenFirstReply']));
+                                        break;
+                                    case "minor":
+                                        $initialRecommendation = "Minor Revisions Needed -- made ".
+                                            date("M j, Y, g:i a", strtotime($paper['whenFirstReply']));
+                                        break;
+                                    case "major":
+                                        $initialRecommendation = "Major Revisions Needed -- made ".
+                                            date("M j, Y, g:i a", strtotime($paper['whenFirstReply']));
+                                        break;
+                                    default:
+                                        $initialRecommendation = "Error: No Recommendation Made. Please contact the reviewer.";
+                                }       
+                                echo "<div class='paperAttribute'><span class='attributeLabel'>Your Initial Recommendation:</span> ".
+                                    $initialRecommendation."</div>";
+                            ?>
+
                         <?php if ($paper['recentlyUpdated'] == "1" &&
                                 !$paper['finalReviewFilename'] &&
                                 !$paper['revisedFilename']) {
+
                             echo "<p class='instructions'>Thanks! Based on your 
                             feedback, if a decision for a revise & resubmit is made by the Editor, 
                             this box will allow you to submit a final review to the Editor 

@@ -107,7 +107,7 @@ function deletePaperDB($paperID) {
         }
         
         if (!empty($paper['firstReviewFilename'])) {
-            $doc_dir = getcwd().'/uploads/firstResponses/';
+            $doc_dir = getcwd().'/uploads/firstReview/';
             unlink($doc_dir.$paper['firstReviewFilename']);
         }
         
@@ -117,7 +117,7 @@ function deletePaperDB($paperID) {
         }
         
         if (!empty($paper['finalReviewFilename'])) {
-            $doc_dir = getcwd().'/uploads/finalResponses/';
+            $doc_dir = getcwd().'/uploads/finalReview/';
             unlink($doc_dir.$paper['finalReviewFilename']);
         }
         
