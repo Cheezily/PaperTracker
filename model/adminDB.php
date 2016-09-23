@@ -77,5 +77,54 @@ function addEditorNotes($paperID, $noteText) {
     return $statement->execute();
 }
     
+function deleteEditorNotes($paperID) {
+    //only the editor can delete notes
+    if ($_SESSION['username'] === 'admin') {
+        global $db;
+        $query = "UPDATE papers SET editorNotes=NULL, whenEditorNotes=NULL WHERE paperID=:paperID";
 
+        $statement=$db->prepare($query);
+        $statement->bindValue('paperID', $paperID);
+        return $statement->execute();    
+    }
+}
+
+function deletePaperDB($paperID) {
+    
+    //only the editor can delete anything
+    if ($_SESSION['username'] === 'admin') {
+        global $db;
+        $query = "SELECT * FROM papers WHERE paperID=:paperID";
+        $statement = $db->prepare($query);
+        $statement->bindValue('paperID', $paperID);
+        $statement->execute();
+        
+        $paper = $statement->fetch();
+        
+        if (!empty($paper['draftFilename'])) {
+            $doc_dir = getcwd().'/uploads/drafts/';
+            unlink($doc_dir.$paper['draftFilename']);
+        }
+        
+        if (!empty($paper['firstReviewFilename'])) {
+            $doc_dir = getcwd().'/uploads/firstResponses/';
+            unlink($doc_dir.$paper['firstReviewFilename']);
+        }
+        
+        if (!empty($paper['revisedFilename'])) {
+            $doc_dir = getcwd().'/uploads/revisions/';
+            unlink($doc_dir.$paper['revisedFilename']);
+        }
+        
+        if (!empty($paper['finalReviewFilename'])) {
+            $doc_dir = getcwd().'/uploads/finalResponses/';
+            unlink($doc_dir.$paper['finalReviewFilename']);
+        }
+        
+        $query = "DELETE FROM papers WHERE paperID=:paperID";
+        $statement = $db->prepare($query);
+        $statement->bindValue('paperID', $paperID);
+        return $statement->execute();
+    }
+}
 ?>

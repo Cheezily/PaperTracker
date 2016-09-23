@@ -54,6 +54,7 @@ $reviewerOptions = reviewerOptionList();
                 </form>
             </div>
             <?php echo paperNote($paper); ?>
+            <?php echo deletePaper($paper); ?>
         </div>
     <br>
         <?php } 
@@ -109,6 +110,7 @@ $reviewerOptions = reviewerOptionList();
                 <br>
             </div>
             <?php echo paperNote($paper); ?>
+            <?php echo deletePaper($paper); ?>
         </div>
         <br>
         <?php }
@@ -181,6 +183,7 @@ $reviewerOptions = reviewerOptionList();
                 <br>
             </div>
             <?php echo paperNote($paper); ?>
+            <?php echo deletePaper($paper); ?>
         </div>
         <?php }
         } //ends needsPostReviewStatus loop ?>            

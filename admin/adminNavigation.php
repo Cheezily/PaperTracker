@@ -24,7 +24,7 @@ if (!isset($adminPage)) {
 
 <nav class="adminNav">
     <form 
-        <?php if ($adminPage == "adminSummary.php") {
+        <?php if ($adminPage === "adminSummary.php") {
             echo " class='activePage' ";
         } ?>
         method="post" action="index.php">
@@ -33,7 +33,7 @@ if (!isset($adminPage)) {
     </form>
 
     <form 
-        <?php if ($adminPage == "adminPapers.php") {
+        <?php if ($adminPage === "adminPapers.php") {
             echo " class='activePage' ";
         } ?>    
         method="post" action="index.php">
@@ -42,7 +42,7 @@ if (!isset($adminPage)) {
     </form>
 
     <form 
-        <?php if ($adminPage == "adminUsers.php") {
+        <?php if ($adminPage === "adminUsers.php") {
             echo " class='activePage' ";
         } ?>    
         method="post" action="index.php">
@@ -51,7 +51,7 @@ if (!isset($adminPage)) {
     </form>
 
     <form 
-        <?php if ($adminPage == "adminMessages.php") {
+        <?php if ($adminPage === "adminMessages.php") {
             echo " class='activePage' ";
         } ?>        
         method="post" action="index.php">
@@ -59,7 +59,7 @@ if (!isset($adminPage)) {
         <input class='navButton' type="submit" value="Messages">
     </form>
     <form 
-        <?php if ($adminPage == "adminSettings.php") {
+        <?php if ($adminPage === "adminSettings.php") {
             echo " class='activePage' ";
         } ?>
         method="post" action="index.php">
