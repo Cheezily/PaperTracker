@@ -13,6 +13,144 @@ $recentlyUpdated = $paperList["recentlyUpdated"];
 
 $reviewerOptions = reviewerOptionList();
 
+function paperTitle($paper) {
+    echo "<div class='paperAttribute'>".
+            "<span class='attributeLabel'>Paper Title: </span>".htmlspecialchars($paper['title']).
+        "</div>";
+}
+
+
+function draftFilename($paper) {
+    echo "<div class='paperAttribute'>".
+            "<span class='attributeLabel'>Draft File:</span>".
+                "<a target='_blank' href='uploads/drafts/".$paper['draftFilename']."'>".
+                    htmlspecialchars($paper['draftFilename']).
+            "</a>".
+            "<br>".
+        "</div>";
+}
+
+
+function submittedBy($paper) {
+    $author = getRealName($paper['username']);
+    echo "<div class='paperAttribute'>".
+            "<span class='attributeLabel'>Submitted By: </span>".
+                '<b>'.$author[0].' '.$author[1].'</b> from <b>'.$author[2].'<b> on '. 
+                    date("M j, Y, g:i a (e)", strtotime($paper['whenSubmitted'])).
+            "<br>".
+        "</div>";
+}
+
+
+function getReviewer($paper) {
+    $reviewer = getRealName($paper['reviewername']);
+    echo "<div class='paperAttribute paperAttributeAlt'>".
+                "<span class='attributeLabel attributeLabelAlt'>Reviewer: </span>".
+                    '<b>'.$reviewer[0].' '.$reviewer[1].'</b> from <b>'.$reviewer[2].
+                    '</b> assigned on '.date("M j, Y, g:i a", strtotime($paper['whenAssigned'])).
+                "<br>".
+            "</div>";
+}
+
+
+function reviewerInitialRecommendation($paper) {
+    $recommendaton = '';
+        switch ($paper['firstRecommendation']) {
+        case "accept":
+            $recommendaton = "Accept As-Is -- Recommendation made ".
+                date("M j, Y, g:i a", strtotime($paper['whenFirstReply']));
+            break;
+        case "reject":
+            $recommendaton = "Reject Draft -- Recommendation made ".
+                date("M j, Y, g:i a", strtotime($paper['whenFirstReply']));
+            break;
+        case "minor":
+            $recommendaton = "Minor Revisions Needed -- Recommendation made ".
+                date("M j, Y, g:i a", strtotime($paper['whenFirstReply']));
+            break;
+        case "major":
+            $recommendaton = "Major Revisions Needed -- Recommendation made ".
+                date("M j, Y, g:i a", strtotime($paper['whenFirstReply']));
+            break;
+        default:
+            $recommendaton = "Error: No Recommendation Made. Please contact the reviewer.";
+        }
+        
+        echo "<div class='paperAttribute paperAttributeAlt'>".
+            "<span class='attributeLabel attributeLabelAlt'>Reviewer Initial Recommendation: </span>".
+                $recommendaton."<br>".
+            "</div>";
+}
+
+
+function firstReviewFilename($paper) {
+    echo "<div class='paperAttribute paperAttributeAlt'>".
+            "<span class='attributeLabel attributeLabelAlt'>Initial Reviewer Notes: </span>".
+                "<a class='attributeLinkAlt' target='_blank' href='uploads/drafts/".$paper['firstReviewFilename']."'>".
+                    htmlspecialchars($paper['firstReviewFilename']).
+            "</a>".
+            "<br>".
+        "</div>";
+}
+
+
+function paperNote($paper) {
+    
+    $noteButton = '';
+    $authorName = getRealName($paper['username']);
+    
+    if ($paper['editorNotes']) {
+        
+        $noteDate = date('M j, Y, g:i a', strtotime($paper['whenEditorNotes']));
+        $buttonTitle = "Editor Note Submitted on ".$noteDate." -- Click to View/Edit";
+        $noteButton = "<div class='noteButtonWrapper'>".
+                        "<button class='adminNoteButton' paperID=".$paper['paperID'].">".$buttonTitle.
+                        "</button>".
+                    "</div>";
+    } else {
+        $buttonTitle = "Click here to add note to the Author";
+        $noteButton = "<div class='noteButtonWrapper'>".
+                        "<button class='adminNoteButton adminNoteButton1' paperID=".$paper['paperID'].">".
+                        $buttonTitle.
+                        "</button>".
+                    "</div>";
+    }
+    
+    $output = $noteButton."<div class='adminPaperNote' id='makeNoteFor".$paper['paperID']."'>".
+                "<div class='adminNoteHeading'>Note for <b>".$paper['title']."</b> by ".
+                    '<b>'.$authorName[0].' '.$authorName[1].'</b> at <b>'.$authorName[2].'</b>'.
+                "</div><hr>".
+                "<form class='noteForm' method='post' action=''>".
+                    "<input type='hidden' name='paperID' value='".$paper['paperID']."'>".
+                    "<textarea class='paperNote' name='noteText' id='textAreaFor".$paper['paperID']."'>".
+                    "</textarea><hr>".
+                    "<input class='submitNoteButton' type='submit' name='adminNote' value='Submit'>".
+                    "<input class='deleteNoteButton' type='submit' name='deleteNote' value='Delete This Note'>".
+                    "<button type='button' class='cancelNoteButton' paperID=".$paper['paperID'].">Cancel</button>".
+                "</form>".
+                "<div id='textFor".$paper['paperID']."' style='display: none;'>".
+                    ($paper['editorNotes']).
+                "</div>".
+            "</div>";
+    
+    return $output;
+}
+
+
+function deletePaper($paper) {
+    $output = "<div class='deletePaperButtonWrapper'>".
+            "<button class='deletePaperButton' paperID=".$paper['paperID']." id='delete".$paper['paperID']."'>".
+                "Delete This Paper".
+            "</button>".
+            "<form class='deleteConfirm' id='confirm".$paper['paperID']."' method='post' action=''>".
+                "<input type='hidden' name='paperID' value=".$paper['paperID'].">".
+                "<input type='submit' name='deletePaper' value='Click to confirm that you really wish to delete this paper!'>".
+            "</form>".
+            "</div>";
+    
+    return $output;
+}
+
 ?>
 
 <div class="mainWrapperWithNav">
@@ -25,24 +163,11 @@ $reviewerOptions = reviewerOptionList();
     <?php } else { ?>
     <?php forEach ($needsAssignment as $paper) { ?>
         <div class='adminPaper'>
-            <div class='paperAttribute'>
-                <span class='attributeLabel'>Draft Filename:</span>
-                <a target='_blank' href='uploads/drafts/<?php echo $paper['draftFilename'];?>'>
-                   <?php echo htmlspecialchars($paper['draftFilename']);?>
-                </a>
-                <br>
-            </div>
-            <div class='paperAttribute'>
-                <span class='attributeLabel'>Submitted By: </span>
-                <?php 
-                    $author = getRealName($paper['username']);
-                    echo '<b>'.$author[0].' '.$author[1].'</b> from <b>'.$author[2].'<b> on '. 
-                         date("M j, Y, g:i a (e)", strtotime($paper['whenSubmitted']));
-                ?>
-                <br>
-            </div>
-            <div class='paperAttribute'>
-                <span class='attributeLabel'>Please Assign Reviewer: </span>
+            <?php echo paperTitle($paper);?>
+            <?php echo submittedBy($paper);?>
+            <?php echo draftFilename($paper);?>
+            <div class='paperAttribute paperAttributeAlt'>
+                <span class='attributeLabel attributeLabelAlt'>Please Assign Reviewer: </span>
                 <form method="post" action="index.php">
                     <select name="reviewer">
                         <?php echo $reviewerOptions; 
@@ -50,7 +175,7 @@ $reviewerOptions = reviewerOptionList();
                     </select>
                     <input type='hidden' name='paperID' value='<?php echo $paper['paperID'];?>'>
                     <input type='hidden' name='adminPage' value='papers'>
-                    <input type='submit' name='changeReviewer' value='Assign Reviewer'>
+                    <input type='submit' class='paperOptionSubmit' name='changeReviewer' value='Assign Reviewer'>
                 </form>
             </div>
             <?php echo paperNote($paper); ?>
@@ -60,8 +185,6 @@ $reviewerOptions = reviewerOptionList();
         <?php } 
         } //ends needsAssignment loop ?>
 
-
-
         <hr>
         <br>
         <h3>Papers Awaiting Initial Review:</h3>
@@ -70,31 +193,10 @@ $reviewerOptions = reviewerOptionList();
         <?php } else { ?>
         <?php forEach ($awaitingInitialReview as $paper) { ?>
         <div class='adminPaper'>
-            <div class='paperAttribute'>
-                <span class='attributeLabel'>Draft Filename:</span>
-                <a target='_blank' href='uploads/drafts/<?php echo $paper['draftFilename'];?>'>
-                   <?php echo htmlspecialchars($paper['draftFilename']);?>
-                </a>
-                <br>
-            </div>
-            <div class='paperAttribute'>
-                <span class='attributeLabel'>Submitted By: </span>
-                <?php 
-                    $author = getRealName($paper['username']);
-                    echo '<b>'.$author[0].' '.$author[1].'</b> from <b>'.$author[2].'</b> on '. 
-                         date("M j, Y, g:i a", strtotime($paper['whenSubmitted']));
-                ?>
-                <br>
-            </div>
-            <div class='paperAttribute paperAttributeAlt'>
-                <span class='attributeLabel attributeLabelAlt'>Reviewer: </span>
-                <?php 
-                    $reviewer = getRealName($paper['reviewername']);
-                    echo '<b>'.$reviewer[0].' '.$reviewer[1].'</b> from <b>'.$reviewer[2].'</b> assigned on '. 
-                         date("M j, Y, g:i a", strtotime($paper['whenAssigned']));
-                ?>
-                <br>
-            </div>
+            <?php echo paperTitle($paper);?>
+            <?php echo submittedBy($paper);?>
+            <?php echo draftFilename($paper);?>
+            <?php echo getReviewer($paper);?>
             <div class='paperAttribute paperAttributeAlt'>
                 <span class='attributeLabel attributeLabelAlt'>Change Reviewer: </span>
                 <form method="post" action="index.php">
@@ -106,7 +208,6 @@ $reviewerOptions = reviewerOptionList();
                     <input type='hidden' name='adminPage' value='papers'>
                     <input type='submit' name='changeReviewer' value='Assign Reviewer'>
                 </form>
-
                 <br>
             </div>
             <?php echo paperNote($paper); ?>
@@ -124,61 +225,16 @@ $reviewerOptions = reviewerOptionList();
         <?php } else { ?>
         <?php forEach ($needsPostReviewStatus as $paper) { ?>
         <div class='adminPaper'>
-            <div class='paperAttribute'>
-                <span class='attributeLabel'>Draft Filename:</span>
-                <a target='_blank' href='uploads/drafts/<?php echo $paper['draftFilename'];?>'>
-                   <?php echo htmlspecialchars($paper['draftFilename']);?>
-                </a>
-                <br>
-            </div>
-            <div class='paperAttribute'>
-                <span class='attributeLabel'>Submitted By: </span>
-                <?php 
-                    $author = getRealName($paper['username']);
-                    echo '<b>'.$author[0].' '.$author[1].'</b> from <b>'.$author[2].'</b> on '. 
-                         date("M j, Y, g:i a", strtotime($paper['whenSubmitted']));
-                ?>
-                <br>
-            </div>
-            <div class='paperAttribute paperAttributeAlt'>
-                <span class='attributeLabel attributeLabelAlt'>Reviewer: </span>
-                <?php 
-                    $reviewer = getRealName($paper['reviewername']);
-                    echo '<b>'.$reviewer[0].' '.$reviewer[1].'</b> from <b>'.$reviewer[2].'</b> on '. 
-                         date("M j, Y, g:i a", strtotime($paper['whenAssigned']));
-                ?>
-                <br>
-            </div>
-            <div class='paperAttribute paperAttributeAlt'>
-                <span class='attributeLabel attributeLabelAlt'>Reviewer Initial Recommendation: </span>
-                <?php 
-                    switch ($paper['firstRecommendation']) {
-                        case "accept":
-                            echo "Accept As-Is -- Recommendation made ".
-                                date("M j, Y, g:i a", strtotime($paper['whenFirstReply']));
-                            break;
-                        case "reject":
-                            echo "Reject Draft -- Recommendation made ".
-                                date("M j, Y, g:i a", strtotime($paper['whenFirstReply']));
-                            break;
-                        case "minor":
-                            echo "Minor Revisions Needed -- Recommendation made ".
-                                date("M j, Y, g:i a", strtotime($paper['whenFirstReply']));
-                            break;
-                        case "major":
-                            echo "Major Revisions Needed -- Recommendation made ".
-                                date("M j, Y, g:i a", strtotime($paper['whenFirstReply']));
-                            break;
-                        default:
-                            echo "Error: No Recommendation Made. Please contact the reviewer.";
-                    }
-                ?>
-                <br>
-            </div>
+            <?php echo paperTitle($paper);?>
+            <?php echo submittedBy($paper);?>
+            <?php echo draftFilename($paper);?>
+            <?php echo getReviewer($paper);?>
+            <?php echo reviewerInitialRecommendation($paper); ?>
+            <?php echo firstReviewFilename($paper); ?>
             <div class='paperAttribute paperAttributeAlt1'>
                 <span class='attributeLabel attributeLabelAlt1'>Your Recommendation: </span>
-                <form method="post" action="index.php">
-                    <select name="editorReview">
+                <form class='paperOptionList' method="post" action="index.php">
+                    <select class='paperOptionList' name="editorReview">
                         <option value='none'></option>
                         <option value='rr'>Request Revisions</option>
                         <option value='accept'>Accept As-Is</option>
@@ -186,7 +242,7 @@ $reviewerOptions = reviewerOptionList();
                     </select>
                     <input type='hidden' name='paperID' value='<?php echo $paper['paperID'];?>'>
                     <input type='hidden' name='adminPage' value='papers'>
-                    <input type='submit' name='editorReview' value='Submit Recommendation'>
+                    <input type='submit' class='paperOptionSubmit' name='editorReview' value='Submit Recommendation'>
                 </form>
                 <br>
             </div>

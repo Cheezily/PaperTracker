@@ -153,7 +153,7 @@ function reviewerOptionList() {
     $list = "<option></option>";
 
     forEach($reviewers as $reviewer) {
-        $list = $list."<option class='reviewer' value=".$reviewer['username'].'>'.
+        $list = $list."<option class='reviewer paperOptionList' value=".$reviewer['username'].'>'.
                 $reviewer['first_name'].' '.$reviewer['last_name'].' - '.
                 $reviewer['affiliation'].'</option>';
     }
@@ -161,57 +161,6 @@ function reviewerOptionList() {
     return $list;
 }
 
-
-function paperNote($paper) {
-    
-    $note = '';
-    $authorName = getRealName($paper['username']);
-    
-    if ($paper['editorNotes']) {
-        
-        $noteDate = date('M j, Y, g:i a', strtotime($paper['whenEditorNotes']));
-        $buttonTitle = "Editor Note Submitted on ".$noteDate." -- Click to View/Edit";
-
-    } else {
-        $buttonTitle = "Click here to add note to the Author";
-    }
-    
-    
-    $output = "<button class='adminNoteButton' paperID=".$paper['paperID'].">".$buttonTitle.
-            "</button>".
-            "<div class='adminPaperNote' id='makeNoteFor".$paper['paperID']."'>".
-                "<div class='adminNoteHeading'>Note for <b>".$paper['title']."</b> by ".
-                    '<b>'.$authorName[0].' '.$authorName[1].'</b> at <b>'.$authorName[2].'</b>'.
-                "</div><hr>".
-                "<form class='noteForm' method='post' action=''>".
-                    "<input type='hidden' name='paperID' value='".$paper['paperID']."'>".
-                    "<textarea class='paperNote' name='noteText' id='textAreaFor".$paper['paperID']."'>".
-                    "</textarea><hr>".
-                    "<input class='submitNoteButton' type='submit' name='adminNote' value='Submit'>".
-                    "<input class='deleteNoteButton' type='submit' name='deleteNote' value='Delete This Note'>".
-                    "<button type='button' class='cancelNoteButton' paperID=".$paper['paperID'].">Cancel</button>".
-                "</form>".
-                "<div id='textFor".$paper['paperID']."' style='display: none;'>".
-                    ($paper['editorNotes']).
-                "</div>".
-            "</div>";
-    
-    return $output;
-}
-
-function deletePaper($paper) {
-    $output = "<div class='deletePaperButtonWrapper'>".
-            "<button class='deletePaperButton' paperID=".$paper['paperID']." id='delete".$paper['paperID']."'>".
-                "Delete This Paper".
-            "</button>".
-            "<form class='deleteConfirm' id='confirm".$paper['paperID']."' method='post' action=''>".
-                "<input type='hidden' name='paperID' value=".$paper['paperID'].">".
-                "<input type='submit' name='deletePaper' value='Click to confirm that you really wish to delete this paper!'>".
-            "</form>".
-            "</div>";
-    
-    return $output;
-}
 
 if (isset($_POST['deletePaper'])) {
     $paperID = filter_input(INPUT_POST, "paperID", FILTER_SANITIZE_NUMBER_INT);
