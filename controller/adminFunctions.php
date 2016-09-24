@@ -177,11 +177,14 @@ if (isset($_POST['changeReviewer']) &&
         isset($_POST['reviewer']) &&
         isset($_POST['paperID'])) {
     
+    require_once 'model/papersDB.php';
     $reviewer = filter_input(INPUT_POST, "reviewer", FILTER_SANITIZE_STRIPPED);
     $paperID = filter_input(INPUT_POST, "paperID", FILTER_SANITIZE_NUMBER_INT);
-
     
-    if($reviewer && $paperID) {
+    if($reviewer && 
+        $paperID &&
+        empty(getPaperInfo($paperID)['firstReviewFilename'])) {
+        
         assignReviewer($paperID, $reviewer);
     }
 }
@@ -207,6 +210,24 @@ if (isset($_POST['deleteNote'])) {
     }
 }
 
+if ($_POST['changePaperStatus']) {
+    
+    $paperID = filter_input(INPUT_POST, "paperID", FILTER_SANITIZE_NUMBER_INT);
+    $status = filter_input(INPUT_POST, 'editorStatus', FILTER_SANITIZE_STRING);
+    require_once 'model/papersDB.php';
+    $paper = getPaperInfo($paperID);
+    
+    if (empty($paper['editorNotes'])) {
+        $needsEditorNote = TRUE;
+        $needsEditorNoteID = $paperID;
+    }
+    
+    if ($paperID && $status && !$needsEditorNote &&
+        !empty($paper['firstReviewFilename'])) {
+
+        updateStatus($paperID, $status);
+    }
+}
 
 ?>
 

@@ -167,7 +167,8 @@ if (isset($_POST['getStarted'])) {
                         </div>
                     <?php } ?>
                     
-                    <!--display the links to the feedback docs if they're there-->
+                    <!--display the links to the feedback docs if they're there
+                        and the editor has updated the status-->
                     <div class='paperAttribute'>
                         <?php if ($paper['firstReviewFilename'] && !$paper['finalReviewFilename'] &&
                                 $paper['status'] == "awaiting_revisions") {

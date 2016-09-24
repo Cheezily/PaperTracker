@@ -710,6 +710,17 @@ header {
     color: #222;
 }
 
+.noteWarning {
+    height: 55px;
+    animation: noteWarning .5s forwards linear;
+    
+}
+
+@keyframes noteWarning {
+    0% {height: 0px;}
+    100% {height: 55px;}
+}
+
 .paperOptionSubmit {
     height: 100%;
     border: none;
@@ -741,7 +752,7 @@ header {
 }
 
 .deletePaperButton:hover {
-    background: rgb(200,0,0);
+    background: #f00;
 }
 
 .deleteConfirm {
@@ -760,7 +771,7 @@ header {
     font-size: 22px;
     font-weight: bold;
     text-align: center;
-    background: rgb(200,0,0);
+    background: #f00;
 }
 
 /*styling for paper note dialog*/
@@ -790,7 +801,7 @@ header {
 
 .adminNoteButton, .adminNoteButton1 {
     width: 100%;
-    height: 35px;
+    height: 30px;
     width: 100%;
     background: #000;
     border: none;

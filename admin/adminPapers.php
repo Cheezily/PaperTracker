@@ -22,7 +22,7 @@ function paperTitle($paper) {
 
 function draftFilename($paper) {
     echo "<div class='paperAttribute'>".
-            "<span class='attributeLabel'>Draft File:</span>".
+            "<span class='attributeLabel'>Draft File: </span>".
                 "<a target='_blank' href='uploads/drafts/".$paper['draftFilename']."'>".
                     htmlspecialchars($paper['draftFilename']).
             "</a>".
@@ -188,6 +188,10 @@ function deletePaper($paper) {
         <hr>
         <br>
         <h3>Papers Awaiting Initial Review:</h3>
+        
+        <!--The editor needs to add an author note once they make a decision.
+            Any papers with r&r, accepted, or rejected with no note will still
+            appear here with a notice-->
         <?php if(empty($awaitingInitialReview)) { ?>
         <p>There are no papers awaiting initial review at this time.</p>
         <?php } else { ?>
@@ -232,20 +236,28 @@ function deletePaper($paper) {
             <?php echo reviewerInitialRecommendation($paper); ?>
             <?php echo firstReviewFilename($paper); ?>
             <div class='paperAttribute paperAttributeAlt1'>
-                <span class='attributeLabel attributeLabelAlt1'>Your Recommendation: </span>
+                <span class='attributeLabel attributeLabelAlt1'>Editor's initial Decision: </span>
                 <form class='paperOptionList' method="post" action="index.php">
-                    <select class='paperOptionList' name="editorReview">
+                    <select class='paperOptionList' name="editorStatus">
                         <option value='none'></option>
-                        <option value='rr'>Request Revisions</option>
-                        <option value='accept'>Accept As-Is</option>
-                        <option value='reject'>Reject</option>
+                        <option value='awaiting_revisions'>Request Revisions</option>
+                        <option value='accepted'>Accept As-Is</option>
+                        <option value='rejected'>Reject</option>
                     </select>
                     <input type='hidden' name='paperID' value='<?php echo $paper['paperID'];?>'>
                     <input type='hidden' name='adminPage' value='papers'>
-                    <input type='submit' class='paperOptionSubmit' name='editorReview' value='Submit Recommendation'>
+                    <input type='submit' class='paperOptionSubmit' name='changePaperStatus' value='Submit'>
+                    <span class='attributeLabel attributeLabelAlt1'>Be sure to add a note to the author with your feedback!</span>
                 </form>
                 <br>
             </div>
+            <?php if($needsEditorNote && $paper['paperID'] === $needsEditorNoteID) {
+                    echo "<div class='paperAttribute paperAttributeAlt1 noteWarning'>".
+                            "This paper needs a note to the author with your feedback before the status can ".
+                            "be updated! Please click on the link below this one to add your ".
+                            "feedback and try again.".
+                        "</div>";
+                } ?>
             <?php echo paperNote($paper); ?>
             <?php echo deletePaper($paper); ?>
         </div>

@@ -127,4 +127,24 @@ function deletePaperDB($paperID) {
         return $statement->execute();
     }
 }
+
+
+function updateStatus($paperID, $status) {
+    $possibilities = array('awaiting_assignment','awaiting_review',
+    'awaiting_revisions','revisions_submitted','accepted','rejected');
+    
+    //only the editor can change the status of a paper
+    if ($_SESSION['username'] === 'admin' &&
+        in_array($status, $possibilities)) {
+        
+        global $db;
+        $query = 'UPDATE papers SET status=:status, whenEditorInitialDecision=:when WHERE paperID=:paperID';
+        
+        $statement = $db->prepare($query);
+        $statement->bindValue('status', $status);
+        $statement->bindValue('when', date("Y-m-d H:i:s"));
+        $statement->bindValue('paperID', $paperID);
+        return $statement->execute();
+    }
+}
 ?>

@@ -1,6 +1,18 @@
 <?php
 require_once 'database.php';
 
+
+function getPaperInfo($paperID) {
+    global $db;
+    $query = "SELECT * FROM papers WHERE paperID=:paperID";
+    $statement=$db->prepare($query);
+    $statement->bindValue('paperID', $paperID);
+    $statement->execute();
+    $results = $statement->fetch();
+    
+    return $results;    
+}
+
 //AUTHOR FUNCTIONS
 function checkPapers($username) {
     global $db;

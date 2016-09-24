@@ -84,7 +84,7 @@
         
         require_once 'model/papersDB.php';
         
-        if ($paperID && $recommendation && checkForFirstReview($paperID) == NULL) {
+        if ($paperID && $recommendation && empty(checkForFirstReview($paperID))) {
 
             $randomPad = rand(1000, 9999);
             $doc_dir = getcwd().'/uploads/firstReview/';
