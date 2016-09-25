@@ -7,6 +7,7 @@ if (!isset($_SESSION['username'])) {
 }
 
 require_once 'model/papersDB.php';
+require_once 'controller/messages.php';
 
 $yourPapers = checkPapers($_SESSION['username']);
 
@@ -156,16 +157,6 @@ if (isset($_POST['getStarted'])) {
                                 "'>".$paper['revisedFilename']."</a>"; ?>
                         </div>
                     <?php } ?>
-                
-                    
-                    <!--display the link to the revised paper if there is one-->
-                    <?php if ($paper['firstReviewFilename']) { ?>
-                        <div class='paperAttribute'>
-                            <span class='attributeLabel'>Initial Review:</span>
-                            <?php echo "<a href='".$paper['firstReviewFilename'].
-                                "'>".$paper['firstReviewFilename']."</a>"; ?>
-                        </div>
-                    <?php } ?>
                     
                     <!--display the links to the feedback docs if they're there
                         and the editor has updated the status-->
@@ -173,7 +164,7 @@ if (isset($_POST['getStarted'])) {
                         <?php if ($paper['firstReviewFilename'] && !$paper['finalReviewFilename'] &&
                                 $paper['status'] == "awaiting_revisions") {
                                 $firstReviewFilename = htmlspecialchars($paper['firstReviewFilename']);
-                                echo "<span class='attributeLabel'>Feedback:</span> ".
+                                echo "<span class='attributeLabel'>Initial Reviewer Feedback:</span> ".
                                 "<a target='_blank' href='uploads/firstReview/".$firstReviewFilename.
                                 "'>".$firstReviewFilename."</a>";
                             } elseif ($paper['finalReviewFilename'] &&
@@ -184,7 +175,7 @@ if (isset($_POST['getStarted'])) {
                                 "<a target='_blank' href='uploads/finalReview/".$finalReviewFilename.
                                 "'>".$finalReviewFilename."</a>";    
                             } else {
-                                echo "<span class='attributeLabel'>Feedback:</span> N/A";
+                                echo "<span class='attributeLabel'>Initial Reviewer Feedback:</span> N/A";
                             }
                         ?>
                     </div>
@@ -208,10 +199,11 @@ if (isset($_POST['getStarted'])) {
                             echo "<br><div><span class='miniWarning'>".$revisionError."</span></div>";
                         } ?>
                         </div>
-                    <?php } ?>
+                    <?php } echo readEditorNote($paper);?>
 
                 </div>    
             <?php 
+                
                 } 
             } else { ?>
             <h2>You have no papers waiting for review. Click the button below
@@ -230,6 +222,7 @@ if (isset($_POST['getStarted'])) {
             <?php if (isset($newPaper) || isset($newPaperError)) {
                 include 'newPaper.php';
             } ?>
+            <script type="text/javascript" src="js/readNotes.js"></script>
     </body>
 </html>
 

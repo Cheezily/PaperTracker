@@ -792,11 +792,14 @@ header {
     z-index: 2;
 }
 
-.adminPaperNote textarea {
+.adminPaperNote textarea, .paperNote {
     width: 95%;
     height: 445px;
     margin: 0 auto;
     font-size: 1em;
+    display: inline-block;
+    width: 100%;
+    overflow-y: scroll;
 }
 
 .adminNoteButton, .adminNoteButton1 {
@@ -815,9 +818,7 @@ header {
 }
 
 .noteForm textarea {
-    display: inline-block;
-    width: 100%;
-    overflow-y: scroll;
+
 }
 
 .submitNoteButton {
@@ -852,7 +853,7 @@ header {
     background: rgb(255,0,0);
 }
 
-.cancelNoteButton {
+.cancelNoteButton, .closeNoteButton {
     float: left;
     width: 20%;
     height: 40px;
@@ -862,6 +863,10 @@ header {
     color: white;
     font-size: 22px;
     margin-bottom: 0;
+}
+
+.closeNoteButton {
+    float: right;
 }
 
 .cancelNoteButton:hover {

@@ -43,4 +43,38 @@
         
         return array($repliedMessages, $noRepliesYet);
     }
+
+    
+    function readEditorNote($paper) {
+    
+    $noteButton = '';
+    
+    if ($paper['editorNotes']) {
+        
+        $noteDate = date('M j, Y, g:i a', strtotime($paper['whenEditorNotes']));
+        $buttonTitle = "Editor Note Submitted on ".$noteDate." -- Click to View";
+        $noteButton = "<div class='noteButtonWrapper'>".
+                        "<button class='adminNoteButton' paperID=".$paper['paperID'].">".$buttonTitle.
+                        "</button>".
+                    "</div>";
+    } else {
+        $noteButton = "<div class='attributeLabel paperAttribute'>There are no notes from the Editor yet for this paper.</div>";
+        /*$noteButton = "<div class='noteButtonWrapper'>".
+                        "<button class='adminNoteButton adminNoteButton1' paperID=".$paper['paperID'].">".
+                        $buttonTitle.
+                        "</button>".
+                    "</div>";*/
+    }
+    
+    $output = $noteButton."<div class='adminPaperNote' id='makeNoteFor".$paper['paperID']."'>".
+                "<div class='adminNoteHeading'>Note for <b>".$paper['title']."</b> by the Editor".
+                "</div><hr>".
+                "<div class='paperNote' id='textFor".$paper['paperID']."'>".
+                    ($paper['editorNotes']).
+                "</div><hr>".
+            "<button type='button' class='closeNoteButton' paperID=".$paper['paperID'].">Close</button>".
+            "</div>";
+    
+    return $output;
+}
 ?>

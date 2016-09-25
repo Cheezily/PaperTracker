@@ -1,7 +1,24 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+//click the button to open the dialog box to submit a note for a specific paper
+$('.adminNoteButton').click(function() {
+    
+    var paperID = $(this).attr('paperID');
+    
+    var textFor = "#textFor" + paperID;
+    var paperText = $(textFor).text();
+    
+    $("#textAreaFor" + paperID).val(paperText);
+    var noteBox = "#makeNoteFor" + paperID;
+    $("body").animate({'scrollTop': 0}, 500, function() {
+        $(noteBox).slideDown(500);
+    });
+});
 
-
+//click to close the dialog box for adding a note to a specific paper
+$('.closeNoteButton').click(function() {
+    var paperID = $(this).attr('paperID');
+    var noteBox = "#makeNoteFor" + paperID;
+    var top = $(this).offset();
+    $(noteBox).slideUp(300, function() {
+        //$("body").animate({'scrollTop': top.top - 200}, 500);
+    });
+});
