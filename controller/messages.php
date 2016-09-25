@@ -54,7 +54,7 @@
         $noteDate = date('M j, Y, g:i a', strtotime($paper['whenEditorNotes']));
         $buttonTitle = "Editor Note Submitted on ".$noteDate." -- Click to View";
         $noteButton = "<div class='noteButtonWrapper'>".
-                        "<button class='adminNoteButton' paperID=".$paper['paperID'].">".$buttonTitle.
+                        "<button class='viewNoteButton' paperID=".$paper['paperID'].">".$buttonTitle.
                         "</button>".
                     "</div>";
     } else {

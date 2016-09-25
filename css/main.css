@@ -802,7 +802,7 @@ header {
     overflow-y: scroll;
 }
 
-.adminNoteButton, .adminNoteButton1 {
+.adminNoteButton, .adminNoteButton1, .viewNoteButton {
     width: 100%;
     height: 30px;
     width: 100%;
@@ -813,8 +813,8 @@ header {
     font-weight: bold;
 }
 
-.adminNoteButton:hover, .adminNoteButton1:hover {
-    background: #333;
+.adminNoteButton:hover, .adminNoteButton1:hover, .viewNoteButton:hover {
+    background: #444;
 }
 
 .noteForm textarea {

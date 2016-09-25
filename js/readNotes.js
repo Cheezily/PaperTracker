@@ -1,5 +1,5 @@
 //click the button to open the dialog box to submit a note for a specific paper
-$('.adminNoteButton').click(function() {
+$('.viewNoteButton').click(function() {
     
     var paperID = $(this).attr('paperID');
     
@@ -18,7 +18,5 @@ $('.closeNoteButton').click(function() {
     var paperID = $(this).attr('paperID');
     var noteBox = "#makeNoteFor" + paperID;
     var top = $(this).offset();
-    $(noteBox).slideUp(300, function() {
-        //$("body").animate({'scrollTop': top.top - 200}, 500);
-    });
+    $(noteBox).slideUp(300);
 });

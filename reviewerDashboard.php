@@ -7,6 +7,7 @@ if (!isset($_SESSION['username'])) {
 }
 
 require_once 'model/papersDB.php';
+require_once 'controller/messages.php';
 
 
 $yourPapers = checkPapersForReviewer($_SESSION['username']);
@@ -234,7 +235,10 @@ if (isset($_POST['getStarted'])) {
                             echo "<p class='instructions'>The Editor is currently "
                             . "reviewing your recommendation.</p>";
                         } ?>
-                    <?php } ?>
+                    <?php } 
+                        echo readEditorNote($paper);
+                    ?>
+                    
                 </div>    
             <?php 
                 } 
@@ -250,5 +254,6 @@ if (isset($_POST['getStarted'])) {
             <?php include "userMessages.php"; ?>
 
         </div>
+        <script type="text/javascript" src="js/readNotes.js"></script>
     </body>
 </html>
