@@ -195,10 +195,11 @@ if (isset($_POST['getStarted'])) {
                             <input type='hidden' name='paperID' value='<?php 
                                 echo $paper['paperID']; ?>'>
                         </form>
-                        <?php if ($revisionError) {
-                            echo "<br><div><span class='miniWarning'>".$revisionError."</span></div>";
-                        } ?>
                         </div>
+                        <?php if ($revisionError) {
+                            echo "<div class='paperAttribute'><span class='miniWarning'>".$revisionError."</span></div>";
+                        } ?>
+                        
                     <?php } echo readEditorNote($paper);?>
 
                 </div>    

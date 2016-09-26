@@ -7,6 +7,7 @@ $awaitingInitialReview = $paperList["awaitingInitialReview"];
 $needsPostReviewStatus = $paperList["needsPostReviewStatus"];
 $awaitingRevisions = $paperList["awaitingRevisions"];
 $awaitingFinalReview = $paperList["awaitingFinalReview"];
+$finalReviewDone = $paperList["finalReviewDone"];
 $accepted = $paperList["accepted"];
 $rejected = $paperList["rejected"];
 $recentlyUpdated = $paperList["recentlyUpdated"];
@@ -16,17 +17,6 @@ $reviewerOptions = reviewerOptionList();
 function paperTitle($paper) {
     echo "<div class='paperAttribute'>".
             "<span class='attributeLabel'>Paper Title: </span>".htmlspecialchars($paper['title']).
-        "</div>";
-}
-
-
-function getDraftFilename($paper) {
-    echo "<div class='paperAttribute'>".
-            "<span class='attributeLabel'>Draft File: </span>".
-                "<a target='_blank' href='uploads/drafts/".$paper['draftFilename']."'>".
-                    htmlspecialchars($paper['draftFilename']).
-            "</a>".
-            "<br>".
         "</div>";
 }
 
@@ -57,19 +47,19 @@ function reviewerInitialRecommendation($paper) {
     $recommendaton = '';
         switch ($paper['firstRecommendation']) {
         case "accept":
-            $recommendaton = "Accept As-Is -- Recommendation made ".
+            $recommendaton = "Accept As-Is as of ".
                 date("M j, Y, g:i a", strtotime($paper['whenFirstReply']));
             break;
         case "reject":
-            $recommendaton = "Reject Draft -- Recommendation made ".
+            $recommendaton = "Reject Draft as of ".
                 date("M j, Y, g:i a", strtotime($paper['whenFirstReply']));
             break;
         case "minor":
-            $recommendaton = "Minor Revisions Needed -- Recommendation made ".
+            $recommendaton = "Minor Revisions Needed as of ".
                 date("M j, Y, g:i a", strtotime($paper['whenFirstReply']));
             break;
         case "major":
-            $recommendaton = "Major Revisions Needed -- Recommendation made ".
+            $recommendaton = "Major Revisions Needed as of ".
                 date("M j, Y, g:i a", strtotime($paper['whenFirstReply']));
             break;
         default:
@@ -82,27 +72,39 @@ function reviewerInitialRecommendation($paper) {
             "</div>";
 }
 
-function getEditorDecision($paper) {
+function getEditorInitialDecision($paper) {
     
     $decision = '';
     switch($paper['status']) {
-        case "awaiting_revisions":
-            $decision = "Awaiting Revisions from the Author";
+        case ("awaiting_revisions" || "revisions_submitted"):
+            $decision = "Revise & Resubmit";
             break;
         case "accepted":
             $decision = "Complete. Paper Accepted.";
             break;
         case "rejected":
             $decision = "Complete. Paper Rejected";
+            break;
         default:
             $decision = "Please update the paper status";
     }
             
-    echo "<div class='paperAttribute paperAttributeAlt1'>".
-            "<span class='attributeLabel attributeLabelAlt1'>Editor Decision: </span>".
-                "<b>".$decision.".</b> Decision made on <b>".
+    echo "<div class='paperAttribute paperAttributeAlt'>".
+            "<span class='attributeLabel attributeLabelAlt'>Editor Initial Decision: </span>".
+                "<b>".$decision.".</b> Decision made <b>".
                 date("M j, Y, g:i a", strtotime($paper['whenEditorInitialDecision'])).
                 "</b>".
+            "<br>".
+        "</div>";
+}
+
+
+function getDraftFilename($paper) {
+    echo "<div class='paperAttribute'>".
+            "<span class='attributeLabel'>Draft File: </span>".
+                "<a target='_blank' href='uploads/drafts/".$paper['draftFilename']."'>".
+                    htmlspecialchars($paper['draftFilename']).
+            "</a>".
             "<br>".
         "</div>";
 }
@@ -111,7 +113,7 @@ function getEditorDecision($paper) {
 function firstReviewFilename($paper) {
     echo "<div class='paperAttribute paperAttributeAlt'>".
             "<span class='attributeLabel attributeLabelAlt'>Initial Reviewer Notes: </span>".
-                "<a class='attributeLinkAlt' target='_blank' href='uploads/drafts/".
+                "<a class='attributeLinkAlt' target='_blank' href='uploads/firstReview/".
                     $paper['firstReviewFilename']."'>".
                     htmlspecialchars($paper['firstReviewFilename']).
             "</a>".
@@ -120,17 +122,43 @@ function firstReviewFilename($paper) {
 }
 
 
-function getRevisedFlename($paper) {
-    echo "<div class='paperAttribute'>".
-            "<span class='attributeLabel attributeLabelAlt'>Draft File: </span>".
-                "<a class='attributeLinkAlt' target='_blank' href='uploads/drafts/".
+function getRevisedFilename($paper) {
+
+    if ($paper['revisedFilename']) {
+        echo "<div class='paperAttribute paperAttributeAlt'>".
+            "<span class='attributeLabel attributeLabelAlt'>Author's Revised File: </span>".
+                "<a class='attributeLinkAlt' target='_blank' href='uploads/revisions/".
                     $paper['revisedFilename']."'>".
                     htmlspecialchars($paper['revisedFilename']).
             "</a>".
-            "<br>".
-            "<span class='attributeLabel attributeLabelAlt'>Revision Subbmited by the Author on </span>".
-                $paper['whenRevised'].
+            "<span class='attributeLabel attributeLabelAlt'> on </span>".
+                date("M j, Y, g:i a", strtotime($paper['whenRevised'])).
         "</div>";
+    } else {
+        echo "<div class='paperAttribute paperAttributeAlt'>".
+                "<span class='attributeLabel attributeLabelAlt'>Author's Revised File: N/A</span>".
+            "</div>";        
+    }
+}
+
+
+function finalReviewFilename($paper) {
+    
+    if ($paper['finalReviewFilename']) {
+        echo "<div class='paperAttribute paperAttributeAlt'>".
+                "<span class='attributeLabel attributeLabelAlt'>Final Reviewer Notes: </span>".
+                    "<a class='attributeLinkAlt' target='_blank' href='uploads/firstReview/".
+                        $paper['firstReviewFilename']."'>".
+                        htmlspecialchars($paper['finalReviewFilename']).
+                "</a>".
+                "<br>".
+            "</div>";        
+    } else {
+        echo "<div class='paperAttribute paperAttributeAlt'>".
+                "<span class='attributeLabel attributeLabelAlt'>Final Reviewer Notes: N/A</span>".
+            "</div>";        
+    }
+
 }
 
 
@@ -197,44 +225,51 @@ function deletePaper($paper) {
 <?php if(empty($papers)) { ?>
     <p>There are no papers in the database at the moment.</p>
 <?php } else { ?>
-    <h3>New Papers Awaiting Reviewer Assignment: <?php echo count($needsAssignment); ?></h3>
+    <h3 class='explanation'>Papers displayed on this page are grouped by each step in the review process 
+        as different actions need to be performed at each step.</h3> 
+    <div class='paperStatus'>
+    <h3><span class='paperStep'>Step 1: </span>New Papers Awaiting Reviewer Assignment: 
+        <?php echo count($needsAssignment); ?>
+    </h3>
     <?php if(empty($needsAssignment)) { ?>
-    <p>There are no papers that need to be assigned at this time.</p>
+    <!--<p>There are no papers that need to be assigned at this time.</p>-->
     <?php } else { ?>
-    <?php forEach ($needsAssignment as $paper) { ?>
-        <div class='adminPaper'>
-            <?php echo paperTitle($paper);?>
-            <?php echo submittedBy($paper);?>
-            <?php echo getDraftfilename($paper);?>
-            <div class='paperAttribute paperAttributeAlt'>
-                <span class='attributeLabel attributeLabelAlt'>Please Assign Reviewer: </span>
-                <form method="post" action="index.php">
-                    <select name="reviewer">
-                        <?php echo $reviewerOptions; 
-                        echo $adminPage;?>
-                    </select>
-                    <input type='hidden' name='paperID' value='<?php echo $paper['paperID'];?>'>
-                    <input type='hidden' name='adminPage' value='papers'>
-                    <input type='submit' class='paperOptionSubmit' name='changeReviewer' value='Assign Reviewer'>
-                </form>
-            </div>
-            <?php echo paperNote($paper); ?>
-            <?php echo deletePaper($paper); ?>
+    <hr>
+    <?php forEach ($needsAssignment as $paper) { ?> 
+        <?php echo paperTitle($paper);?>
+        <?php echo submittedBy($paper);?>
+        <?php echo getDraftfilename($paper);?>
+        <div class='paperAttribute paperAttributeAlt'>
+            <span class='attributeLabel attributeLabelAlt'>Please Assign Reviewer: </span>
+            <form method="post" action="index.php">
+                <select name="reviewer">
+                    <?php echo $reviewerOptions; 
+                    echo $adminPage;?>
+                </select>
+                <input type='hidden' name='paperID' value='<?php echo $paper['paperID'];?>'>
+                <input type='hidden' name='adminPage' value='papers'>
+                <input type='submit' class='paperOptionSubmit' name='changeReviewer' value='Assign Reviewer'>
+            </form>
         </div>
-    <br>
+        <?php echo paperNote($paper); ?>
+        <?php echo deletePaper($paper); ?>
+        </div>
         <?php } 
         } //ends needsAssignment loop ?>
+    </div>
+    <div class='paperBridge'>&#8681;</div>
 
-        <hr>
-        <br>
-        <h3>Papers Awaiting Initial Review: <?php echo count($awaitingInitialReview); ?></h3>
-        
+    <div class='paperStatus'>
+        <h3><span class='paperStep'>Step 2: </span>Papers Awaiting Initial Review: 
+            <?php echo count($awaitingInitialReview); ?>
+        </h3>
         <!--The editor needs to add an author note once they make a decision.
             Any papers with r&r, accepted, or rejected with no note will still
             appear here with a notice-->
         <?php if(empty($awaitingInitialReview)) { ?>
-        <p>There are no papers awaiting initial review at this time.</p>
+        <!--<p>There are no papers awaiting initial review at this time.</p>-->
         <?php } else { ?>
+        <hr>
         <?php forEach ($awaitingInitialReview as $paper) { ?>
         <div class='adminPaper'>
             <?php echo paperTitle($paper);?>
@@ -243,7 +278,7 @@ function deletePaper($paper) {
             <?php echo getReviewer($paper);?>
             <div class='paperAttribute paperAttributeAlt'>
                 <span class='attributeLabel attributeLabelAlt'>Change Reviewer: </span>
-                <form method="post" action="index.php">
+                <form method="post" action="index.php">3
                     <select name="reviewer">
                         <?php echo $reviewerOptions; 
                         echo $adminPage;?>
@@ -257,16 +292,19 @@ function deletePaper($paper) {
             <?php echo paperNote($paper); ?>
             <?php echo deletePaper($paper); ?>
         </div>
-        <br>
-        <?php }
-        } //ends awaitingInitialReview loop ?>
+    <?php }
+    } //ends awaitingInitialReview loop ?>
+    </div>
+    <div class='paperBridge paperBridge1'>&#8681;</div>
 
-        <hr>
-        <br>
-        <h3>Papers with Initial Review Completed and Awaiting Your Input: <?php echo count($needsPostReviewStatus); ?></h3>
+    <div class='paperStatus'>
+        <h3><span class='paperStep'>Step 3: </span>Papers with Initial Review Completed and Awaiting Your Input: 
+            <?php echo count($needsPostReviewStatus); ?>
+        </h3>
         <?php if(empty($needsPostReviewStatus)) { ?>
-        <p>There are no papers awaiting a status update at this time.</p>
+        <!--<p>There are no papers awaiting an initial decision at this time.</p>-->
         <?php } else { ?>
+        <hr>
         <?php forEach ($needsPostReviewStatus as $paper) { ?>
         <div class='adminPaper'>
             <?php echo paperTitle($paper);?>
@@ -301,16 +339,19 @@ function deletePaper($paper) {
             <?php echo paperNote($paper); ?>
             <?php echo deletePaper($paper); ?>
         </div>
-        <?php }
-        } //ends needsPostReviewStatus loop ?>            
+    <?php }
+    } //ends needsPostReviewStatus loop ?>
+    </div>
+    <div class='paperBridge paperBridge2'>&#8681;</div>
 
-        
-        <hr>
-        <br>
-        <h3>Papers Awaiting Revisions form the Author: <?php echo count($awaitingRevisions); ?></h3>
+    <div class='paperStatus'>
+        <h3><span class='paperStep'>Step 4: </span>Papers Awaiting Revisions form the Author: 
+            <?php echo count($awaitingRevisions); ?>
+        </h3>
         <?php if(empty($awaitingRevisions)) { ?>
-        <p>There are no papers awaiting revisions at this time.</p>
+        <!--<p>There are no papers awaiting revisions at this time.</p>-->
         <?php } else { ?>
+        <hr>
         <?php forEach ($awaitingRevisions as $paper) { ?>
         <div class='adminPaper'>
             <?php echo paperTitle($paper);?>
@@ -319,21 +360,52 @@ function deletePaper($paper) {
             <?php echo getReviewer($paper);?>
             <?php echo reviewerInitialRecommendation($paper); ?>
             <?php echo firstReviewFilename($paper); ?>
-            <?php echo getEditorDecision($paper); ?>
+            <?php echo getEditorInitialDecision($paper); ?>
             <?php echo paperNote($paper); ?>
             <?php echo deletePaper($paper); ?>
         </div>
-        <?php }
-        } //ends awaitingRevisions loop ?>
+    <?php }
+    } //ends awaitingRevisions loop ?>
+    </div>
+    <div class='paperBridge paperBridge3'>&#8681;</div>
 
-        
-        <hr>
-        <br>
-        <h3>Papers Awaiting Final Review from the Reviewer: <?php echo count($awaitingFinalReview); ?></h3>
+    <div class='paperStatus'>
+        <h3><span class='paperStep'>Step 5: </span>Papers Awaiting Final Review from the Reviewer: 
+            <?php echo count($awaitingFinalReview); ?>
+        </h3>
         <?php if(empty($awaitingFinalReview)) { ?>
-        <p>There are no papers awaiting revisions at this time.</p>
+        <!--<p>There are no papers awaiting final review at this time.</p>-->
         <?php } else { ?>
+        <hr>
         <?php forEach ($awaitingFinalReview as $paper) { ?>
+            <div class='adminPaper'>
+                <?php echo paperTitle($paper);?>
+                <?php echo submittedBy($paper);?>
+                <?php echo getDraftfilename($paper);?>
+                <?php echo getReviewer($paper);?>
+                <?php echo reviewerInitialRecommendation($paper); ?>
+                <?php echo firstReviewFilename($paper); ?>
+                <?php echo getEditorInitialDecision($paper); ?>
+                <?php echo getRevisedFilename($paper); ?>
+                <?php echo paperNote($paper); ?>
+                <?php echo deletePaper($paper); ?>
+            </div>
+        <?php }
+    } //ends $awaitingFinalReview loop ?>
+    </div>
+    <div class='paperBridge paperBridge4'>&#8681;</div>
+
+    
+    <div class='paperStatus'>
+        <h3><span class='paperStep'>Step 6 (Final): </span>
+            Papers with Second Review Complete, Awaiting Your Final Decision: 
+            <?php echo count($finalReviewDone); ?>
+        </h3>
+        <?php if(empty($finalReviewDone)) { ?>
+        <!--<p>There are no papers awaiting revisions at this time.</p>-->
+        <?php } else { ?>
+        <hr>
+        <?php forEach ($finalReviewDone as $paper) { ?>
         <div class='adminPaper'>
             <?php echo paperTitle($paper);?>
             <?php echo submittedBy($paper);?>
@@ -341,15 +413,68 @@ function deletePaper($paper) {
             <?php echo getReviewer($paper);?>
             <?php echo reviewerInitialRecommendation($paper); ?>
             <?php echo firstReviewFilename($paper); ?>
-            <?php echo getEditorDecision($paper); ?>
-            <?php echo getDraftfilename($paper);?>
+            <?php echo getRevisedFlename($paper); ?>
+            <?php echo getEditorInitialDecision($paper); ?>
             <?php echo paperNote($paper); ?>
             <?php echo deletePaper($paper); ?>
         </div>
-        <?php }
-        } //ends awaitingRevisions loop ?>
+    <?php }
+    } //ends $awaitingFinalReview loop ?>
     </div>
+    <div class='paperBridge paperBridge5'>&#8681;</div>
+    
 
+    <div class='paperStatus'>
+        <h3>Papers with a Final Status of <span style='color: green;'>ACCEPTED:</span>
+            <?php echo count($accepted); ?></h3>
+        <?php if(empty($accepted)) { ?>
+        <!--<p>There are no papers awaiting revisions at this time.</p>-->
+        <?php } else { ?>
+        <hr>
+        <?php forEach ($accepted as $paper) { ?>
+        <div class='adminPaper'>
+            <?php echo paperTitle($paper);?>
+            <?php echo submittedBy($paper);?>
+            <?php echo getDraftfilename($paper);?>
+            <?php echo getReviewer($paper);?>
+            <?php echo reviewerInitialRecommendation($paper); ?>
+            <?php echo firstReviewFilename($paper); ?>
+            <?php echo getEditorInitialDecision($paper); ?>
+            <?php echo getRevisedFlename($paper); ?>
+            <?php echo paperNote($paper); ?>
+            <?php echo deletePaper($paper); ?>
+        </div>
+    <?php }
+    } //ends $awaitingFinalReview loop ?>
+    </div>
+    <div class='paperBridge paperBridge5'>&#8681;</div>
+    
+    
+    <div class='paperStatus'>
+        <h3>Papers with a Final Status of <span style='color: red;'>REJECTED:</span>
+            <?php echo count($rejected); ?></h3>
+        <?php if(empty($rejected)) { ?>
+        <!--<p>There are no papers awaiting revisions at this time.</p>-->
+        <?php } else { ?>
+        <hr>
+        <?php forEach ($rejected as $paper) { ?>
+        <div class='adminPaper'>
+            <?php echo paperTitle($paper);?>
+            <?php echo submittedBy($paper);?>
+            <?php echo getDraftfilename($paper);?>
+            <?php echo getReviewer($paper);?>
+            <?php echo reviewerInitialRecommendation($paper); ?>
+            <?php echo firstReviewFilename($paper); ?>
+            <?php echo getEditorInitialDecision($paper); ?>
+            <?php echo getRevisedFilename($paper); ?>
+            <?php echo finalReviewFilename($paper); ?>
+            <?php echo paperNote($paper); ?>
+            <?php echo deletePaper($paper); ?>
+        </div>
+    <?php }
+    } //ends $awaitingFinalReview loop ?>
+    </div> 
+    
 <?php } ?>
 
 <script type='text/javascript' src='admin/JS/adminPaper.js'></script>

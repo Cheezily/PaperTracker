@@ -121,7 +121,7 @@ function getPapersByStatus($papers) {
             array_push($accepted, $paper);
         }
         
-        if ($paper['status'] === 'accepted') {
+        if ($paper['status'] === 'rejected') {
             array_push($rejected, $paper);
         }
     }

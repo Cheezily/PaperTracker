@@ -34,9 +34,8 @@ header {
     box-sizing: border-box;
     background: #eee;
     width: 960px;
-    padding: 15px 50px 25px;
+    padding: 15px 50px 90px;
     margin: 0 auto 100px;
-
     border-radius: 5px;
 }
 
@@ -398,9 +397,10 @@ header {
 .paperAttribute {
     box-sizing: border-box;
     width: 100%;
-    height: 28px;
+    min-height: 28px;
     margin: 0 auto;
     padding: 5px;
+    background: #ddd;
 }
 
 .paperAttribute:not(:first-of-type) {
@@ -410,7 +410,8 @@ header {
 .attributeLabel {
     font-weight: bold;
     font-style: italic;
-    color: #777;
+    color: #333;
+    height: 100%;
 }
 
 .paperTitleLabel {
@@ -683,9 +684,69 @@ header {
     margin: 0 auto 8px;
 }
 
+.explanation {
+    margin: 0 auto -15px;
+    color: #555;
+}
+
+.paperStatus {
+    box-sizing: border-box;
+    background: #fff;
+    margin: 32px auto -30px;
+    box-shadow: 0 2px 4px #000;
+    padding: 3px 8px;
+    color: #666;
+    border: 3px solid #a22;
+    border-radius: 3px;
+}
+
+.paperBridge {
+    position: relative;
+    width: 34px;
+    height: 45px;
+    margin: 22px 0 -40px 5%;
+    padding-top: 5px;
+    background: #fff;
+    border-left: 3px solid #a22;
+    border-right: 3px solid #a22;
+    border-top: 3px solid #fff;
+    border-bottom: 3px solid #fff;
+    z-index: 2;
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
+    color: #a22;
+}
+
+.paperBridge1 {
+    margin-left: 5%;
+}
+
+.paperBridge2 {
+    margin-left: 5%;
+}
+
+.paperBridge3 {
+    margin-left: 5%;
+}
+
+.paperBridge4 {
+    margin-left: 5%;
+}
+
+.paperBridge5 {
+    margin-left: 5%;
+}
+
+.paperBridge6 {
+    margin-left: 5%;
+}
+
 .adminPaper {
-    width: 860px;
-    border: 2px solid #333;
+    width: 800px;
+    border: 3px solid #777;
+    margin: 20px auto;
+    box-shadow: 0 5px 5px #000;
 }
 
 .paperAttributeAlt {

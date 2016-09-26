@@ -186,7 +186,7 @@ if (isset($_POST['getStarted'])) {
                         if one exists-->
                     <?php if ($paper['revisedFilename']) { ?>
                     <div class='paperAttribute'>
-                        <?php echo "<span class='attributeLabel'>Revised File:</span> ".
+                        <?php echo "<span class='attributeLabel'>Author's Revised File:</span> ".
                                 "<a target='_blank' href='uploads/drafts/".$paper['revisedFilename'].
                                 "'>".htmlspecialchars($paper['revisedFilename'])."</a>"; ?>
                     </div>

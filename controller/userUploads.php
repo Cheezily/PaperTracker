@@ -51,6 +51,7 @@
     
     //Handle author revision upload
     if (isset($_POST['revisionSubmit'])) {
+        //echo "HI THERE";
         $paperID = filter_input(INPUT_POST, 'paperID', FILTER_VALIDATE_INT);
         require_once 'model/papersDB.php';
         if ($paperID && !checkForRevision($paperID)) {
@@ -68,6 +69,7 @@
                 $revisionError = "File already exists";
             }
             if (!isset($revisionError)) {
+                
                 if (move_uploaded_file($_FILES["revisionFile"]["tmp_name"], $doc_file)) {
                     uploadRevision($paperID, $randomPad."-".basename($_FILES["revisionFile"]["name"]));
                 } else {
