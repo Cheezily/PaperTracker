@@ -25,7 +25,7 @@ function submittedBy($paper) {
     $author = getRealName($paper['username']);
     echo "<div class='paperAttribute'>".
             "<span class='attributeLabel'>Submitted By: </span>".
-                '<b>'.$author[0].' '.$author[1].'</b> from <b>'.$author[2].'<b> on '. 
+                '<b>'.$author[0].' '.$author[1].'</b> from <b>'.$author[2].'</b> on '. 
                     date("M j, Y, g:i a (e)", strtotime($paper['whenSubmitted'])).
             "<br>".
         "</div>";
@@ -235,7 +235,8 @@ function deletePaper($paper) {
     <!--<p>There are no papers that need to be assigned at this time.</p>-->
     <?php } else { ?>
     <hr>
-    <?php forEach ($needsAssignment as $paper) { ?> 
+    <?php forEach ($needsAssignment as $paper) { ?>
+        <div class="adminPaper">
         <?php echo paperTitle($paper);?>
         <?php echo submittedBy($paper);?>
         <?php echo getDraftfilename($paper);?>
@@ -253,7 +254,8 @@ function deletePaper($paper) {
         </div>
         <?php echo paperNote($paper); ?>
         <?php echo deletePaper($paper); ?>
-        </div>
+            </div>
+
         <?php } 
         } //ends needsAssignment loop ?>
     </div>
@@ -278,7 +280,7 @@ function deletePaper($paper) {
             <?php echo getReviewer($paper);?>
             <div class='paperAttribute paperAttributeAlt'>
                 <span class='attributeLabel attributeLabelAlt'>Change Reviewer: </span>
-                <form method="post" action="index.php">3
+                <form method="post" action="index.php">
                     <select name="reviewer">
                         <?php echo $reviewerOptions; 
                         echo $adminPage;?>
@@ -315,7 +317,8 @@ function deletePaper($paper) {
             <?php echo firstReviewFilename($paper); ?>
             <div class='paperAttribute paperAttributeAlt1'>
                 <span class='attributeLabel attributeLabelAlt1'>Editor's initial Decision: </span>
-                <form class='paperOptionList' method="post" action="index.php">
+                <form paperID='<?php echo $paper['paperID']; ?>' 
+                      class='paperOptionList' method="post" action="index.php">
                     <select class='paperOptionList' name="editorStatus">
                         <option value='none'></option>
                         <option value='awaiting_revisions'>Request Revisions</option>
@@ -324,18 +327,19 @@ function deletePaper($paper) {
                     </select>
                     <input type='hidden' name='paperID' value='<?php echo $paper['paperID'];?>'>
                     <input type='hidden' name='adminPage' value='papers'>
-                    <input type='submit' class='paperOptionSubmit' name='changePaperStatus' value='Submit'>
-                    <span class='attributeLabel attributeLabelAlt1'>Be sure to add a note to the author with your feedback!</span>
+                    <input type='submit' class='paperOptionSubmit' name='changePaperStatus' 
+                           value='Submit'>
+                    <span class='attributeLabel attributeLabelAlt1'>
+                        Be sure to add a note to the author first!
+                    </span>
                 </form>
                 <br>
             </div>
-            <?php if($needsEditorNote && $paper['paperID'] === $needsEditorNoteID) {
-                    echo "<div class='paperAttribute paperAttributeAlt1 noteWarning'>".
-                            "This paper needs a note to the author with your feedback before the status can ".
-                            "be updated! Please click on the link below this one to add your ".
-                            "feedback and try again.".
-                        "</div>";
-                } ?>
+            <div id='needsNote<?php echo $paper['paperID']; ?>' class='noteWarning'>
+                This paper needs a note to the author with your feedback before the status can 
+                be updated! Please click on the link directly below this message to add your 
+                feedback and try again.
+            </div>
             <?php echo paperNote($paper); ?>
             <?php echo deletePaper($paper); ?>
         </div>

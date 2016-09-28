@@ -19,7 +19,7 @@ $('.cancelNoteButton').click(function() {
     var noteBox = "#makeNoteFor" + paperID;
     var top = $(this).offset();
     $(noteBox).slideUp(300, function() {
-        //$("body").animate({'scrollTop': top.top - 200}, 500);
+        $("body").animate({'scrollTop': top.top - 200}, 500);
     });
 });
 
@@ -29,5 +29,16 @@ $('.deletePaperButton').click(function() {
    var confirmation = '#deleteConfirm' + paperID;
 
    $(buttonID).slideUp(600);
-   
+});
+
+$('.paperOptionList').submit(function(event) {
+   var paperID = $(this).attr('paperID');
+   var textFor = 'textFor' + paperID;
+   //alert(paperID + " " + $('#textFor' + paperID).html());
+   if ($('#textFor' + paperID).html() == false) {
+       $('#needsNote' + paperID).hide();
+       $('#needsNote' + paperID).slideDown(500);
+       event.preventDefault();
+       return false;
+   }
 });

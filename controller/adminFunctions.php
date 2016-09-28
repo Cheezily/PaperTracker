@@ -216,14 +216,8 @@ if ($_POST['changePaperStatus']) {
     $status = filter_input(INPUT_POST, 'editorStatus', FILTER_SANITIZE_STRING);
     require_once 'model/papersDB.php';
     $paper = getPaperInfo($paperID);
-    
-    if (empty($paper['editorNotes'])) {
-        $needsEditorNote = TRUE;
-        $needsEditorNoteID = $paperID;
-    }
-    
-    if ($paperID && $status && !$needsEditorNote &&
-        !empty($paper['firstReviewFilename'])) {
+
+    if ($paperID && $status && !empty($paper['firstReviewFilename'])) {
 
         updateStatus($paperID, $status);
     }
